@@ -68,7 +68,12 @@ Kaggle, Customer Retention Datathon (Riyadh Edition): https://www.kaggle.com/com
 
 ## AI-use disclosure
 
+<<<<<<< HEAD
 We used AI Tools to help make the website. 
+=======
+We used AI to help make the website.
+
+>>>>>>> 55c7f83206eed1df8ab5adf38c539e7d3fb50ae2
 
 ## Citations
 
