@@ -163,5 +163,21 @@
             <p class="text-xs text-text-secondary mt-3" id="ovn-importance-text"></p>
           </div>
         </div>
+
+        <!-- Strict cutoff sensitivity check (notebook 08) -->
+        <div id="ovn-strict" class="bg-surface-card border-2 border-text-primary rounded-2xl shadow-subtle-card overflow-x-auto mt-10">
+          <div class="px-6 pt-6">
+            <h3 class="text-base sm:text-lg font-bold text-text-primary flex items-center gap-2"><span class="material-symbols-outlined">lock_clock</span>Stricter test: hide the March billing</h3>
+            <p class="text-xs text-text-secondary mt-1 max-w-4xl leading-relaxed" id="ovn-strict-lead"></p>
+          </div>
+          <table class="w-full text-xs mt-4">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr><th class="text-left px-6 py-2">Model (test split)</th><th class="text-right px-3 py-2">PR-AUC</th><th class="text-right px-3 py-2">95% CI</th><th class="text-right px-3 py-2">ROC-AUC</th>
+                <th class="text-right px-3 py-2">Log loss</th><th class="text-right px-3 py-2">&tau; (val)</th><th class="text-right px-3 py-2">Precision</th><th class="text-right px-3 py-2">Recall</th><th class="text-right px-6 py-2">F1</th></tr>
+            </thead>
+            <tbody id="ovn-strict-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+          </table>
+          <p class="text-xs text-text-secondary px-6 py-4 leading-relaxed max-w-5xl" id="ovn-strict-text"></p>
+        </div>
       </div>
     </section>

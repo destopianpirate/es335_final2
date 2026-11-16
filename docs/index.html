@@ -480,11 +480,11 @@
             </div>
             <div class="rq-item space-y-1.5">
               <span class="rq-chip"><span class="material-symbols-outlined">schedule</span></span><span class="font-bold text-text-primary block text-sm">When the prediction is made</span>
-              <p class="text-text-secondary leading-relaxed">On the cutoff date, <strong class="text-text-primary">31 March 2017</strong>, before the renewal decision. The use case: decide which subscribers to contact before their plan runs out.</p>
+              <p class="text-text-secondary leading-relaxed">On the cutoff date, <strong class="text-text-primary">31 March 2017</strong>. The use case: decide which subscribers to contact. Caveat: the labelled plans expire <em>during</em> March, so for many subscribers the renewal (or its absence) has already happened by the cutoff. We therefore also test a <a href="#ovn-strict" class="underline">strict 1 March cutoff</a>, before any expiry.</p>
             </div>
             <div class="rq-item space-y-1.5">
               <span class="rq-chip"><span class="material-symbols-outlined">inventory_2</span></span><span class="font-bold text-text-primary block text-sm">What is known then</span>
-              <p class="text-text-secondary leading-relaxed">The member profile, every transaction up to 31 March (plan, price, auto-renew, cancel, expiry date) and daily listening for March 2017. Nothing dated after the cutoff is used.</p>
+              <p class="text-text-secondary leading-relaxed">The member profile, every transaction up to 31 March (plan, price, auto-renew, cancel, expiry date) and daily listening for March 2017. Nothing dated after the cutoff is used, but March transactions overlap the label window (see <a href="#ovn-strict" class="underline">strict check</a>).</p>
             </div>
             <div class="rq-item space-y-1.5">
               <span class="rq-chip"><span class="material-symbols-outlined">balance</span></span><span class="font-bold text-text-primary block text-sm">Limits of the claim</span>
@@ -585,7 +585,7 @@
             </thead>
             <tbody class="divide-y divide-border-subtle text-text-secondary leading-relaxed">
               <tr><td class="px-4 py-3 font-semibold text-text-primary">Aggregate every table to one row per subscriber, using only data up to 31 March 2017</td>
-                  <td class="px-4 py-3">The unit of prediction is the subscriber. Nothing after the cutoff is used, so no future information leaks into the features.</td></tr>
+                  <td class="px-4 py-3">The unit of prediction is the subscriber. Nothing dated after the cutoff is used. However, the labelled plans expire during March, so a March renewal transaction can already be in the features; this is not leakage from the future, but it makes the task easier. A <a href="#ovn-strict" class="underline">strict check</a> rebuilds billing features from transactions before 1 March (notebook 08).</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-text-primary">Left joins, nobody dropped, plus <code>has_member</code> / <code>has_tx</code> / <code>has_logs</code> flags</td>
                   <td class="px-4 py-3">Dropping subscribers missing from any table would remove 25 % of them (65 % if invalid ages also count). Absence is informative: subscribers with no transactions churn at <span data-ds-break="has_tx|0.0"></span>.</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-text-primary">No listening logs &rarr; zeros and "31 days since last listen"</td>
@@ -667,7 +667,12 @@
           </div>
           <div class="led-row">
             <dt><span class="led-big">&tau; = <span data-sd="champion.threshold" data-fmt="f2"></span></span><span class="led-cap">Threshold</span></dt>
-            <dd>To flag subscribers we need a cut-off on the probability. We pick the one that maximises F1 on <em>validation</em>, then apply it unchanged to test.</dd>
+            <dd>To flag subscribers we need a cut-off on the probability. We pick the one that maximises F1 on <em>validation</em>, then apply it unchanged to test.
+              F1 weighs a missed churner and a false alarm equally. A business that values a lost subscriber more than a wasted offer should lower &tau; to raise recall; the <a href="#ovn-results" class="underline">cost explorer</a> shows how the best &tau; moves with that ratio. Any such choice should be made on validation, not test.</dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">1 Mar</span><span class="led-cap">Strict check</span></dt>
+            <dd>Because March transactions overlap the label window, the tuned LightGBM is retrained with billing features from before <strong>1 March 2017</strong> only, on the same split, and scored once on the same test subscribers. <a href="#ovn-strict" class="underline">Results &rarr;</a></dd>
           </div>
           <div class="led-row">
             <dt><span class="led-big">1&thinsp;000</span><span class="led-cap">Bootstrap resamples</span></dt>
@@ -843,6 +848,22 @@
             <p class="text-xs text-text-secondary mt-3" id="ovn-importance-text"></p>
           </div>
         </div>
+
+        <!-- Strict cutoff sensitivity check (notebook 08) -->
+        <div id="ovn-strict" class="bg-surface-card border-2 border-text-primary rounded-2xl shadow-subtle-card overflow-x-auto mt-10">
+          <div class="px-6 pt-6">
+            <h3 class="text-base sm:text-lg font-bold text-text-primary flex items-center gap-2"><span class="material-symbols-outlined">lock_clock</span>Stricter test: hide the March billing</h3>
+            <p class="text-xs text-text-secondary mt-1 max-w-4xl leading-relaxed" id="ovn-strict-lead"></p>
+          </div>
+          <table class="w-full text-xs mt-4">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr><th class="text-left px-6 py-2">Model (test split)</th><th class="text-right px-3 py-2">PR-AUC</th><th class="text-right px-3 py-2">95% CI</th><th class="text-right px-3 py-2">ROC-AUC</th>
+                <th class="text-right px-3 py-2">Log loss</th><th class="text-right px-3 py-2">&tau; (val)</th><th class="text-right px-3 py-2">Precision</th><th class="text-right px-3 py-2">Recall</th><th class="text-right px-6 py-2">F1</th></tr>
+            </thead>
+            <tbody id="ovn-strict-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+          </table>
+          <p class="text-xs text-text-secondary px-6 py-4 leading-relaxed max-w-5xl" id="ovn-strict-text"></p>
+        </div>
       </div>
     </section>
 
@@ -908,8 +929,8 @@
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">What these results do not show</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
-            <h3 class="font-bold text-text-primary mb-1">Billing state almost encodes the label</h3>
-            <p class="text-text-secondary leading-relaxed">KKBOX defines churn from transactions, and the last transaction (cancel flag, expiry date, auto-renew) already tells most of the story. The very high scores mean "easy for subscribers whose billing already shows the decision", not "we can read intentions".</p>
+            <h3 class="font-bold text-text-primary mb-1">The 31 March scores are optimistic for early warning</h3>
+            <p class="text-text-secondary leading-relaxed" id="ovn-lim-overlap">KKBOX defines churn from transactions, and the labelled plans expire during March, so the last March transaction often already shows the renewal decision. The headline PR-AUC means "easy once billing shows the decision", not "we can read intentions". With billing cut at 1 March the model is much weaker (see the <a href="#ovn-strict" class="underline">strict check</a>).</p>
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">One snapshot, random split</h3>
@@ -970,16 +991,19 @@
               <li><a class="underline font-mono text-text-primary" href="https://github.com/destopianpirate/es335_final/blob/main/notebooks/05_tree_models_and_tuning.ipynb">05_tree_models_and_tuning</a>: random forest grid, LightGBM with Optuna, threshold, ablation.</li>
               <li><a class="underline font-mono text-text-primary" href="https://github.com/destopianpirate/es335_final/blob/main/notebooks/06_test_evaluation.ipynb">06_test_evaluation</a>: test metrics, all curves, bootstrap, error analysis.</li>
               <li><a class="underline font-mono text-text-primary" href="https://github.com/destopianpirate/es335_final/blob/main/notebooks/07_website_export.ipynb">07_website_export</a>: numbers and the browser model for this site.</li>
+              <li><a class="underline font-mono text-text-primary" href="https://github.com/destopianpirate/es335_final/blob/main/notebooks/08_strict_cutoff.ipynb">08_strict_cutoff</a>: sensitivity check with billing cut at 1 March (run before 07).</li>
             </ol>
-            <p class="text-[11px] text-text-muted mt-4">Full metric tables: <a class="underline" href="https://github.com/destopianpirate/es335_final/blob/main/results/test_metrics.csv">results/test_metrics.csv</a>, <a class="underline" href="https://github.com/destopianpirate/es335_final/blob/main/results/validation_metrics.csv">results/validation_metrics.csv</a>. Setup, data download, AI-use disclosure and citations: <a class="underline" href="https://github.com/destopianpirate/es335_final#readme">README</a>.</p>
+            <p class="text-[11px] text-text-muted mt-4">Full metric tables: <a class="underline" href="https://github.com/destopianpirate/es335_final/blob/main/results/test_metrics.csv">results/test_metrics.csv</a>, <a class="underline" href="https://github.com/destopianpirate/es335_final/blob/main/results/validation_metrics.csv">results/validation_metrics.csv</a>, <a class="underline" href="https://github.com/destopianpirate/es335_final/blob/main/results/strict_cutoff_metrics.csv">results/strict_cutoff_metrics.csv</a>. Setup, data download, AI-use disclosure and citations: <a class="underline" href="https://github.com/destopianpirate/es335_final#readme">README</a>.</p>
           </div>
           <div class="bg-[#121212] text-[#E2E8F0] rounded-2xl p-6 font-mono text-[11px] leading-relaxed overflow-x-auto">
 <pre># 1. put the 5 Kaggle CSVs in data/raw/
 pip install -r requirements.txt
 cd notebooks
-jupyter nbconvert --to notebook --execute --inplace 0*.ipynb   # in order 01 to 07
+for nb in 01 02 03 04 05 06 08 07; do   # 08 before 07
+  jupyter nbconvert --to notebook --execute --inplace ${nb}_*.ipynb
+done
 # 2. rebuild this website into docs/
-cd .. &amp;&amp; python website/build.py --repo &lt;repo-url&gt;
+cd .. &amp;&amp; python website/build.py
 node website/tests/check_model_parity.mjs   # browser model == Python</pre>
           </div>
         </div>

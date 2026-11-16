@@ -4,8 +4,8 @@
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">What these results do not show</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
-            <h3 class="font-bold text-text-primary mb-1">Billing state almost encodes the label</h3>
-            <p class="text-text-secondary leading-relaxed">KKBOX defines churn from transactions, and the last transaction (cancel flag, expiry date, auto-renew) already tells most of the story. The very high scores mean "easy for subscribers whose billing already shows the decision", not "we can read intentions".</p>
+            <h3 class="font-bold text-text-primary mb-1">The 31 March scores are optimistic for early warning</h3>
+            <p class="text-text-secondary leading-relaxed" id="ovn-lim-overlap">KKBOX defines churn from transactions, and the labelled plans expire during March, so the last March transaction often already shows the renewal decision. The headline PR-AUC means "easy once billing shows the decision", not "we can read intentions". With billing cut at 1 March the model is much weaker (see the <a href="#ovn-strict" class="underline">strict check</a>).</p>
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">One snapshot, random split</h3>
@@ -66,16 +66,19 @@
               <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/05_tree_models_and_tuning.ipynb">05_tree_models_and_tuning</a>: random forest grid, LightGBM with Optuna, threshold, ablation.</li>
               <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/06_test_evaluation.ipynb">06_test_evaluation</a>: test metrics, all curves, bootstrap, error analysis.</li>
               <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/07_website_export.ipynb">07_website_export</a>: numbers and the browser model for this site.</li>
+              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/08_strict_cutoff.ipynb">08_strict_cutoff</a>: sensitivity check with billing cut at 1 March (run before 07).</li>
             </ol>
-            <p class="text-[11px] text-text-muted mt-4">Full metric tables: <a class="underline" href="{{REPO_URL}}/blob/main/results/test_metrics.csv">results/test_metrics.csv</a>, <a class="underline" href="{{REPO_URL}}/blob/main/results/validation_metrics.csv">results/validation_metrics.csv</a>. Setup, data download, AI-use disclosure and citations: <a class="underline" href="{{REPO_URL}}#readme">README</a>.</p>
+            <p class="text-[11px] text-text-muted mt-4">Full metric tables: <a class="underline" href="{{REPO_URL}}/blob/main/results/test_metrics.csv">results/test_metrics.csv</a>, <a class="underline" href="{{REPO_URL}}/blob/main/results/validation_metrics.csv">results/validation_metrics.csv</a>, <a class="underline" href="{{REPO_URL}}/blob/main/results/strict_cutoff_metrics.csv">results/strict_cutoff_metrics.csv</a>. Setup, data download, AI-use disclosure and citations: <a class="underline" href="{{REPO_URL}}#readme">README</a>.</p>
           </div>
           <div class="bg-[#121212] text-[#E2E8F0] rounded-2xl p-6 font-mono text-[11px] leading-relaxed overflow-x-auto">
 <pre># 1. put the 5 Kaggle CSVs in data/raw/
 pip install -r requirements.txt
 cd notebooks
-jupyter nbconvert --to notebook --execute --inplace 0*.ipynb   # in order 01 to 07
+for nb in 01 02 03 04 05 06 08 07; do   # 08 before 07
+  jupyter nbconvert --to notebook --execute --inplace ${nb}_*.ipynb
+done
 # 2. rebuild this website into docs/
-cd .. &amp;&amp; python website/build.py --repo &lt;repo-url&gt;
+cd .. &amp;&amp; python website/build.py
 node website/tests/check_model_parity.mjs   # browser model == Python</pre>
           </div>
         </div>

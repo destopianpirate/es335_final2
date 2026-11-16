@@ -1,0 +1,6 @@
+model,pr_auc,pr_auc_low,pr_auc_high,roc_auc,log_loss,threshold,precision,recall,f1
+Strict billing + demographics,0.4208,0.4134,0.4276,0.8023,0.236,0.2,0.3434,0.4299,0.3818
+Strict billing + demographics + listening,0.5682,0.561,0.5757,0.8614,0.2017,0.27,0.6279,0.4539,0.5269
+Rule: auto-renew off (strict),0.1418,0.1381,0.1457,0.5553,0.2917,0.45,0.8396,0.0523,0.0984
+Majority (prior),0.0899,0.0886,0.0912,0.5,0.3024,0.45,0.0,0.0,0.0
+Original champion (31 March billing),0.9644,0.9624,0.9662,0.9958,0.0452,0.45,0.8828,0.9129,0.8976

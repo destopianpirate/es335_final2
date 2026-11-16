@@ -5,6 +5,9 @@ const CHAMP = 'LightGBM (tuned)';
 const LOWER_BETTER = ['log_loss', 'brier'];
 const modelRow = name => (SITE.test_metrics || []).find(m => m.model === name) || {};
 const ablationRow = set => (SITE.ablation || []).find(a => a.set === set) || {};
+const STRICT_BILL = 'Strict billing + demographics', STRICT_ALL = 'Strict billing + demographics + listening';
+const strictRow = name => ((SITE.strict || {}).metrics || []).find(m => m.model === name) || {};
+const strictGain = () => (SITE.strict || {}).listening_gain || {};
 const f4 = v => sdFormat(v, 'f4');
 const pct1 = v => sdFormat(v, 'pct1');
 
@@ -19,18 +22,18 @@ function ovnRenderIntro() {
      <strong class="text-text-primary">PR-AUC ${f4(c.pr_auc)}</strong> (ROC-AUC ${f4(c.roc_auc)}), against ${f4(lr.pr_auc)} for logistic regression and ${f4(rule.pr_auc)} for the auto-renew rule.
      At the threshold chosen on validation it catches <strong class="text-text-primary">${pct1(c.recall)} of churners</strong> with ${pct1(c.precision)} precision.
      Billing records carry almost all of the signal; listening behaviour changes PR-AUC by <strong class="text-text-primary">${sdFormat(d.mean, 'signed4')}</strong>
-     (95% CI ${sdFormat(d.low, 'signed4')} to ${sdFormat(d.high, 'signed4')}).`);
+     (95% CI ${sdFormat(d.low, 'signed4')} to ${sdFormat(d.high, 'signed4')}).
+     These scores benefit from March billing that often already shows the renewal; with billing cut at 1 March, PR-AUC is
+     <strong class="text-text-primary">${f4(strictRow(STRICT_ALL).pr_auc)}</strong> and listening adds <strong class="text-text-primary">${sdFormat(strictGain().mean, 'signed4')}</strong>.`);
 
   setText('ovn-naive-acc', pct1(1 - SITE.data.train.churn_rate) + ' accuracy');
 
   const bill = ablationRow('Billing + demographics'), lis = ablationRow('Listening + demographics');
   const g = SITE.importance_by_group || {};
   const findings = [
-    { title: 'Churn can be predicted well', text: `The champion reaches PR-AUC ${f4(c.pr_auc)} on unseen subscribers; a constant guess scores ${f4(modelRow('Majority (prior)').pr_auc)}. Probabilities are well calibrated (log loss ${f4(c.log_loss)}).` },
-    { title: 'Billing carries the signal', text: `Billing + demographics alone reach PR-AUC ${f4(bill.pr_auc)}; listening + demographics only ${f4(lis.pr_auc)}. Billing features take ${sdFormat(g.billing / 100, 'pct1')} of the champion's split gain.` },
-    { title: listeningHelps ? 'Listening adds a little' : 'Listening adds nothing reliable', text: listeningHelps
-        ? `Adding listening to billing raises PR-AUC by ${sdFormat(d.mean, 'signed4')} (paired bootstrap 95% CI ${sdFormat(d.low, 'signed4')} to ${sdFormat(d.high, 'signed4')}). Real, but small next to billing.`
-        : `Adding listening to billing changes PR-AUC by ${sdFormat(d.mean, 'signed4')} (95% CI ${sdFormat(d.low, 'signed4')} to ${sdFormat(d.high, 'signed4')}), which includes zero.` },
+    { title: 'On 31 March, churn is easy to rank', text: `The champion reaches PR-AUC ${f4(c.pr_auc)} on unseen subscribers; a constant guess scores ${f4(modelRow('Majority (prior)').pr_auc)}. Billing features take ${sdFormat(g.billing / 100, 'pct1')} of the split gain, because March billing often already records the renewal decision.` },
+    { title: 'Earlier, it is much harder', text: `With billing cut at 1 March, before any labelled plan expires, the same model reaches PR-AUC ${f4(strictRow(STRICT_ALL).pr_auc)} (billing + demographics alone: ${f4(strictRow(STRICT_BILL).pr_auc)}). That is still ${(strictRow(STRICT_ALL).pr_auc / modelRow('Majority (prior)').pr_auc).toFixed(1)}&times; the no-skill level, but far from ${f4(c.pr_auc)}.` },
+    { title: 'Listening matters when billing is silent', text: `At 31 March, listening adds only ${sdFormat(d.mean, 'signed4')} PR-AUC (paired 95% CI ${sdFormat(d.low, 'signed4')} to ${sdFormat(d.high, 'signed4')}). Under the strict cutoff it adds ${sdFormat(strictGain().mean, 'signed4')} (CI ${sdFormat(strictGain().low, 'signed4')} to ${sdFormat(strictGain().high, 'signed4')}).` },
   ];
   setText('ovn-findings', findings.map(f => `
     <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
@@ -264,9 +267,9 @@ function ovnRenderConclusion() {
   const c = modelRow(CHAMP), rule = modelRow('Rule: auto-renew off'), d = SITE.ablation_diff;
   const bill = ablationRow('Billing + demographics');
   const cards = [
-    ['Can churn be predicted?', `Yes, for this snapshot. On unseen subscribers the tuned LightGBM reaches PR-AUC ${f4(c.pr_auc)} (95% CI ${f4(SITE.champion.ci.pr_auc.low)}&ndash;${f4(SITE.champion.ci.pr_auc.high)}), against ${f4(rule.pr_auc)} for the best simple rule, and its probabilities are well calibrated.`],
-    ['Does listening help beyond billing?', `A little. Billing + demographics already reach ${f4(bill.pr_auc)}; adding listening adds ${sdFormat(d.mean, 'signed4')} PR-AUC (paired 95% CI ${sdFormat(d.low, 'signed4')} to ${sdFormat(d.high, 'signed4')}). Most of the signal is in the billing state.`],
-    ['What it cannot do', `It mostly misses subscribers whose records look like renewers', and it shows association, not cause. It has only been tested on the same month it was trained on.`],
+    ['Can churn be predicted?', `On 31 March, yes: the tuned LightGBM reaches PR-AUC ${f4(c.pr_auc)} (95% CI ${f4(SITE.champion.ci.pr_auc.low)}&ndash;${f4(SITE.champion.ci.pr_auc.high)}) against ${f4(rule.pr_auc)} for the best simple rule, but much of this comes from March billing that already shows the renewal. As an early warning (billing cut at 1 March) it reaches ${f4(strictRow(STRICT_ALL).pr_auc)}: useful, but far from perfect.`],
+    ['Does listening help beyond billing?', `It depends on what billing already reveals. At 31 March, billing + demographics reach ${f4(bill.pr_auc)} and listening adds only ${sdFormat(d.mean, 'signed4')}. With billing cut at 1 March, listening adds ${sdFormat(strictGain().mean, 'signed4')} PR-AUC (paired 95% CI ${sdFormat(strictGain().low, 'signed4')} to ${sdFormat(strictGain().high, 'signed4')}): it matters most exactly when billing is uninformative.`],
+    ['What it cannot do', `It mostly misses subscribers whose records look like renewers', and it shows association, not cause. March listening may partly reflect activity after a plan has already lapsed. It has only been tested on the same month it was trained on.`],
   ];
   setText('ovn-conclusion-cards', cards.map(([h, t]) => `
     <div class="p-5 rounded-2xl bg-page-bg border border-border-subtle"><span class="font-bold text-text-primary block mb-1">${h}</span>
@@ -440,6 +443,34 @@ function ovnRenderGap() {
   if (c) setText('ovn-gap-note', `The champion scores ${f4(c.v.pr_auc)} PR-AUC on validation and ${f4(c.t.pr_auc)} on test: a gap of ${sdFormat(c.t.pr_auc - c.v.pr_auc, 'signed4')}. The test split is slightly lower, as expected when the model and threshold were picked on validation (see Limitations).`);
 }
 
+function ovnRenderStrict() {
+  const s = SITE.strict;
+  if (!s) return;
+  const withMarch = (s.overlap || []).find(o => o.march_tx) || {}, without = (s.overlap || []).find(o => !o.march_tx) || {};
+  setText('ovn-strict-lead', `The labelled plans expire during March, and ${pct1(withMarch.share)} of subscribers have a transaction dated in March 2017.
+    Those churn at ${pct1(withMarch.churn_rate)}; the rest churn at ${pct1(without.churn_rate)}. So by 31 March the billing record often already shows the decision.
+    Here every billing feature is rebuilt from transactions before <strong>${s.cutoff}</strong> (only ${pct1(s.has_tx_share)} of subscribers have one), and the same tuned LightGBM is retrained on the same split.
+    Thresholds are chosen on validation; the test split is scored once.`);
+  const best = Math.max(...s.metrics.filter(m => m.model.startsWith('Strict')).map(m => m.pr_auc));
+  setText('ovn-strict-rows', s.metrics.map(r => {
+    const orig = r.model.startsWith('Original'), top = r.pr_auc === best;
+    return `<tr class="${orig ? 'bg-surface-subtle text-text-muted' : ''}">
+      <td class="px-6 py-2 font-sans ${top ? 'font-bold text-text-primary' : 'text-text-secondary'}">${r.model}${top ? ' &#9733;' : ''}</td>
+      <td class="px-3 py-2 text-right ${top ? 'font-bold text-text-primary' : ''}">${f4(r.pr_auc)}</td>
+      <td class="px-3 py-2 text-right text-text-muted">${f4(r.pr_auc_low)}&ndash;${f4(r.pr_auc_high)}</td>
+      <td class="px-3 py-2 text-right">${f4(r.roc_auc)}</td><td class="px-3 py-2 text-right">${f4(r.log_loss)}</td>
+      <td class="px-3 py-2 text-right">${r.threshold.toFixed(2)}</td><td class="px-3 py-2 text-right">${f4(r.precision)}</td>
+      <td class="px-3 py-2 text-right">${f4(r.recall)}</td><td class="px-6 py-2 text-right">${f4(r.f1)}</td></tr>`;
+  }).join(''));
+  const g = s.listening_gain;
+  setText('ovn-strict-text', `<strong class="text-text-primary">Reading.</strong> Without March billing, PR-AUC falls from ${f4(strictRow('Original champion (31 March billing)').pr_auc)} to
+    ${f4(strictRow(STRICT_ALL).pr_auc)}, so most of the headline score comes from billing that records the outcome, not from early warning signs.
+    The early-warning model is still clearly useful (${(strictRow(STRICT_ALL).pr_auc / strictRow('Majority (prior)').pr_auc).toFixed(1)}&times; the no-skill PR-AUC of ${f4(strictRow('Majority (prior)').pr_auc)}).
+    And here listening matters: it adds <strong class="text-text-primary">${sdFormat(g.mean, 'signed4')}</strong> PR-AUC (paired bootstrap 95% CI ${sdFormat(g.low, 'signed4')} to ${sdFormat(g.high, 'signed4')}),
+    against ${sdFormat(SITE.ablation_diff.mean, 'signed4')} at 31 March. Caveat: March listening can extend past a subscriber's expiry, and a subscriber whose plan has lapsed may stop listening,
+    so part of this gain may also reflect the outcome. A fully clean early-warning test would need each subscriber's expiry date and listening only before it.`);
+}
+
 window.initOverview = function () {
   if (!window.SITE_DATA) return;
   const view = document.getElementById('view-overview');
@@ -456,6 +487,7 @@ window.initOverview = function () {
   ovnRenderErrors();
   ovnRenderTuning();
   ovnRenderExamples();
+  ovnRenderStrict();
   ovnRenderConclusion();
   ovnRenderMetricButtons();
   ovnRenderScoreAndGains();

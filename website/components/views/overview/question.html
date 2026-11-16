@@ -65,11 +65,11 @@
             </div>
             <div class="rq-item space-y-1.5">
               <span class="rq-chip"><span class="material-symbols-outlined">schedule</span></span><span class="font-bold text-text-primary block text-sm">When the prediction is made</span>
-              <p class="text-text-secondary leading-relaxed">On the cutoff date, <strong class="text-text-primary">31 March 2017</strong>, before the renewal decision. The use case: decide which subscribers to contact before their plan runs out.</p>
+              <p class="text-text-secondary leading-relaxed">On the cutoff date, <strong class="text-text-primary">31 March 2017</strong>. The use case: decide which subscribers to contact. Caveat: the labelled plans expire <em>during</em> March, so for many subscribers the renewal (or its absence) has already happened by the cutoff. We therefore also test a <a href="#ovn-strict" class="underline">strict 1 March cutoff</a>, before any expiry.</p>
             </div>
             <div class="rq-item space-y-1.5">
               <span class="rq-chip"><span class="material-symbols-outlined">inventory_2</span></span><span class="font-bold text-text-primary block text-sm">What is known then</span>
-              <p class="text-text-secondary leading-relaxed">The member profile, every transaction up to 31 March (plan, price, auto-renew, cancel, expiry date) and daily listening for March 2017. Nothing dated after the cutoff is used.</p>
+              <p class="text-text-secondary leading-relaxed">The member profile, every transaction up to 31 March (plan, price, auto-renew, cancel, expiry date) and daily listening for March 2017. Nothing dated after the cutoff is used, but March transactions overlap the label window (see <a href="#ovn-strict" class="underline">strict check</a>).</p>
             </div>
             <div class="rq-item space-y-1.5">
               <span class="rq-chip"><span class="material-symbols-outlined">balance</span></span><span class="font-bold text-text-primary block text-sm">Limits of the claim</span>

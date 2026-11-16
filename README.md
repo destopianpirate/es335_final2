@@ -19,12 +19,26 @@ ES 335 Machine Learning course project. Ayush Singh (25110068), Avnish Yadav (25
 
 Billing features carry most of the signal; adding listening features raises PR-AUC by 0.0083 (paired bootstrap 95% CI 0.0073 to 0.0093). Full tables: `results/test_metrics.csv`, `results/validation_metrics.csv`.
 
+### Strict cutoff check (notebook 08)
+
+The labelled plans expire during March 2017, and 95.4% of subscribers have a transaction dated in March (they churn at 5.5%, the rest at 80.9%). So by 31 March the billing record often already shows the renewal decision. The scores above are therefore optimistic for early warning. Notebook 08 rebuilds every billing feature from transactions before **1 March 2017** (before any labelled expiry) and retrains the same tuned LightGBM on the same split:
+
+| Model (same test split) | PR-AUC (95% CI) | ROC-AUC | F1 at validation threshold |
+|---|---|---|---|
+| Majority (prior) | 0.0899 | 0.5000 | 0.0000 |
+| Rule: auto-renew off (strict) | 0.1418 | 0.5553 | 0.0984 |
+| Strict billing + demographics | 0.4208 (0.4134 to 0.4276) | 0.8023 | 0.3818 |
+| **Strict billing + demographics + listening** | **0.5682** (0.5610 to 0.5757) | **0.8614** | **0.5269** |
+| Original champion (31 March billing) | 0.9644 | 0.9958 | 0.8976 |
+
+Under the strict cutoff listening adds +0.1474 PR-AUC (paired bootstrap 95% CI +0.1426 to +0.1524), far more than at 31 March: listening matters most when billing does not already reveal the outcome. Caveat: March listening can fall after a subscriber's expiry, so part of this gain may still reflect the outcome. Table: `results/strict_cutoff_metrics.csv`.
+
 ## Repository
 
 ```
 data/raw/          the 5 Kaggle CSVs (not committed, see Data access)
 data/processed/    feature tables, split_assignments.csv, X and y files per split
-notebooks/         01 to 07, run in order
+notebooks/         01 to 08 (run 08 before 07)
 models/            fitted models and model_config.json
 results/           metric tables, figures, submission.csv
 website/           website source and build script
@@ -40,6 +54,7 @@ docs/              built website (GitHub Pages)
 | 05_tree_models_and_tuning | random forest grid, LightGBM with Optuna, decision threshold, feature set ablation |
 | 06_test_evaluation | test metrics and curves, bootstrap intervals, error analysis |
 | 07_website_export | data for the website and the champion model as JavaScript |
+| 08_strict_cutoff | sensitivity check: billing features from before 1 March 2017, same split and hyperparameters |
 
 ## Setup and run
 
@@ -47,9 +62,11 @@ docs/              built website (GitHub Pages)
 pip install -r requirements.txt
 # put the five CSVs in data/raw/ (see Data access)
 cd notebooks
-jupyter nbconvert --to notebook --execute --inplace 01_raw_data_analysis.ipynb   # then 02 to 07 in order
+for nb in 01 02 03 04 05 06 08 07; do   # 08 before 07, which exports its results to the site
+  jupyter nbconvert --to notebook --execute --inplace ${nb}_*.ipynb
+done
 cd ..
-python website/build.py --repo https://github.com/destopianpirate/es335_final
+python website/build.py   # writes the site to docs/, repo link defaults to this repository
 node website/tests/check_model_parity.mjs   # optional: browser model matches Python
 ```
 
@@ -68,12 +85,12 @@ Kaggle, Customer Retention Datathon (Riyadh Edition): https://www.kaggle.com/com
 
 ## AI-use disclosure
 
-<<<<<<< HEAD
-We used AI Tools to help make the website. 
-=======
-We used AI to help make the website.
+We used AI assistants (Claude Code by Anthropic) during this project:
 
->>>>>>> 55c7f83206eed1df8ab5adf38c539e7d3fb50ae2
+- **Website:** generating and styling the HTML, CSS and JavaScript of the site, the build script, and the JavaScript port of the LightGBM model.
+- **Code review and checks:** reviewing the notebooks against the project rubric, which led to the strict cutoff check in notebook 08 (drafted with AI assistance), and wording of the README and site text.
+
+We chose the question, features, split, models and metrics; ran every notebook ourselves; and checked that all numbers on the site and in this README come from the committed results files. The browser model is verified against Python with `website/tests/check_model_parity.mjs`. We are responsible for all content.
 
 ## Citations
 

@@ -1,0 +1,85 @@
+{
+ "cutoff": "2017-03-01",
+ "has_tx_share": 0.09547515958547592,
+ "overlap": [
+  {
+   "march_tx": false,
+   "n": 43550,
+   "share": 0.046002581637417266,
+   "churn_rate": 0.8087715269804822
+  },
+  {
+   "march_tx": true,
+   "n": 903136,
+   "share": 0.9539974183625828,
+   "churn_rate": 0.055279603514863766
+  }
+ ],
+ "metrics": [
+  {
+   "model": "Strict billing + demographics",
+   "pr_auc": 0.4208,
+   "pr_auc_low": 0.4134,
+   "pr_auc_high": 0.4276,
+   "roc_auc": 0.8023,
+   "log_loss": 0.236,
+   "threshold": 0.2,
+   "precision": 0.3434,
+   "recall": 0.4299,
+   "f1": 0.3818
+  },
+  {
+   "model": "Strict billing + demographics + listening",
+   "pr_auc": 0.5682,
+   "pr_auc_low": 0.561,
+   "pr_auc_high": 0.5757,
+   "roc_auc": 0.8614,
+   "log_loss": 0.2017,
+   "threshold": 0.27,
+   "precision": 0.6279,
+   "recall": 0.4539,
+   "f1": 0.5269
+  },
+  {
+   "model": "Rule: auto-renew off (strict)",
+   "pr_auc": 0.1418,
+   "pr_auc_low": 0.1381,
+   "pr_auc_high": 0.1457,
+   "roc_auc": 0.5553,
+   "log_loss": 0.2917,
+   "threshold": 0.45,
+   "precision": 0.8396,
+   "recall": 0.0523,
+   "f1": 0.0984
+  },
+  {
+   "model": "Majority (prior)",
+   "pr_auc": 0.0899,
+   "pr_auc_low": 0.0886,
+   "pr_auc_high": 0.0912,
+   "roc_auc": 0.5,
+   "log_loss": 0.3024,
+   "threshold": 0.45,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0
+  },
+  {
+   "model": "Original champion (31 March billing)",
+   "pr_auc": 0.9644,
+   "pr_auc_low": 0.9624,
+   "pr_auc_high": 0.9662,
+   "roc_auc": 0.9958,
+   "log_loss": 0.0452,
+   "threshold": 0.45,
+   "precision": 0.8828,
+   "recall": 0.9129,
+   "f1": 0.8976
+  }
+ ],
+ "listening_gain": {
+  "mean": 0.1474335869157289,
+  "low": 0.1425583914980029,
+  "high": 0.15238267286728618
+ }
+}

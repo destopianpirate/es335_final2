@@ -9,7 +9,7 @@
             </thead>
             <tbody class="divide-y divide-border-subtle text-text-secondary leading-relaxed">
               <tr><td class="px-4 py-3 font-semibold text-text-primary">Aggregate every table to one row per subscriber, using only data up to 31 March 2017</td>
-                  <td class="px-4 py-3">The unit of prediction is the subscriber. Nothing after the cutoff is used, so no future information leaks into the features.</td></tr>
+                  <td class="px-4 py-3">The unit of prediction is the subscriber. Nothing dated after the cutoff is used. However, the labelled plans expire during March, so a March renewal transaction can already be in the features; this is not leakage from the future, but it makes the task easier. A <a href="#ovn-strict" class="underline">strict check</a> rebuilds billing features from transactions before 1 March (notebook 08).</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-text-primary">Left joins, nobody dropped, plus <code>has_member</code> / <code>has_tx</code> / <code>has_logs</code> flags</td>
                   <td class="px-4 py-3">Dropping subscribers missing from any table would remove 25 % of them (65 % if invalid ages also count). Absence is informative: subscribers with no transactions churn at <span data-ds-break="has_tx|0.0"></span>.</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-text-primary">No listening logs &rarr; zeros and "31 days since last listen"</td>
@@ -91,7 +91,12 @@
           </div>
           <div class="led-row">
             <dt><span class="led-big">&tau; = <span data-sd="champion.threshold" data-fmt="f2"></span></span><span class="led-cap">Threshold</span></dt>
-            <dd>To flag subscribers we need a cut-off on the probability. We pick the one that maximises F1 on <em>validation</em>, then apply it unchanged to test.</dd>
+            <dd>To flag subscribers we need a cut-off on the probability. We pick the one that maximises F1 on <em>validation</em>, then apply it unchanged to test.
+              F1 weighs a missed churner and a false alarm equally. A business that values a lost subscriber more than a wasted offer should lower &tau; to raise recall; the <a href="#ovn-results" class="underline">cost explorer</a> shows how the best &tau; moves with that ratio. Any such choice should be made on validation, not test.</dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">1 Mar</span><span class="led-cap">Strict check</span></dt>
+            <dd>Because March transactions overlap the label window, the tuned LightGBM is retrained with billing features from before <strong>1 March 2017</strong> only, on the same split, and scored once on the same test subscribers. <a href="#ovn-strict" class="underline">Results &rarr;</a></dd>
           </div>
           <div class="led-row">
             <dt><span class="led-big">1&thinsp;000</span><span class="led-cap">Bootstrap resamples</span></dt>
