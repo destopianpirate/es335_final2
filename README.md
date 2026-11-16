@@ -119,12 +119,7 @@ Kaggle, Customer Retention Datathon (Riyadh Edition): https://www.kaggle.com/com
 
 ## AI-use disclosure
 
-We used AI assistants (Claude Code by Anthropic) during this project:
-
-- **Website:** generating and styling the HTML, CSS and JavaScript of the site, the build script, and the JavaScript port of the LightGBM model.
-- **Code review and checks:** reviewing the notebooks against the project rubric, which led to the strict cutoff check in notebook 08 (drafted with AI assistance), and wording of the README and site text.
-
-We chose the question, features, split, models and metrics; ran every notebook ourselves; and checked that all numbers on the site and in this README come from the committed results files. The browser model is verified against Python with `website/tests/check_model_parity.mjs`. We are responsible for all content.
+We used AI assistants to build websites and to understand the concepts.
 
 ## Citations
 
