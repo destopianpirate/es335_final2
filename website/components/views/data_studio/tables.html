@@ -24,6 +24,12 @@
           </table>
         </div>
 
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mt-8">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">How the five files become one feature matrix</h2>
+          <p class="text-[11px] text-text-secondary mb-4">Each table is cleaned and aggregated to one row per subscriber (<code>msno</code>), then left-joined onto the labels and split. Notebooks 02 and 03.</p>
+          <div class="overflow-x-auto"><div data-mermaid="data-flow" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="Data flow: four raw files aggregated per subscriber, left-joined into a 946,686 by 33 feature matrix, then split into train, validation and test">Loading diagram&hellip;</div></div>
+        </div>
+
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Labelled subscribers</span>

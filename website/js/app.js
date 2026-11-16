@@ -1,34 +1,33 @@
-// Single-page router: Overview, Data Studio, Model Predictor.
+// Single-page router: Home, Report, Data Studio, Model Predictor.
 
 const VIEW_TITLES = {
-  'overview': 'Overview',
+  'home': 'Home',
+  'report': 'Report',
   'data-studio': 'Data Studio',
   'model-predictor': 'Model Predictor',
 };
-
-// Section anchors that live inside each view (used to open the right view for a deep link)
-const VIEW_ANCHORS = {
-  'overview': ['ovn-data', 'ovn-preprocessing', 'ovn-models', 'ovn-evaluation', 'ovn-results', 'ovn-errors', 'ovn-limitations', 'ovn-conclusion', 'ovn-repro'],
-  'data-studio': ['dsn-tables', 'dsn-raw', 'dsn-overlap', 'dsn-quality', 'dsn-signals', 'dsn-explorer', 'dsn-features', 'dsn-training', 'dsn-split'],
-};
+const VIEW_ALIASES = { 'overview': 'report' };  // old links
 
 const initialised = {};
 
+// A hash is either a page name (#report) or the id of any element on a page (#ovn-strict);
+// for an element, open the page that contains it and scroll there.
 function parseRoute() {
-  const hash = (window.location.hash || '').replace(/^#/, '');
-  if (!hash) return { view: 'overview', anchor: null };
+  const hash = decodeURIComponent((window.location.hash || '').replace(/^#/, ''));
+  if (!hash) return { view: 'home', anchor: null };
   if (VIEW_TITLES[hash]) return { view: hash, anchor: null };
-  for (const [view, anchors] of Object.entries(VIEW_ANCHORS)) {
-    if (anchors.includes(hash)) return { view, anchor: hash };
-  }
-  return { view: 'overview', anchor: null };
+  if (VIEW_ALIASES[hash]) return { view: VIEW_ALIASES[hash], anchor: null };
+  const panel = document.getElementById(hash)?.closest('.view-panel');
+  if (panel) return { view: panel.id.replace(/^view-/, ''), anchor: hash };
+  return { view: 'home', anchor: null };
 }
 
 function initView(view) {
   if (initialised[view]) return;
   initialised[view] = true;
   try {
-    if (view === 'overview' && window.initOverview) window.initOverview();
+    if (view === 'home' && window.initHome) window.initHome();
+    if (view === 'report' && window.initReport) window.initReport();
     if (view === 'data-studio' && window.initDataStudio) window.initDataStudio();
   } catch (err) {
     console.warn(`Rendering error in ${view}:`, err);
@@ -39,6 +38,7 @@ function initView(view) {
 // (so the homepage can open halfway down). We control the first scroll ourselves.
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 let firstRoute = true;
+let currentView = null;
 let userScrolled = false;
 ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(ev => window.addEventListener(ev, () => { userScrolled = true; }, { passive: true }));
 
@@ -52,6 +52,8 @@ function switchView(view, anchor = null) {
   const title = document.getElementById('header-view-title');
   if (title) title.innerHTML = VIEW_TITLES[view];
 
+  const changedView = view !== currentView;
+  currentView = view;
   updateSidebarState(view);
   // Defer one frame so the panel is visible and canvases get real sizes
   requestAnimationFrame(() => {
@@ -59,12 +61,13 @@ function switchView(view, anchor = null) {
     if (isPredictor && typeof showInputScreen === 'function') showInputScreen();
   });
 
-  const behavior = firstRoute ? 'auto' : 'smooth';
+  // jump (not glide) when arriving from another page; glide within the same page
+  const behavior = firstRoute || changedView ? 'auto' : 'smooth';
   const go = () => {
     if (anchor) document.getElementById(anchor)?.scrollIntoView({ behavior, block: 'start' });
     else window.scrollTo({ top: 0, behavior });
   };
-  if (anchor) setTimeout(go, 80); else go();
+  if (anchor) setTimeout(go, changedView ? 160 : 80); else go();
 
   if (firstRoute) {
     // Charts and fonts change the page height while it loads: settle once more, unless the reader already moved.
@@ -76,7 +79,8 @@ function switchView(view, anchor = null) {
 
 function updateSidebarState(view) {
   const rows = {
-    'overview': document.getElementById('row-overview'),
+    'home': document.getElementById('row-home'),
+    'report': document.getElementById('row-report'),
     'data-studio': document.getElementById('row-data-studio'),
     'model-predictor': document.getElementById('row-model-predictor'),
   };

@@ -123,7 +123,7 @@ function renderPredictionResult(res) {
   const ciElem = document.getElementById('res-ci-readout');
   if (ciElem && res.score_band) {
     const b = res.score_band;
-    ciElem.textContent = `Test subscribers scored ${(b.lo * 100).toFixed(0)}-${(b.hi * 100).toFixed(0)}%: ${(b.rate * 100).toFixed(1)}% churned [${(b.ci[0] * 100).toFixed(1)}-${(b.ci[1] * 100).toFixed(1)}%], n = ${b.n.toLocaleString()}`;
+    ciElem.textContent = `Test subscribers scored ${(b.lo * 100).toFixed(0)}-${(b.hi * 100).toFixed(0)}%: ${(b.rate * 100).toFixed(1)}% churned [${(b.ci[0] * 100).toFixed(1)}-${(b.ci[1] * 100).toFixed(1)}%], n = ${b.n.toLocaleString('en-US')}`;
   }
 
   // Threshold marker position

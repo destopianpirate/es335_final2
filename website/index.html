@@ -13,9 +13,14 @@
 
     <main class="flex-grow">
 
-      <!-- VIEW 1: OVERVIEW (concise, reasoning from question to conclusion) -->
-      <div id="view-overview" class="view-panel">
+      <!-- VIEW 1: HOME (title, abstract, question, findings, where to go next) -->
+      <div id="view-home" class="view-panel">
         <load ="components/views/overview/question.html" />
+      </div>
+
+      <!-- VIEW 2: REPORT (full reasoning, data to conclusion) -->
+      <div id="view-report" class="view-panel hidden">
+        <load ="components/views/overview/report_intro.html" />
         <load ="components/views/overview/data.html" />
         <load ="components/views/overview/method.html" />
         <load ="components/views/overview/results.html" />
@@ -23,7 +28,7 @@
         <load ="components/views/overview/limitations.html" />
       </div>
 
-      <!-- VIEW 2: DATA STUDIO (main data points only) -->
+      <!-- VIEW 3: DATA STUDIO (main data points only) -->
       <div id="view-data-studio" class="view-panel hidden">
         <load ="components/views/data_studio/tables.html" />
         <load ="components/views/data_studio/raw.html" />
@@ -36,7 +41,7 @@
         <load ="components/views/data_studio/split.html" />
       </div>
 
-      <!-- VIEW 3: MODEL PREDICTOR (runs the champion LightGBM in the browser) -->
+      <!-- VIEW 4: MODEL PREDICTOR (runs the champion LightGBM in the browser) -->
       <div id="view-model-predictor" class="view-panel hidden lg:h-[calc(100vh-46px)] lg:overflow-hidden flex flex-col">
         <div id="model-predictor" class="w-full m-0 p-0 border-none shrink-0"></div>
         <div class="shrink-0">
@@ -76,6 +81,9 @@
   <script src="js/data_studio.js"></script>
   <script src="js/sandbox_engine.js"></script>
   <script src="js/sandbox_ui.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+  <script src="js/diagrams.js"></script>
 
   <script src="js/section_rail.js"></script>
   <script src="js/app.js"></script>

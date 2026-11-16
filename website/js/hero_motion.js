@@ -18,7 +18,7 @@
 
   // ---------- count-up numbers ----------
   function countUp(el, target, kind) {
-    const fmt = v => kind === 'int' ? Math.round(v).toLocaleString('en-IN')
+    const fmt = v => kind === 'int' ? Math.round(v).toLocaleString('en-US')
       : kind === 'pct1' ? (v * 100).toFixed(1) + '%' : v.toFixed(4);
     if (reduce) { el.textContent = fmt(target); return; }
     const t0 = performance.now(), dur = 1600;

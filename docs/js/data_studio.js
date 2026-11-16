@@ -234,7 +234,7 @@ function dsnRenderSignal(key) {
     options: {
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: c => c.datasetIndex === 1 ? `${c.raw.toFixed(1)} % churn  (n = ${rows[c.dataIndex].n.toLocaleString('en-IN')})` : `overall ${c.raw.toFixed(1)} %` } },
+        tooltip: { callbacks: { label: c => c.datasetIndex === 1 ? `${c.raw.toFixed(1)} % churn  (n = ${rows[c.dataIndex].n.toLocaleString('en-US')})` : `overall ${c.raw.toFixed(1)} %` } },
       },
       scales: { y: { beginAtZero: true, max: 100, title: { text: 'churn rate (%)' } }, x: { grid: { display: false } } },
     },
@@ -296,7 +296,7 @@ function dsnRenderRawChart(i, cfg) {
     type: cfg.line ? 'line' : 'bar',
     data: { labels, datasets: [{ data: values, backgroundColor: cfg.color || '#334155', borderColor: '#1D4ED8', borderRadius: 2,
       barPercentage: cfg.hist ? 1 : 0.8, categoryPercentage: cfg.hist ? 1 : 0.8, pointRadius: 2 }] },
-    options: { plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => Number(c.raw).toLocaleString('en-IN') } } },
+    options: { plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => Number(c.raw).toLocaleString('en-US') } } },
       scales: { y: { type: cfg.log ? 'logarithmic' : 'linear', beginAtZero: !cfg.log }, x: { grid: { display: false }, ticks: { maxTicksLimit: 14 } } } },
   });
 }
@@ -309,7 +309,7 @@ function dsnRenderCoverage() {
   makeChart('dsn-raw-c3', {
     type: 'bar',
     data: { labels, datasets: [{ data: cov.map(r => r.churn_rate * 100), backgroundColor: '#B91C1C', borderRadius: 3 }] },
-    options: { plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.raw.toFixed(1)} % churn (n = ${cov[c.dataIndex].n.toLocaleString('en-IN')})` } } },
+    options: { plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.raw.toFixed(1)} % churn (n = ${cov[c.dataIndex].n.toLocaleString('en-US')})` } } },
       scales: { y: { beginAtZero: true, max: 100, title: { text: 'churn rate (%)' } }, x: { grid: { display: false } } } },
   });
   setText('dsn-raw-t2', 'Labelled subscribers by table presence');
@@ -396,7 +396,7 @@ let summarySort = { key: null, dir: 1 };
 function dsnRenderSummary() {
   const rows = [...((SITE.eda || {}).feature_summary || [])];
   if (summarySort.key) rows.sort((a, b) => (a[summarySort.key] > b[summarySort.key] ? 1 : -1) * summarySort.dir);
-  const fmt = v => typeof v === 'number' ? (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString('en-IN') : +v.toFixed(3)) : v;
+  const fmt = v => typeof v === 'number' ? (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString('en-US') : +v.toFixed(3)) : v;
   setText('dsn-summary-head', '<tr>' + SUMMARY_COLS.map(([k, n], i) => `<th class="${i ? 'text-right' : 'text-left'} px-3 py-2 cursor-pointer select-none" onclick="dsnSortSummary('${k}')">${n}${summarySort.key === k ? (summarySort.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('') + '</tr>');
   setText('dsn-summary-rows', rows.map(r => '<tr>' + SUMMARY_COLS.map(([k], i) => i ? `<td class="px-3 py-1.5 text-right ${k === 'missing_pct' && r[k] > 0 ? 'text-accent-warning' : k === 'skew' && Math.abs(r[k]) > 3 ? 'text-accent-danger' : 'text-text-secondary'}">${fmt(r[k])}</td>` : `<td class="px-3 py-1.5 font-sans text-text-primary whitespace-nowrap">${featureName(r.feature)}</td>`).join('') + '</tr>').join(''));
 }
@@ -415,7 +415,7 @@ function dsnRenderDecile(feature) {
       { label: 'churn rate', data: d.map(r => r.churn_rate * 100), borderColor: '#1D4ED8', backgroundColor: '#1D4ED8', pointRadius: 4, borderWidth: 2 },
       { label: 'overall', data: lab.map(() => overall * 100), borderColor: '#B91C1C', borderDash: [5, 4], pointRadius: 0, borderWidth: 1.5 },
     ] },
-    options: { plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.datasetIndex ? `overall ${c.raw.toFixed(1)} %` : `${c.raw.toFixed(1)} % churn (n = ${d[c.dataIndex].n.toLocaleString('en-IN')})` } } },
+    options: { plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.datasetIndex ? `overall ${c.raw.toFixed(1)} %` : `${c.raw.toFixed(1)} % churn (n = ${d[c.dataIndex].n.toLocaleString('en-US')})` } } },
       scales: { y: { beginAtZero: true, title: { text: 'churn rate (%)' } }, x: { title: { text: featureName(feature) }, ticks: { font: { size: 9 } } } } },
   });
 }
@@ -468,7 +468,7 @@ const GROUP_DIMS = [
   { key: 'tx_count', short: 'Transactions', note: 'Most subscribers have 1 or 2 transactions. Churn peaks at 54 % for 3 to 5 transactions, then falls as the subscriber history grows (22 % at 21 or more).' },
   { key: 'n_methods', short: 'Payment methods used', note: 'Switching payment method is a warning sign: two methods already means 53 % churn against 6 % for subscribers who only ever used one.' },
   { key: 'daily_hours', short: 'Listening per day', note: 'Listening time barely separates churners from renewers. Only very short days (under 15 minutes) stand out a little, at about 12 %.' },
-  { key: 'skip', short: 'Early skips', note: 'The share of songs skipped early moves the churn rate only between 8.7 % and 9.5 %. It is a weak signal on its own.' },
+  { key: 'skip', short: 'Early skips', note: 'The share of songs skipped early moves the churn rate only between 8.7 % and 9.4 %. It is a weak signal on its own.' },
   { key: 'city', short: 'City', note: 'City 1 holds 46 % of subscribers and churns at 6 %. Most other large cities sit at 12 to 14 %.' },
   { key: 'registered_via', short: 'Registration channel', note: 'Channel 7 (48 % of subscribers) churns at 4.5 %. Channels 3 and 4 churn at 17 % and 23 %.' },
 ];
@@ -501,7 +501,7 @@ function dsnRenderGroup(key) {
       { label: 'churn rate', data: rows.map(r => r.churn_rate * 100), borderRadius: 4,
         backgroundColor: rows.map(r => r.churn_rate > X.overall ? '#B91C1C' : '#334155') } ] },
     options: { indexAxis: 'y', maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.raw.toFixed(1)} % churn  (n = ${rows[c.dataIndex].n.toLocaleString('en-IN')})` } } },
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.raw.toFixed(1)} % churn  (n = ${rows[c.dataIndex].n.toLocaleString('en-US')})` } } },
       scales: { x: { beginAtZero: true, max: 100, title: { text: `churn rate (%), overall ${(X.overall * 100).toFixed(1)} %` } }, y: { grid: { display: false } } } },
   });
 }

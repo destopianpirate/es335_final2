@@ -2,7 +2,7 @@
     
     <!-- Top Header: Lab Branding & Collapse Action -->
     <div id="sidebar-header" class="h-16 px-4 flex items-center justify-between bg-white dark:bg-[#121212] shrink-0 border-b border-border-subtle dark:border-[#222222] relative transition-all duration-200">
-      <a href="#overview" id="sidebar-brand-link" class="flex items-center gap-3 overflow-hidden group" title="Return to Overview">
+      <a href="#home" id="sidebar-brand-link" class="flex items-center gap-3 overflow-hidden group" title="Return to Home">
         <div class="w-8 h-8 rounded-lg bg-black text-white dark:border dark:border-[#444444] flex items-center justify-center font-black text-xs tracking-wider shrink-0 group-hover:bg-black transition-colors">
           ML
         </div>
@@ -57,56 +57,33 @@
     <!-- Scrollable Navigation Sections -->
     <div id="sidebar-nav-container" class="flex-1 overflow-y-auto px-3 py-2 space-y-2 text-xs font-semibold">
       
-      <!-- NAV SECTION 1: OVERVIEW -->
+      <!-- NAV SECTION 1: HOME (single <a>) -->
       <div class="sidebar-accordion">
-        <div id="row-overview" class="sidebar-nav-row active-nav-row w-full flex items-center justify-between text-white hover:bg-black rounded-full px-3 py-2 transition-colors group">
-          <a href="#overview" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Overview">
-            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-white shrink-0">grid_view</span>
-            <span class="sidebar-text font-bold text-xs text-white truncate tracking-tight">Overview</span>
+        <div id="row-home" class="sidebar-nav-row active-nav-row w-full flex items-center justify-between text-white hover:bg-black rounded-full px-3 py-2 transition-colors group">
+          <a href="#home" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Home">
+            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-white shrink-0">home</span>
+            <span class="sidebar-text font-bold text-xs text-white truncate tracking-tight">Home</span>
           </a>
-          <button type="button" onclick="event.preventDefault(); event.stopPropagation(); toggleSidebarAccordion('model-portal')" class="sidebar-arrow p-1 text-slate-300 hover:text-white cursor-pointer shrink-0 transition-colors" title="Toggle Sections" aria-label="Toggle Overview Subsections">
-            <span id="arrow-model-portal" class="material-symbols-outlined text-[16px] inline-block transition-transform duration-200">chevron_right</span>
-          </button>
-        </div>
-        
-        <!-- Subheadings under Overview (NO grey dot, NO numbers, collapsed by default) -->
-        <div id="subheadings-model-portal" class="hidden pl-4 pr-1 py-1.5 space-y-0.5 text-[11px] font-medium bg-transparent">
-          <div class="space-y-0.5">
-            <a href="#overview" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Question &amp; Answer</span>
-            </a>
-            <a href="#ovn-data" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Data</span>
-            </a>
-            <a href="#ovn-preprocessing" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Preprocessing</span>
-            </a>
-            <a href="#ovn-models" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Baseline &amp; Methods</span>
-            </a>
-            <a href="#ovn-evaluation" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Evaluation</span>
-            </a>
-            <a href="#ovn-results" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Results</span>
-            </a>
-            <a href="#ovn-errors" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Errors</span>
-            </a>
-            <a href="#ovn-limitations" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Limitations</span>
-            </a>
-            <a href="#ovn-conclusion" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Conclusion</span>
-            </a>
-            <a href="#ovn-repro" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Reproduction Steps</span>
-            </a>
-          </div>
+          <span class="sidebar-arrow p-1 text-slate-400 group-hover:text-slate-700 shrink-0 pointer-events-none" aria-hidden="true">
+            <span class="material-symbols-outlined text-[16px] inline-block">chevron_right</span>
+          </span>
         </div>
       </div>
 
-      <!-- NAV SECTION 2: DATA STUDIO -->
+      <!-- NAV SECTION 2: MODEL PREDICTOR (single <a>, perfectly centered in collapsed mode) -->
+      <div class="sidebar-accordion">
+        <div id="row-model-predictor" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
+          <a href="#model-predictor" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Model Predictor">
+            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-slate-500 group-hover:text-slate-900 shrink-0">model_training</span>
+            <span class="sidebar-text font-bold text-xs text-slate-800 group-hover:text-slate-900 truncate tracking-tight">Model Predictor</span>
+          </a>
+          <span class="sidebar-arrow p-1 text-slate-400 group-hover:text-slate-700 shrink-0 pointer-events-none" aria-hidden="true">
+            <span class="material-symbols-outlined text-[16px] inline-block">chevron_right</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- NAV SECTION 3: DATA STUDIO -->
       <div class="sidebar-accordion">
         <div id="row-data-studio" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
           <a href="#data-studio" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Data Studio">
@@ -152,16 +129,49 @@
         </div>
       </div>
 
-      <!-- NAV SECTION 3: MODEL PREDICTOR (single <a>, perfectly centered in collapsed mode) -->
+      <!-- NAV SECTION 4: REPORT -->
       <div class="sidebar-accordion">
-        <div id="row-model-predictor" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
-          <a href="#model-predictor" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Model Predictor">
-            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-slate-500 group-hover:text-slate-900 shrink-0">model_training</span>
-            <span class="sidebar-text font-bold text-xs text-slate-800 group-hover:text-slate-900 truncate tracking-tight">Model Predictor</span>
+        <div id="row-report" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
+          <a href="#report" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Report">
+            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-slate-500 group-hover:text-slate-900 shrink-0">article</span>
+            <span class="sidebar-text font-bold text-xs text-slate-800 group-hover:text-slate-900 truncate tracking-tight">Report</span>
           </a>
-          <span class="sidebar-arrow p-1 text-slate-400 group-hover:text-slate-700 shrink-0 pointer-events-none" aria-hidden="true">
-            <span class="material-symbols-outlined text-[16px] inline-block">chevron_right</span>
-          </span>
+          <button type="button" onclick="event.preventDefault(); event.stopPropagation(); toggleSidebarAccordion('model-portal')" class="sidebar-arrow p-1 text-slate-400 hover:text-slate-700 cursor-pointer shrink-0 transition-colors" title="Toggle Sections" aria-label="Toggle Report Subsections">
+            <span id="arrow-model-portal" class="material-symbols-outlined text-[16px] inline-block transition-transform duration-200">chevron_right</span>
+          </button>
+        </div>
+        
+        <!-- Subheadings under Report (NO grey dot, NO numbers, collapsed by default) -->
+        <div id="subheadings-model-portal" class="hidden pl-4 pr-1 py-1.5 space-y-0.5 text-[11px] font-medium bg-transparent">
+          <div class="space-y-0.5">
+            <a href="#ovn-data" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Data</span>
+            </a>
+            <a href="#ovn-preprocessing" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Preprocessing</span>
+            </a>
+            <a href="#ovn-models" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Baseline &amp; Methods</span>
+            </a>
+            <a href="#ovn-evaluation" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Evaluation</span>
+            </a>
+            <a href="#ovn-results" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Results</span>
+            </a>
+            <a href="#ovn-errors" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Errors</span>
+            </a>
+            <a href="#ovn-limitations" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Limitations</span>
+            </a>
+            <a href="#ovn-conclusion" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Conclusion</span>
+            </a>
+            <a href="#ovn-repro" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Reproduction Steps</span>
+            </a>
+          </div>
         </div>
       </div>
 

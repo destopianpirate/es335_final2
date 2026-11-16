@@ -78,7 +78,8 @@ for nb in 01 02 03 04 05 06 08 07; do   # 08 before 07
   jupyter nbconvert --to notebook --execute --inplace ${nb}_*.ipynb
 done
 # 2. rebuild this website into docs/
-cd .. &amp;&amp; python website/build.py
+cd .. &amp;&amp; python scripts/export_ds_extra.py
+python website/build.py
 node website/tests/check_model_parity.mjs   # browser model == Python</pre>
           </div>
         </div>

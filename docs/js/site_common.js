@@ -3,6 +3,9 @@
 
 const SITE = window.SITE_DATA || {};
 
+// Chart axes and tooltips use international digit grouping (946,686), whatever the visitor's locale.
+if (window.Chart) Chart.defaults.locale = 'en-US';
+
 function sdGet(path, root = SITE) {
   return path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), root);
 }
@@ -10,7 +13,7 @@ function sdGet(path, root = SITE) {
 function sdFormat(v, fmt) {
   if (v === undefined || v === null || Number.isNaN(v)) return '–';
   switch (fmt) {
-    case 'int': return Math.round(v).toLocaleString('en-IN');
+    case 'int': return Math.round(v).toLocaleString('en-US');
     case 'pct0': return (v * 100).toFixed(0) + '%';
     case 'pct1': return (v * 100).toFixed(1) + '%';
     case 'pct2': return (v * 100).toFixed(2) + '%';

@@ -74,7 +74,7 @@
     
     <!-- Top Header: Lab Branding & Collapse Action -->
     <div id="sidebar-header" class="h-16 px-4 flex items-center justify-between bg-white dark:bg-[#121212] shrink-0 border-b border-border-subtle dark:border-[#222222] relative transition-all duration-200">
-      <a href="#overview" id="sidebar-brand-link" class="flex items-center gap-3 overflow-hidden group" title="Return to Overview">
+      <a href="#home" id="sidebar-brand-link" class="flex items-center gap-3 overflow-hidden group" title="Return to Home">
         <div class="w-8 h-8 rounded-lg bg-black text-white dark:border dark:border-[#444444] flex items-center justify-center font-black text-xs tracking-wider shrink-0 group-hover:bg-black transition-colors">
           ML
         </div>
@@ -129,56 +129,33 @@
     <!-- Scrollable Navigation Sections -->
     <div id="sidebar-nav-container" class="flex-1 overflow-y-auto px-3 py-2 space-y-2 text-xs font-semibold">
       
-      <!-- NAV SECTION 1: OVERVIEW -->
+      <!-- NAV SECTION 1: HOME (single <a>) -->
       <div class="sidebar-accordion">
-        <div id="row-overview" class="sidebar-nav-row active-nav-row w-full flex items-center justify-between text-white hover:bg-black rounded-full px-3 py-2 transition-colors group">
-          <a href="#overview" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Overview">
-            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-white shrink-0">grid_view</span>
-            <span class="sidebar-text font-bold text-xs text-white truncate tracking-tight">Overview</span>
+        <div id="row-home" class="sidebar-nav-row active-nav-row w-full flex items-center justify-between text-white hover:bg-black rounded-full px-3 py-2 transition-colors group">
+          <a href="#home" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Home">
+            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-white shrink-0">home</span>
+            <span class="sidebar-text font-bold text-xs text-white truncate tracking-tight">Home</span>
           </a>
-          <button type="button" onclick="event.preventDefault(); event.stopPropagation(); toggleSidebarAccordion('model-portal')" class="sidebar-arrow p-1 text-slate-300 hover:text-white cursor-pointer shrink-0 transition-colors" title="Toggle Sections" aria-label="Toggle Overview Subsections">
-            <span id="arrow-model-portal" class="material-symbols-outlined text-[16px] inline-block transition-transform duration-200">chevron_right</span>
-          </button>
-        </div>
-        
-        <!-- Subheadings under Overview (NO grey dot, NO numbers, collapsed by default) -->
-        <div id="subheadings-model-portal" class="hidden pl-4 pr-1 py-1.5 space-y-0.5 text-[11px] font-medium bg-transparent">
-          <div class="space-y-0.5">
-            <a href="#overview" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Question &amp; Answer</span>
-            </a>
-            <a href="#ovn-data" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Data</span>
-            </a>
-            <a href="#ovn-preprocessing" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Preprocessing</span>
-            </a>
-            <a href="#ovn-models" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Baseline &amp; Methods</span>
-            </a>
-            <a href="#ovn-evaluation" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Evaluation</span>
-            </a>
-            <a href="#ovn-results" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Results</span>
-            </a>
-            <a href="#ovn-errors" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Errors</span>
-            </a>
-            <a href="#ovn-limitations" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Limitations</span>
-            </a>
-            <a href="#ovn-conclusion" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Conclusion</span>
-            </a>
-            <a href="#ovn-repro" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Reproduction Steps</span>
-            </a>
-          </div>
+          <span class="sidebar-arrow p-1 text-slate-400 group-hover:text-slate-700 shrink-0 pointer-events-none" aria-hidden="true">
+            <span class="material-symbols-outlined text-[16px] inline-block">chevron_right</span>
+          </span>
         </div>
       </div>
 
-      <!-- NAV SECTION 2: DATA STUDIO -->
+      <!-- NAV SECTION 2: MODEL PREDICTOR (single <a>, perfectly centered in collapsed mode) -->
+      <div class="sidebar-accordion">
+        <div id="row-model-predictor" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
+          <a href="#model-predictor" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Model Predictor">
+            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-slate-500 group-hover:text-slate-900 shrink-0">model_training</span>
+            <span class="sidebar-text font-bold text-xs text-slate-800 group-hover:text-slate-900 truncate tracking-tight">Model Predictor</span>
+          </a>
+          <span class="sidebar-arrow p-1 text-slate-400 group-hover:text-slate-700 shrink-0 pointer-events-none" aria-hidden="true">
+            <span class="material-symbols-outlined text-[16px] inline-block">chevron_right</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- NAV SECTION 3: DATA STUDIO -->
       <div class="sidebar-accordion">
         <div id="row-data-studio" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
           <a href="#data-studio" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Data Studio">
@@ -224,16 +201,49 @@
         </div>
       </div>
 
-      <!-- NAV SECTION 3: MODEL PREDICTOR (single <a>, perfectly centered in collapsed mode) -->
+      <!-- NAV SECTION 4: REPORT -->
       <div class="sidebar-accordion">
-        <div id="row-model-predictor" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
-          <a href="#model-predictor" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Model Predictor">
-            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-slate-500 group-hover:text-slate-900 shrink-0">model_training</span>
-            <span class="sidebar-text font-bold text-xs text-slate-800 group-hover:text-slate-900 truncate tracking-tight">Model Predictor</span>
+        <div id="row-report" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
+          <a href="#report" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Report">
+            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-slate-500 group-hover:text-slate-900 shrink-0">article</span>
+            <span class="sidebar-text font-bold text-xs text-slate-800 group-hover:text-slate-900 truncate tracking-tight">Report</span>
           </a>
-          <span class="sidebar-arrow p-1 text-slate-400 group-hover:text-slate-700 shrink-0 pointer-events-none" aria-hidden="true">
-            <span class="material-symbols-outlined text-[16px] inline-block">chevron_right</span>
-          </span>
+          <button type="button" onclick="event.preventDefault(); event.stopPropagation(); toggleSidebarAccordion('model-portal')" class="sidebar-arrow p-1 text-slate-400 hover:text-slate-700 cursor-pointer shrink-0 transition-colors" title="Toggle Sections" aria-label="Toggle Report Subsections">
+            <span id="arrow-model-portal" class="material-symbols-outlined text-[16px] inline-block transition-transform duration-200">chevron_right</span>
+          </button>
+        </div>
+        
+        <!-- Subheadings under Report (NO grey dot, NO numbers, collapsed by default) -->
+        <div id="subheadings-model-portal" class="hidden pl-4 pr-1 py-1.5 space-y-0.5 text-[11px] font-medium bg-transparent">
+          <div class="space-y-0.5">
+            <a href="#ovn-data" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Data</span>
+            </a>
+            <a href="#ovn-preprocessing" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Preprocessing</span>
+            </a>
+            <a href="#ovn-models" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Baseline &amp; Methods</span>
+            </a>
+            <a href="#ovn-evaluation" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Evaluation</span>
+            </a>
+            <a href="#ovn-results" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Results</span>
+            </a>
+            <a href="#ovn-errors" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Errors</span>
+            </a>
+            <a href="#ovn-limitations" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Limitations</span>
+            </a>
+            <a href="#ovn-conclusion" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Conclusion</span>
+            </a>
+            <a href="#ovn-repro" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Reproduction Steps</span>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -411,8 +421,8 @@
 
     <main class="flex-grow">
 
-      <!-- VIEW 1: OVERVIEW (concise, reasoning from question to conclusion) -->
-      <div id="view-overview" class="view-panel">
+      <!-- VIEW 1: HOME (title, abstract, question, findings, where to go next) -->
+      <div id="view-home" class="view-panel">
             <section id="ovn-question" class="ovn-hero relative overflow-hidden py-14 sm:py-20 border-b border-border-subtle bg-gradient-to-b from-page-bg to-surface-subtle">
       <div class="ovn-hero-bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="grid-fade"></span></div>
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -438,19 +448,24 @@
             <div class="lg:col-span-3 hero-rise" style="--d:500ms">
             <nav class="hero-index" aria-label="Where to go next">
               <p class="hi-kicker">Where to start</p>
-              <a class="hi-row" href="#dsn-tables">
+              <a class="hi-row" href="#model-predictor">
                 <span class="hi-no">01</span>
+                <span class="hi-body"><b>Model</b><small>Score a subscriber yourself</small></span>
+                <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </a>
+              <a class="hi-row" href="#data-studio">
+                <span class="hi-no">02</span>
                 <span class="hi-body"><b>Data Studio</b><small>Five tables, 33 features, every plot</small></span>
                 <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
-              <a class="hi-row" href="#ovn-results">
-                <span class="hi-no">02</span>
-                <span class="hi-body"><b>Results</b><small>Six models, one untouched test split</small></span>
+              <a class="hi-row" href="#report">
+                <span class="hi-no">03</span>
+                <span class="hi-body"><b>Report</b><small>Full reasoning, question to conclusion</small></span>
                 <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
-              <a class="hi-row" href="#model-predictor">
-                <span class="hi-no">03</span>
-                <span class="hi-body"><b>Model</b><small>Score a subscriber yourself</small></span>
+              <a class="hi-row" href="#ovn-results">
+                <span class="hi-no">04</span>
+                <span class="hi-body"><b>Results</b><small>Six models, one untouched test split</small></span>
                 <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
               <a class="hi-repo" href="https://github.com/destopianpirate/es335_final" target="_blank" rel="noopener noreferrer" aria-label="Open the repository on GitHub">
@@ -495,6 +510,38 @@
 
         <h2 class="text-xs font-bold uppercase tracking-wider text-text-muted mb-3">Findings</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10" id="ovn-findings"></div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">The answer at a glance</h2>
+          <p class="text-[11px] text-text-secondary mb-4">Same tuned LightGBM, same test subscribers, two cutoffs. Test PR-AUC with and without listening features. Click a highlighted box for the evidence in the Report.</p>
+          <div class="overflow-x-auto"><div data-mermaid="home-answer" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="At the 31 March cutoff billing alone reaches a very high PR-AUC and listening adds little; at a strict 1 March cutoff PR-AUC is much lower and listening adds a large gain">Loading diagram&hellip;</div></div>
+        </div>
+      </div>
+    </section>
+
+      </div>
+
+      <!-- VIEW 2: REPORT (full reasoning, data to conclusion) -->
+      <div id="view-report" class="view-panel hidden">
+            <section id="rpt-top" class="pt-12 pb-10 sm:pt-14 border-b border-border-subtle bg-gradient-to-b from-page-bg to-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-text-muted mb-2">Report</p>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-text-primary leading-tight mb-4">From the question to the conclusion</h1>
+        <p class="text-sm sm:text-base text-text-secondary leading-relaxed max-w-4xl">
+          <strong class="text-text-primary">Question.</strong> Using only what is known on 31 March 2017, can we predict whether a KKBOX subscriber will churn
+          (no new subscription within 30 days of plan expiry), and does listening behaviour add predictive value beyond billing records?
+          One row is one subscriber; the target is <code>is_churn</code>.
+        </p>
+        <p class="text-xs text-text-secondary leading-relaxed max-w-4xl mt-3">
+          The nine sections below give the full reasoning: data, preprocessing, baseline and methods, evaluation, results, errors, limitations, conclusion and how to reproduce every number.
+          A short summary is on the <a href="#home" class="underline">Home</a> page; the raw data in detail is in the <a href="#data-studio" class="underline">Data Studio</a>.
+        </p>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mt-8">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">How this report is built</h2>
+          <p class="text-[11px] text-text-secondary mb-4">The nine sections in reading order. Every model choice uses the validation split; the test split is scored once, in Results. Click a box to jump to that section.</p>
+          <div class="overflow-x-auto"><div data-mermaid="report-pipeline" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="Report structure: question, 01 data, 02 preprocessing, 03 baseline and methods, 04 evaluation, 05 results, 06 errors, 07 limitations, 08 conclusion, 09 reproduction">Loading diagram&hellip;</div></div>
+        </div>
       </div>
     </section>
 
@@ -1003,7 +1050,8 @@ for nb in 01 02 03 04 05 06 08 07; do   # 08 before 07
   jupyter nbconvert --to notebook --execute --inplace ${nb}_*.ipynb
 done
 # 2. rebuild this website into docs/
-cd .. &amp;&amp; python website/build.py
+cd .. &amp;&amp; python scripts/export_ds_extra.py
+python website/build.py
 node website/tests/check_model_parity.mjs   # browser model == Python</pre>
           </div>
         </div>
@@ -1012,7 +1060,7 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
 
       </div>
 
-      <!-- VIEW 2: DATA STUDIO (main data points only) -->
+      <!-- VIEW 3: DATA STUDIO (main data points only) -->
       <div id="view-data-studio" class="view-panel hidden">
             <section id="dsn-tables" class="py-14 sm:py-16 border-b border-border-subtle bg-gradient-to-b from-page-bg to-surface-subtle">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1038,6 +1086,12 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
             </thead>
             <tbody id="dsn-table-rows" class="divide-y divide-border-subtle"></tbody>
           </table>
+        </div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mt-8">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">How the five files become one feature matrix</h2>
+          <p class="text-[11px] text-text-secondary mb-4">Each table is cleaned and aggregated to one row per subscriber (<code>msno</code>), then left-joined onto the labels and split. Notebooks 02 and 03.</p>
+          <div class="overflow-x-auto"><div data-mermaid="data-flow" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="Data flow: four raw files aggregated per subscriber, left-joined into a 946,686 by 33 feature matrix, then split into train, validation and test">Loading diagram&hellip;</div></div>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
@@ -1217,7 +1271,8 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Churn by group: billing, listening and members</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">
           The same idea as the signal explorer, for the groupings people usually ask about: payment method, plan length, price paid, number of transactions, listening time, city and registration channel.
-          Every table is measured on the <span data-sd="data.train.subscribers" data-fmt="int"></span> labelled subscribers. A missing group means the subscriber has no row in that table.
+          Every table is measured on the <span data-sd="data.train.subscribers" data-fmt="int"></span> labelled subscribers (all splits). These tables are descriptive only: no feature, model or threshold choice was based on them. A missing group means the subscriber has no row in that table.
+          Generated by <code>scripts/export_ds_extra.py</code>.
         </p>
 
         <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Auto-renew and cancellation, together</h3>
@@ -1285,7 +1340,7 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
         <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card mb-8">
           <div class="px-5 pt-5 pb-2">
             <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Feature summary</h3>
-            <p class="text-[11px] text-text-secondary mt-1">All 33 model features on the 6,62,679 training subscribers. Click a column header to sort.</p>
+            <p class="text-[11px] text-text-secondary mt-1">All 33 model features on the 662,679 training subscribers. Click a column header to sort.</p>
           </div>
           <div class="overflow-x-auto max-h-[32rem] overflow-y-auto">
             <table class="w-full text-[11px]">
@@ -1344,7 +1399,7 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
 
       </div>
 
-      <!-- VIEW 3: MODEL PREDICTOR (runs the champion LightGBM in the browser) -->
+      <!-- VIEW 4: MODEL PREDICTOR (runs the champion LightGBM in the browser) -->
       <div id="view-model-predictor" class="view-panel hidden lg:h-[calc(100vh-46px)] lg:overflow-hidden flex flex-col">
         <div id="model-predictor" class="w-full m-0 p-0 border-none shrink-0"></div>
         <div class="shrink-0">
@@ -1416,7 +1471,7 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
               Plan Duration
             </label>
             <select id="sb-plan-days" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong">
-              <option value="30" selected>30 Days (Monthly - 98%)</option>
+              <option value="30" selected>30 Days (Monthly - 94% of subscribers)</option>
               <option value="0">0 Days (Free Pass / Trial)</option>
               <option value="1">1 Day (Single Day Pass)</option>
               <option value="3">3 Days (Weekend Pass)</option>
@@ -1791,7 +1846,7 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
           <p class="font-semibold text-text-primary inline-flex items-center gap-1.5 justify-center sm:justify-end w-full"><a href="https://github.com/destopianpirate" target="_blank" rel="noopener noreferrer" title="destopianpirate on GitHub" aria-label="destopianpirate on GitHub" class="member-ink hover:opacity-70 transition-opacity"><svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a><a href="https://destopianpirate.github.io" target="_blank" rel="noopener noreferrer" class="hover:underline">Ayush Singh</a> (25110068)</p>
           <p class="font-semibold text-text-primary inline-flex items-center gap-1.5 justify-center sm:justify-end w-full"><a href="https://github.com/LostImmortal" target="_blank" rel="noopener noreferrer" title="LostImmortal on GitHub" aria-label="LostImmortal on GitHub" class="member-ink hover:opacity-70 transition-opacity"><svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>Avnish Yadav (25110067)</p>
         </div>
-        <a href="#overview" class="p-2.5 rounded-xl border border-border-subtle bg-surface-subtle hover:bg-border-subtle text-text-primary transition-colors cursor-pointer" title="Back to top">
+        <a href="javascript:void(0)" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" class="p-2.5 rounded-xl border border-border-subtle bg-surface-subtle hover:bg-border-subtle text-text-primary transition-colors cursor-pointer" title="Back to top">
           <span class="material-symbols-outlined text-sm">arrow_upward</span>
         </a>
       </div>
@@ -1819,6 +1874,9 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
   <script src="js/data_studio.js"></script>
   <script src="js/sandbox_engine.js"></script>
   <script src="js/sandbox_ui.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+  <script src="js/diagrams.js"></script>
 
   <script src="js/section_rail.js"></script>
   <script src="js/app.js"></script>

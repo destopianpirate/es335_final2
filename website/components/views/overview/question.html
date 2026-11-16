@@ -23,19 +23,24 @@
             <div class="lg:col-span-3 hero-rise" style="--d:500ms">
             <nav class="hero-index" aria-label="Where to go next">
               <p class="hi-kicker">Where to start</p>
-              <a class="hi-row" href="#dsn-tables">
+              <a class="hi-row" href="#model-predictor">
                 <span class="hi-no">01</span>
+                <span class="hi-body"><b>Model</b><small>Score a subscriber yourself</small></span>
+                <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </a>
+              <a class="hi-row" href="#data-studio">
+                <span class="hi-no">02</span>
                 <span class="hi-body"><b>Data Studio</b><small>Five tables, 33 features, every plot</small></span>
                 <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
-              <a class="hi-row" href="#ovn-results">
-                <span class="hi-no">02</span>
-                <span class="hi-body"><b>Results</b><small>Six models, one untouched test split</small></span>
+              <a class="hi-row" href="#report">
+                <span class="hi-no">03</span>
+                <span class="hi-body"><b>Report</b><small>Full reasoning, question to conclusion</small></span>
                 <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
-              <a class="hi-row" href="#model-predictor">
-                <span class="hi-no">03</span>
-                <span class="hi-body"><b>Model</b><small>Score a subscriber yourself</small></span>
+              <a class="hi-row" href="#ovn-results">
+                <span class="hi-no">04</span>
+                <span class="hi-body"><b>Results</b><small>Six models, one untouched test split</small></span>
                 <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
               <a class="hi-repo" href="{{REPO_URL}}" target="_blank" rel="noopener noreferrer" aria-label="Open the repository on GitHub">
@@ -80,5 +85,11 @@
 
         <h2 class="text-xs font-bold uppercase tracking-wider text-text-muted mb-3">Findings</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10" id="ovn-findings"></div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">The answer at a glance</h2>
+          <p class="text-[11px] text-text-secondary mb-4">Same tuned LightGBM, same test subscribers, two cutoffs. Test PR-AUC with and without listening features. Click a highlighted box for the evidence in the Report.</p>
+          <div class="overflow-x-auto"><div data-mermaid="home-answer" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="At the 31 March cutoff billing alone reaches a very high PR-AUC and listening adds little; at a strict 1 March cutoff PR-AUC is much lower and listening adds a large gain">Loading diagram&hellip;</div></div>
+        </div>
       </div>
     </section>

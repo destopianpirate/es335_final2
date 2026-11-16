@@ -234,7 +234,7 @@
           if (arrowData) arrowData.textContent = 'expand_more';
           if (subModel) subModel.classList.add('hidden');
           if (arrowModel) arrowModel.textContent = 'chevron_right';
-        } else if (!hash.includes('model-predictor')) {
+        } else if (hash.includes('report') || hash.includes('ovn-')) {
           if (subModel) subModel.classList.remove('hidden');
           if (arrowModel) arrowModel.textContent = 'expand_more';
           if (subData) subData.classList.add('hidden');

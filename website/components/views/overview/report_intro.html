@@ -1,0 +1,21 @@
+    <section id="rpt-top" class="pt-12 pb-10 sm:pt-14 border-b border-border-subtle bg-gradient-to-b from-page-bg to-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-text-muted mb-2">Report</p>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-text-primary leading-tight mb-4">From the question to the conclusion</h1>
+        <p class="text-sm sm:text-base text-text-secondary leading-relaxed max-w-4xl">
+          <strong class="text-text-primary">Question.</strong> Using only what is known on 31 March 2017, can we predict whether a KKBOX subscriber will churn
+          (no new subscription within 30 days of plan expiry), and does listening behaviour add predictive value beyond billing records?
+          One row is one subscriber; the target is <code>is_churn</code>.
+        </p>
+        <p class="text-xs text-text-secondary leading-relaxed max-w-4xl mt-3">
+          The nine sections below give the full reasoning: data, preprocessing, baseline and methods, evaluation, results, errors, limitations, conclusion and how to reproduce every number.
+          A short summary is on the <a href="#home" class="underline">Home</a> page; the raw data in detail is in the <a href="#data-studio" class="underline">Data Studio</a>.
+        </p>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mt-8">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">How this report is built</h2>
+          <p class="text-[11px] text-text-secondary mb-4">The nine sections in reading order. Every model choice uses the validation split; the test split is scored once, in Results. Click a box to jump to that section.</p>
+          <div class="overflow-x-auto"><div data-mermaid="report-pipeline" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="Report structure: question, 01 data, 02 preprocessing, 03 baseline and methods, 04 evaluation, 05 results, 06 errors, 07 limitations, 08 conclusion, 09 reproduction">Loading diagram&hellip;</div></div>
+        </div>
+      </div>
+    </section>

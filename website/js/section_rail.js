@@ -3,7 +3,7 @@
 // hovering shows the section name, clicking scrolls to it.
 (function () {
   const NAMES = {
-    'ovn-question': 'Top: the question', 'ovn-data': 'Data', 'ovn-preprocessing': 'Preprocessing', 'ovn-models': 'Baselines & methods',
+    'ovn-question': 'Top: the question', 'rpt-top': 'Top: the question', 'ovn-data': 'Data', 'ovn-preprocessing': 'Preprocessing', 'ovn-models': 'Baselines & methods',
     'ovn-evaluation': 'Evaluation', 'ovn-results': 'Results', 'ovn-errors': 'Errors', 'ovn-limitations': 'Limitations',
     'ovn-conclusion': 'Conclusion', 'ovn-repro': 'Reproduction steps',
     'dsn-tables': 'The five tables', 'dsn-raw': 'Raw data', 'dsn-overlap': 'File overlap', 'dsn-quality': 'Data quality',
@@ -34,7 +34,8 @@
 
   function build() {
     const panel = openPanel();
-    const list = panel && panel.id !== 'view-model-predictor' ? Array.from(panel.querySelectorAll(':scope > section[id]')) : [];
+    let list = panel && panel.id !== 'view-model-predictor' ? Array.from(panel.querySelectorAll(':scope > section[id]')) : [];
+    if (list.length < 2) list = [];   // a one-section page (Home) needs no rail
     const key = list.map(s => s.id).join('|');
     if (key === builtFor) return;
     builtFor = key;

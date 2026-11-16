@@ -1,8 +1,40 @@
 # Early Prediction of Subscription Churn Using Listening Patterns and Temporal Engagement Features
 
-ES 335 Machine Learning course project. Ayush Singh (25110068), Avnish Yadav (25110067)
+ES 335 Machine Learning course project.
 
-**Website:** `https://destopianpirate.github.io/es335_final/`
+- **Website:** https://destopianpirate.github.io/es335_final/
+- **Dataset (Kaggle):** https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data
+- **Repository:** https://github.com/destopianpirate/es335_final
+
+**Team**
+
+| Name | Roll number |
+|---|---|
+| Ayush Singh | 25110068 |
+| Avnish Yadav | 25110067 |
+
+**Pipeline**
+
+```mermaid
+flowchart LR
+    subgraph RAW["Kaggle raw data"]
+        M[members.csv]
+        T[transactions.csv]
+        U[user_logs.csv]
+        L[train_data.csv<br/>labels]
+    end
+    RAW --> A["01 Raw data analysis"]
+    A --> F["02 Feature engineering<br/>1 row per subscriber, 33 features<br/>cutoff 31 Mar 2017"]
+    F --> S["03 Stratified split 70/10/20<br/>seed 42"]
+    S --> B["04 Baselines<br/>majority, auto-renew rule,<br/>logistic regression"]
+    S --> TR["05 Random forest, LightGBM<br/>Optuna tuning on validation"]
+    B --> E["06 Test evaluation<br/>bootstrap CIs, error analysis"]
+    TR --> E
+    S --> X["08 Strict cutoff check<br/>billing before 1 Mar 2017"]
+    E --> W["07 Website export"]
+    X --> W
+    W --> D["website/build.py → docs/<br/>GitHub Pages"]
+```
 
 **Question.** Using only what is known on 31 March 2017, can we predict whether a KKBOX subscriber will churn (no new subscription within 30 days after their plan expires), and does listening behaviour add value beyond billing records? One row is one subscriber; the target is `is_churn`.
 
@@ -41,6 +73,7 @@ data/processed/    feature tables, split_assignments.csv, X and y files per spli
 notebooks/         01 to 08 (run 08 before 07)
 models/            fitted models and model_config.json
 results/           metric tables, figures, submission.csv
+scripts/           export_ds_extra.py: extra Data Studio tables (churn by group, file overlap)
 website/           website source and build script
 docs/              built website (GitHub Pages)
 ```
@@ -66,6 +99,7 @@ for nb in 01 02 03 04 05 06 08 07; do   # 08 before 07, which exports its result
   jupyter nbconvert --to notebook --execute --inplace ${nb}_*.ipynb
 done
 cd ..
+python scripts/export_ds_extra.py   # extra Data Studio tables, needs data/raw (a few minutes)
 python website/build.py   # writes the site to docs/, repo link defaults to this repository
 node website/tests/check_model_parity.mjs   # optional: browser model matches Python
 ```
