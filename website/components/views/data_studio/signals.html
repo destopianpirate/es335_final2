@@ -1,0 +1,30 @@
+    <section id="dsn-signals" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 5 of 9: Churn signals"><span class="chap-no" aria-hidden="true">05</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Churn signals</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Churn signal explorer</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">
+          Pick a variable to see the churn rate in each group of subscribers. The dashed line is the overall rate. Bar width does not show group size; hover a bar for the count.
+        </p>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 sm:p-8 shadow-subtle-card">
+          <div id="dsn-signal-buttons"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 h-80 relative"><canvas id="dsn-signal-chart"></canvas></div>
+            <div class="text-xs text-text-secondary leading-relaxed space-y-3">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-text-muted" id="dsn-signal-source"></span>
+                <h3 class="text-base font-bold text-text-primary mt-1" id="dsn-signal-title"></h3>
+              </div>
+              <p id="dsn-signal-note"></p>
+              <p class="text-[11px] text-text-muted" id="dsn-signal-range"></p>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-xs text-text-secondary mt-6 max-w-4xl">
+          <strong class="text-text-primary">Takeaway.</strong> Billing state (auto-renew, cancellation, expiry date, plan length) splits subscribers into groups with churn rates near 0&nbsp;% or near 100&nbsp;%.
+          Listening behaviour shifts the rate more gently: a silent streak of 15+ days multiplies it about five times, but most listening groups stay close to the average.
+          The models then test whether listening still adds information once billing is known (<a href="#ovn-results" class="underline">see Results</a>).
+        </p>
+      </div>
+    </section>

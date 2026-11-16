@@ -1,0 +1,84 @@
+    <section id="ovn-question" class="ovn-hero relative overflow-hidden py-14 sm:py-20 border-b border-border-subtle bg-gradient-to-b from-page-bg to-surface-subtle">
+      <div class="ovn-hero-bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="grid-fade"></span></div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="mb-10">
+          <div class="max-w-6xl">
+            <h1 id="ovn-title" class="ovn-title text-3xl sm:text-4xl lg:text-[3.1rem] font-extrabold tracking-tight text-text-primary leading-[1.12] mb-8">
+              Early Prediction of Subscription Churn Using Listening Patterns and Temporal Engagement Features
+            </h1>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-10 gap-8 lg:gap-10 items-start">
+            <div class="lg:col-span-7">
+            <p class="hero-rise text-base sm:text-lg text-text-secondary leading-relaxed max-w-none" style="--d:900ms" id="ovn-abstract"></p>
+            <div class="hero-rise" style="--d:700ms">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8 hero-stats-grid">
+            <div class="hero-stat"><span class="material-symbols-outlined">group</span><div><div class="hero-num" data-hero="subs">&ndash;</div><div class="hero-lab">labelled subscribers</div></div></div>
+            <div class="hero-stat"><span class="material-symbols-outlined">person_off</span><div><div class="hero-num" data-hero="churn">&ndash;</div><div class="hero-lab">churn rate in the data</div></div></div>
+            <div class="hero-stat"><span class="material-symbols-outlined">target</span><div><div class="hero-num" data-hero="pr">&ndash;</div><div class="hero-lab">test PR-AUC (champion)</div></div></div>
+            <div class="hero-stat"><span class="material-symbols-outlined">show_chart</span><div><div class="hero-num" data-hero="roc">&ndash;</div><div class="hero-lab">test ROC-AUC (champion)</div></div></div>
+            </div>
+            </div>
+            </div>
+            <div class="lg:col-span-3 hero-rise" style="--d:500ms">
+            <nav class="hero-index" aria-label="Where to go next">
+              <p class="hi-kicker">Where to start</p>
+              <a class="hi-row" href="#dsn-tables">
+                <span class="hi-no">01</span>
+                <span class="hi-body"><b>Data Studio</b><small>Five tables, 33 features, every plot</small></span>
+                <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </a>
+              <a class="hi-row" href="#ovn-results">
+                <span class="hi-no">02</span>
+                <span class="hi-body"><b>Results</b><small>Six models, one untouched test split</small></span>
+                <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </a>
+              <a class="hi-row" href="#model-predictor">
+                <span class="hi-no">03</span>
+                <span class="hi-body"><b>Model</b><small>Score a subscriber yourself</small></span>
+                <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </a>
+              <a class="hi-repo" href="{{REPO_URL}}" target="_blank" rel="noopener noreferrer" aria-label="Open the repository on GitHub">
+                <span class="hi-repo-logo"><svg viewBox="0 0 16 16" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></span>
+                <span class="hi-repo-body"><b>Repository</b><code>notebooks &middot; code &middot; results<i class="hi-caret"></i></code></span>
+                <svg class="hi-graph" viewBox="0 0 44 56" aria-hidden="true"><path d="M10 4v48M10 20c0 12 24 8 24 24" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="6" r="4"/><circle cx="10" cy="30" r="4"/><circle cx="10" cy="50" r="4"/><circle cx="34" cy="44" r="4"/></svg>
+              </a>
+            </nav>
+            </div>
+          </div>
+        </div>
+
+        <div class="rq-card hero-rise relative overflow-hidden mb-10" style="--d:700ms">
+          <div class="flex flex-col sm:flex-row items-start justify-between gap-4">
+            <div class="space-y-2">
+              <p class="text-xl sm:text-2xl lg:text-[1.75rem] font-extrabold tracking-tight text-text-primary leading-snug max-w-5xl">
+                Using only what is known on 31 March 2017, can we predict whether a KKBOX subscriber will churn (not renew within 30 days of plan expiry)?
+                And does their listening behaviour add predictive value beyond their billing records?
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-8 border-t border-border-subtle grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-[13px]">
+            <div class="rq-item space-y-1.5">
+              <span class="rq-chip"><span class="material-symbols-outlined">table_rows</span></span><span class="font-bold text-text-primary block text-sm">Unit and target</span>
+              <p class="text-text-secondary leading-relaxed">One row is one subscriber (<code>msno</code>) whose plan comes up for renewal around the end of March 2017. Target: <code>is_churn</code> = 1 if they make no new valid subscription within 30 days after expiry (<span data-sd="data.train.churn_rate" data-fmt="pct1"></span> of subscribers).</p>
+            </div>
+            <div class="rq-item space-y-1.5">
+              <span class="rq-chip"><span class="material-symbols-outlined">schedule</span></span><span class="font-bold text-text-primary block text-sm">When the prediction is made</span>
+              <p class="text-text-secondary leading-relaxed">On the cutoff date, <strong class="text-text-primary">31 March 2017</strong>, before the renewal decision. The use case: decide which subscribers to contact before their plan runs out.</p>
+            </div>
+            <div class="rq-item space-y-1.5">
+              <span class="rq-chip"><span class="material-symbols-outlined">inventory_2</span></span><span class="font-bold text-text-primary block text-sm">What is known then</span>
+              <p class="text-text-secondary leading-relaxed">The member profile, every transaction up to 31 March (plan, price, auto-renew, cancel, expiry date) and daily listening for March 2017. Nothing dated after the cutoff is used.</p>
+            </div>
+            <div class="rq-item space-y-1.5">
+              <span class="rq-chip"><span class="material-symbols-outlined">balance</span></span><span class="font-bold text-text-primary block text-sm">Limits of the claim</span>
+              <p class="text-text-secondary leading-relaxed">Results hold for this KKBOX snapshot only. We show association, not cause: a feature that predicts churn is not proven to cause it. See <a href="#ovn-limitations" class="underline">Limitations</a>.</p>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="text-xs font-bold uppercase tracking-wider text-text-muted mb-3">Findings</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10" id="ovn-findings"></div>
+      </div>
+    </section>

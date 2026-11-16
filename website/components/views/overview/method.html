@@ -1,0 +1,103 @@
+    <section id="ovn-preprocessing" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 2 of 9: Preprocessing"><span class="chap-no" aria-hidden="true">02</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Preprocessing</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Choices and why</h2>
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+          <table class="w-full text-xs">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr><th class="text-left px-4 py-3 w-1/3">Choice</th><th class="text-left px-4 py-3">Why</th></tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle text-text-secondary leading-relaxed">
+              <tr><td class="px-4 py-3 font-semibold text-text-primary">Aggregate every table to one row per subscriber, using only data up to 31 March 2017</td>
+                  <td class="px-4 py-3">The unit of prediction is the subscriber. Nothing after the cutoff is used, so no future information leaks into the features.</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary">Left joins, nobody dropped, plus <code>has_member</code> / <code>has_tx</code> / <code>has_logs</code> flags</td>
+                  <td class="px-4 py-3">Dropping subscribers missing from any table would remove 25 % of them (65 % if invalid ages also count). Absence is informative: subscribers with no transactions churn at <span data-ds-break="has_tx|0.0"></span>.</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary">No listening logs &rarr; zeros and "31 days since last listen"</td>
+                  <td class="px-4 py-3">A subscriber with no March plays did listen zero hours; this is the true value, not a missing one.</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary">Ages outside 10&ndash;90 &rarr; missing; daily listening clipped to [0, 24 h]</td>
+                  <td class="px-4 py-3">These values are impossible and would distort means and splits.</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary">Remaining gaps imputed inside each model pipeline (median, fitted on train only); LightGBM uses its native missing-value handling</td>
+                  <td class="px-4 py-3">Learning fill values from the training split only keeps validation and test unseen. No feature selection was done: every model uses all 33 features, so no choice depends on held-out data.</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary"><code>log1p</code> + standardisation + one-hot codes, for logistic regression only</td>
+                  <td class="px-4 py-3">A linear model needs comparable scales and suffers from heavy skew. Tree models are invariant to monotone transforms, so they get the raw values.</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary">City, registration channel, payment method treated as categories</td>
+                  <td class="px-4 py-3">They are ID codes, not quantities.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="ovn-models" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 3 of 9: Baseline and methods"><span class="chap-no" aria-hidden="true">03</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Baseline and methods</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">From a constant guess to tuned boosting</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">Every model outputs a churn probability and, apart from the baselines, is trained by minimising log loss on the training split. Every hyperparameter was chosen on the validation split; the test split played no part.</p>
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mb-8">
+          <table class="w-full text-xs">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr><th class="text-left px-4 py-3">Model</th><th class="text-left px-4 py-3">Objective / core idea</th><th class="text-left px-4 py-3">Assumptions</th><th class="text-left px-4 py-3">Why here</th><th class="text-left px-4 py-3">Tuned on validation</th></tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle text-text-secondary leading-relaxed">
+              <tr><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-text-muted">Baseline</span><div class="font-semibold text-text-primary">Majority (prior)</div></td>
+                <td class="px-4 py-3 align-top">Training churn rate for every subscriber.</td><td class="px-4 py-3 align-top">None.</td><td class="px-4 py-3 align-top">The floor: any useful model must beat it.</td><td class="px-4 py-3 align-top">None.</td></tr>
+              <tr><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-text-muted">Baseline</span><div class="font-semibold text-text-primary">Rule: auto-renew off</div></td>
+                <td class="px-4 py-3 align-top">Training churn rate of the subscriber's auto-renew group.</td><td class="px-4 py-3 align-top">One flag explains churn.</td><td class="px-4 py-3 align-top">The strongest single raw signal; what a business could do without ML.</td><td class="px-4 py-3 align-top">None.</td></tr>
+              <tr><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-text-muted">Linear</span><div class="font-semibold text-text-primary">Logistic regression</div></td>
+                <td class="px-4 py-3 align-top">L2-penalised log loss on log-scaled, standardised and one-hot features.</td><td class="px-4 py-3 align-top">Log-odds of churn are linear in the (log-scaled) features; no interactions.</td><td class="px-4 py-3 align-top">Simple, fast, interpretable; tests whether a linear boundary is enough.</td><td class="px-4 py-3 align-top">Penalty strength C &isin; {0.01, 0.1, 1, 10}.</td></tr>
+              <tr><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-text-muted">Bagging</span><div class="font-semibold text-text-primary">Random forest</div></td>
+                <td class="px-4 py-3 align-top">150 trees, log loss on validation for model choice.</td><td class="px-4 py-3 align-top">Few: handles thresholds and interactions, needs no scaling.</td><td class="px-4 py-3 align-top">Churn depends on thresholds (expiry, plan length) and interactions; averaging reduces variance.</td><td class="px-4 py-3 align-top">Leaf size &isin; {5, 20, 50}, features per split &isin; {&radic;p, 0.5p}.</td></tr>
+              <tr><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-text-muted">Boosting</span><div class="font-semibold text-text-primary">LightGBM (default)</div></td>
+                <td class="px-4 py-3 align-top">Log loss, learning rate 0.05, native categorical and missing-value handling.</td><td class="px-4 py-3 align-top">Same as random forest; learns missing-value branches natively.</td><td class="px-4 py-3 align-top">Reference point before tuning.</td><td class="px-4 py-3 align-top">Number of trees by early stopping on validation.</td></tr>
+              <tr class="bg-surface-subtle"><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-accent-success">Champion</span><div class="font-semibold text-text-primary">LightGBM (tuned)</div></td>
+                <td class="px-4 py-3 align-top">Log loss, hyperparameters from 30 Optuna (TPE) trials.</td><td class="px-4 py-3 align-top">As above.</td><td class="px-4 py-3 align-top">Best validation log loss of all candidates.</td><td class="px-4 py-3 align-top">Learning rate, leaves, min. leaf size, row/column sampling, L2; <span data-sd="champion.n_trees"></span> trees.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Logistic regression: C</h3>
+            <table class="w-full text-xs font-mono"><thead class="text-text-muted text-[10px] uppercase"><tr><th class="text-left py-1">C</th><th class="text-right py-1">val log loss</th></tr></thead><tbody id="ovn-tune-lr" class="divide-y divide-border-subtle"></tbody></table>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Random forest grid</h3>
+            <table class="w-full text-xs font-mono"><thead class="text-text-muted text-[10px] uppercase"><tr><th class="text-left py-1">leaf</th><th class="text-left py-1">features</th><th class="text-right py-1">val log loss</th></tr></thead><tbody id="ovn-tune-rf" class="divide-y divide-border-subtle"></tbody></table>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">LightGBM: Optuna search</h3>
+            <p class="text-[11px] text-text-secondary mb-3">Validation log loss of each trial and the best so far.</p>
+            <div class="h-44 relative"><canvas id="ovn-optuna-chart"></canvas></div>
+          </div>
+        </div>
+        <p class="text-xs text-text-secondary mt-6 max-w-4xl"><strong class="text-text-primary">Ablation.</strong> To answer the second half of the question, the tuned LightGBM is retrained on three feature sets: billing + demographics, listening + demographics, and all features.</p>
+      </div>
+    </section>
+
+    <section id="ovn-evaluation" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 4 of 9: Evaluation"><span class="chap-no" aria-hidden="true">04</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Evaluation</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Split and metrics</h2>
+        <dl class="led">
+          <div class="led-row">
+            <dt><span class="led-big">70 / 10 / 20</span><span class="led-cap">Split</span></dt>
+            <dd>Stratified random split, seed 42: <strong>70 % train</strong> (fit), <strong>10 % validation</strong> (model choice, tuning, threshold) and <strong>20 % test</strong> (used once).
+              Churn rate is <span data-sd="eda.split.test.churn_rate" data-fmt="pct2"></span> in every part. <a href="#dsn-split" class="underline">Split table &rarr;</a></dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">PR-AUC</span><span class="led-cap">Main metric</span></dt>
+            <dd>Churners are only 9&nbsp;% of subscribers, so PR-AUC is the main metric; its no-skill level is 0.09. ROC-AUC, log loss and Brier are reported alongside, and log loss is also the tuning objective.
+              Precision, recall, F1 and accuracy are taken at the decision threshold; accuracy is read against the 0.91 of the majority baseline.</dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">&tau; = <span data-sd="champion.threshold" data-fmt="f2"></span></span><span class="led-cap">Threshold</span></dt>
+            <dd>To flag subscribers we need a cut-off on the probability. We pick the one that maximises F1 on <em>validation</em>, then apply it unchanged to test.</dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">1&thinsp;000</span><span class="led-cap">Bootstrap resamples</span></dt>
+            <dd>Test metrics get 95&nbsp;% intervals from 1&nbsp;000 bootstrap resamples of the test set; the ablation uses a <em>paired</em> bootstrap (both models scored on the same resample).
+              This shows how much a number could move with another sample of subscribers from the same population. It cannot tell how the model would do in a later month, or why subscribers churn.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>

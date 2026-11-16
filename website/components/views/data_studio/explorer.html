@@ -1,0 +1,35 @@
+    <section id="dsn-explorer" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 6 of 9: Churn by group"><span class="chap-no" aria-hidden="true">06</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Churn by group</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Churn by group: billing, listening and members</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">
+          The same idea as the signal explorer, for the groupings people usually ask about: payment method, plan length, price paid, number of transactions, listening time, city and registration channel.
+          Every table is measured on the <span data-sd="data.train.subscribers" data-fmt="int"></span> labelled subscribers. A missing group means the subscriber has no row in that table.
+        </p>
+
+        <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Auto-renew and cancellation, together</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10" id="dsn-cross-cards"></div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 sm:p-8 shadow-subtle-card">
+          <div id="dsn-group-buttons"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            <div class="lg:col-span-3 relative" id="dsn-group-chart-wrap"><canvas id="dsn-group-chart"></canvas></div>
+            <div class="lg:col-span-2 text-xs text-text-secondary leading-relaxed space-y-3">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-text-muted" id="dsn-group-source"></span>
+                <h3 class="text-base font-bold text-text-primary mt-1" id="dsn-group-title"></h3>
+              </div>
+              <p id="dsn-group-note"></p>
+              <div class="overflow-auto max-h-64 rounded-xl">
+                <table class="w-full text-[11px]">
+                  <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+                    <tr><th class="text-left px-3 py-2">Group</th><th class="text-right px-3 py-2">Subscribers</th><th class="text-right px-3 py-2">Share</th><th class="text-right px-3 py-2">Churn</th></tr>
+                  </thead>
+                  <tbody id="dsn-group-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>

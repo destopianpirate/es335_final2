@@ -1,0 +1,83 @@
+{
+ "features": [
+  "city",
+  "registered_via",
+  "gender",
+  "age",
+  "tenure_days",
+  "has_member",
+  "has_tx",
+  "tx_count",
+  "total_paid",
+  "avg_plan_days",
+  "auto_renew_ratio",
+  "cancel_count",
+  "discount_count",
+  "n_payment_methods",
+  "last_payment_method",
+  "last_plan_days",
+  "last_amount_paid",
+  "last_auto_renew",
+  "last_is_cancel",
+  "days_since_last_tx",
+  "days_until_expiration",
+  "has_logs",
+  "active_days",
+  "total_hours",
+  "secs_per_day",
+  "songs_per_day",
+  "unique_song_ratio",
+  "skip_ratio",
+  "complete_ratio",
+  "last7_share",
+  "active_days_7d",
+  "days_since_last_active",
+  "daily_secs_cv"
+ ],
+ "categorical": [
+  "city",
+  "registered_via",
+  "last_payment_method"
+ ],
+ "groups": {
+  "demographic": [
+   "city",
+   "registered_via",
+   "gender",
+   "age",
+   "tenure_days",
+   "has_member"
+  ],
+  "billing": [
+   "has_tx",
+   "tx_count",
+   "total_paid",
+   "avg_plan_days",
+   "auto_renew_ratio",
+   "cancel_count",
+   "discount_count",
+   "n_payment_methods",
+   "last_payment_method",
+   "last_plan_days",
+   "last_amount_paid",
+   "last_auto_renew",
+   "last_is_cancel",
+   "days_since_last_tx",
+   "days_until_expiration"
+  ],
+  "listening": [
+   "has_logs",
+   "active_days",
+   "total_hours",
+   "secs_per_day",
+   "songs_per_day",
+   "unique_song_ratio",
+   "skip_ratio",
+   "complete_ratio",
+   "last7_share",
+   "active_days_7d",
+   "days_since_last_active",
+   "daily_secs_cv"
+  ]
+ }
+}

@@ -1,0 +1,55 @@
+    <section id="ovn-errors" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 6 of 9: Error analysis"><span class="chap-no" aria-hidden="true">06</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Error analysis</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Where the champion goes wrong</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8" id="ovn-errors-lead"></p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-8">
+          <div class="lg:col-span-3 bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+            <div class="px-5 pt-5 pb-2">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Recall and precision by segment (test, &tau; = <span data-sd="champion.threshold" data-fmt="f2"></span>)</h3>
+            </div>
+            <table class="w-full text-xs">
+              <thead class="text-text-muted uppercase tracking-wider text-[10px] border-b border-border-subtle">
+                <tr><th class="text-left px-5 py-2">Segment</th><th class="text-right px-3 py-2">Subscribers</th><th class="text-right px-3 py-2">Churn rate</th>
+                  <th class="text-right px-3 py-2">Recall</th><th class="text-right px-3 py-2">Precision</th><th class="text-right px-3 py-2">Missed</th><th class="text-right px-5 py-2">False alarms</th></tr>
+              </thead>
+              <tbody id="ovn-segment-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+            </table>
+          </div>
+          <div class="lg:col-span-2 bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Calibration</h3>
+            <p class="text-[11px] text-text-secondary mb-4">Test subscribers in 10 bins of predicted probability.</p>
+            <div class="h-64 relative"><canvas id="ovn-calibration-chart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+          <div class="px-5 pt-5 pb-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">What missed churners look like (medians)</h3>
+            <p class="text-[11px] text-text-secondary mt-1">TP = churners caught, FN = churners missed, FP = renewers wrongly flagged, TN = renewers correctly left alone.</p>
+          </div>
+          <table class="w-full text-xs">
+            <thead class="text-text-muted uppercase tracking-wider text-[10px] border-b border-border-subtle">
+              <tr><th class="text-left px-5 py-2">Feature</th><th class="text-right px-3 py-2">TP</th><th class="text-right px-3 py-2 text-accent-danger">FN</th><th class="text-right px-3 py-2">FP</th><th class="text-right px-5 py-2">TN</th></tr>
+            </thead>
+            <tbody id="ovn-profile-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+          </table>
+          <p class="text-xs text-text-secondary px-5 py-4 leading-relaxed" id="ovn-errors-text"></p>
+        </div>
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mt-8">
+          <div class="px-5 pt-5 pb-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Representative errors</h3>
+            <p class="text-[11px] text-text-secondary mt-1">Real test subscribers: missed churners and false alarms at the 25th, 50th and 75th percentile of their predicted probability.</p>
+          </div>
+          <table class="w-full text-xs">
+            <thead class="text-text-muted uppercase tracking-wider text-[10px] border-b border-border-subtle">
+              <tr><th class="text-left px-5 py-2">Error</th><th class="text-right px-3 py-2">Predicted</th><th class="text-right px-3 py-2">Auto-renew</th><th class="text-right px-3 py-2">Cancel</th>
+                <th class="text-right px-3 py-2">Days to expiry</th><th class="text-right px-3 py-2">Plan days</th><th class="text-right px-3 py-2">Active days</th><th class="text-right px-3 py-2">Days since listen</th><th class="text-right px-5 py-2">Hours</th></tr>
+            </thead>
+            <tbody id="ovn-example-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+          </table>
+          <p class="text-xs text-text-secondary px-5 py-4 leading-relaxed" id="ovn-example-text"></p>
+        </div>
+      </div>
+    </section>

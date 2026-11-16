@@ -1,0 +1,24 @@
+<section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-3 pb-4 shrink-0">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 pb-3.5 border-b border-border-subtle mb-1">
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight font-sans leading-none">Subscriber Churn Predictor</h1>
+    </div>
+
+    <!-- Quick Archetype Presets (NO DOTS) -->
+    <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+      <span class="text-[11px] font-semibold text-text-muted mr-1">Presets:</span>
+      <button type="button" onclick="loadArchetype('loyal')" class="inline-flex items-center px-2.5 py-1 text-xs border border-border-subtle rounded-md hover:bg-surface-subtle text-text-secondary hover:text-text-primary transition-colors cursor-pointer bg-surface-card">
+        <span>Low Risk (Loyal)</span>
+      </button>
+      <button type="button" onclick="loadArchetype('disengaging')" class="inline-flex items-center px-2.5 py-1 text-xs border border-border-subtle rounded-md hover:bg-surface-subtle text-text-secondary hover:text-text-primary transition-colors cursor-pointer bg-surface-card">
+        <span>High Risk (Disengaging)</span>
+      </button>
+      <button type="button" onclick="loadArchetype('discount_hopper')" class="inline-flex items-center px-2.5 py-1 text-xs border border-border-subtle rounded-md hover:bg-surface-subtle text-text-secondary hover:text-text-primary transition-colors cursor-pointer bg-surface-card">
+        <span>Cancellation Logged</span>
+      </button>
+      <button type="button" onclick="resetSandboxDefaults()" class="px-2.5 py-1 text-xs border border-border-subtle rounded-md hover:bg-surface-subtle text-text-muted hover:text-text-secondary transition-colors cursor-pointer">
+        Reset
+      </button>
+    </div>
+  </div>
+</section>

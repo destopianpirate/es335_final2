@@ -1,0 +1,29 @@
+    <section id="dsn-features" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 7 of 9: Feature analysis - training split"><span class="chap-no" aria-hidden="true">07</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Feature analysis &middot; training split</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">How the 33 features relate to churn and to each other</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8">
+          Computed on the training split only, so nothing here looks at validation or test subscribers.
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Ranking power of each feature alone</h3>
+            <p class="text-[11px] text-text-secondary mb-4">ROC-AUC of each feature used alone as the score. Colour = feature group.</p>
+            <div class="h-[34rem] relative"><canvas id="dsn-auc-chart"></canvas></div>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Distribution by class</h3>
+            <p class="text-[11px] text-text-secondary mb-3">Share of renewers and of churners in each value range.</p>
+            <select id="dsn-hist-select" aria-label="Feature" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary mb-4"></select>
+            <div class="h-[28rem] relative"><canvas id="dsn-hist-chart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Correlation between features</h3>
+          <p class="text-[11px] text-text-secondary mb-4">Spearman correlation on 100k training subscribers. Blue = positive, red = negative. Hover a cell for the value.</p>
+          <div class="overflow-x-auto"><div id="dsn-corr" class="inline-block"></div></div>
+        </div>
+      </div>
+    </section>

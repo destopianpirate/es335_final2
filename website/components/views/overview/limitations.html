@@ -1,0 +1,83 @@
+    <section id="ovn-limitations" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 7 of 9: Limitations"><span class="chap-no" aria-hidden="true">07</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Limitations</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">What these results do not show</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Billing state almost encodes the label</h3>
+            <p class="text-text-secondary leading-relaxed">KKBOX defines churn from transactions, and the last transaction (cancel flag, expiry date, auto-renew) already tells most of the story. The very high scores mean "easy for subscribers whose billing already shows the decision", not "we can read intentions".</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">One snapshot, random split</h3>
+            <p class="text-text-secondary leading-relaxed">Train and test subscribers come from the same month. We do not show that the model keeps working for a later month, when prices, promotions or user mix may change.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Hard cases stay hard</h3>
+            <p class="text-text-secondary leading-relaxed" id="ovn-hard-cases"></p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Prediction is not causation</h3>
+            <p class="text-text-secondary leading-relaxed">Feature importance shows what the model uses, not what makes people leave. For example, switching a subscriber's auto-renew on would not necessarily keep them: auto-renew is partly a sign of an earlier decision to stay. Testing an intervention would need an experiment.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Listening data is thin</h3>
+            <p class="text-text-secondary leading-relaxed">Only March 2017 is used, and about a fifth of subscribers have no logs at all. A longer listening history might show a larger effect than our ablation finds.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Threshold and tuning use the same validation split</h3>
+            <p class="text-text-secondary leading-relaxed">This makes validation scores slightly optimistic; test scores are not affected because the test split was never used for any choice.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Predictor page is approximate</h3>
+            <p class="text-text-secondary leading-relaxed">The <a href="#model-predictor" class="underline">predictor</a> runs the real champion model, but asks for 16 inputs; the other features are filled with training medians for similar subscribers. Treat it as an illustration of the model, not a scoring tool. Demographic features (age, city) also raise fairness questions if used for decisions.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Privacy and fairness</h3>
+            <p class="text-text-secondary leading-relaxed">Subscriber IDs are anonymised hashes and there are no names or contact details. But age and gender are model inputs, and we did not check whether error rates differ between age or gender groups. Before any real use, audit those groups, and use the scores to offer help to people likely to leave, not to treat them worse.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">The Kaggle test set has no labels</h3>
+            <p class="text-text-secondary leading-relaxed">The competition test file lists <span data-sd="data.kaggle_test.subscribers" data-fmt="int"></span> subscribers without the answer. We predict them (<code>results/submission.csv</code>) but cannot score them here, so every number on this page comes from our own labelled test split.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ovn-conclusion" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-card">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 8 of 9: Conclusion"><span class="chap-no" aria-hidden="true">08</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Conclusion</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Answer to the question</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm" id="ovn-conclusion-cards"></div>
+        <p class="text-xs text-text-secondary mt-6 max-w-4xl leading-relaxed" id="ovn-conclusion-text"></p>
+      </div>
+    </section>
+
+    <section id="ovn-repro" class="py-14 sm:py-16 bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 9 of 9: Reproduction steps"><span class="chap-no" aria-hidden="true">09</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Reproduction steps</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Everything on this page comes from seven notebooks</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <ol class="text-xs text-text-secondary space-y-2 list-decimal pl-4">
+              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/01_raw_data_analysis.ipynb">01_raw_data_analysis</a>: detailed analysis of the 5 raw tables.</li>
+              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/02_feature_engineering.ipynb">02_feature_engineering</a>: one row per subscriber, 33 features.</li>
+              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/03_feature_analysis_and_split.ipynb">03_feature_analysis_and_split</a>: the 70/10/20 split, then feature plots on the training split.</li>
+              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/04_baselines.ipynb">04_baselines</a>: majority and rule baselines, tuned logistic regression.</li>
+              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/05_tree_models_and_tuning.ipynb">05_tree_models_and_tuning</a>: random forest grid, LightGBM with Optuna, threshold, ablation.</li>
+              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/06_test_evaluation.ipynb">06_test_evaluation</a>: test metrics, all curves, bootstrap, error analysis.</li>
+              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/07_website_export.ipynb">07_website_export</a>: numbers and the browser model for this site.</li>
+            </ol>
+            <p class="text-[11px] text-text-muted mt-4">Full metric tables: <a class="underline" href="{{REPO_URL}}/blob/main/results/test_metrics.csv">results/test_metrics.csv</a>, <a class="underline" href="{{REPO_URL}}/blob/main/results/validation_metrics.csv">results/validation_metrics.csv</a>. Setup, data download, AI-use disclosure and citations: <a class="underline" href="{{REPO_URL}}#readme">README</a>.</p>
+          </div>
+          <div class="bg-[#121212] text-[#E2E8F0] rounded-2xl p-6 font-mono text-[11px] leading-relaxed overflow-x-auto">
+<pre># 1. put the 5 Kaggle CSVs in data/raw/
+pip install -r requirements.txt
+cd notebooks
+jupyter nbconvert --to notebook --execute --inplace 0*.ipynb   # in order 01 to 07
+# 2. rebuild this website into docs/
+cd .. &amp;&amp; python website/build.py --repo &lt;repo-url&gt;
+node website/tests/check_model_parity.mjs   # browser model == Python</pre>
+          </div>
+        </div>
+      </div>
+    </section>

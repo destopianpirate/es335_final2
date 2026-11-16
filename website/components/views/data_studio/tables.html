@@ -1,0 +1,73 @@
+    <section id="dsn-tables" class="py-14 sm:py-16 border-b border-border-subtle bg-gradient-to-b from-page-bg to-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 1 of 9: The five tables"><span class="chap-no" aria-hidden="true">01</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">The five tables</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-text-primary mt-1 mb-3">The five raw tables</h1>
+        <p class="text-sm sm:text-base text-text-secondary leading-relaxed max-w-4xl mb-8">
+          The KKBOX churn data comes as five CSV files. Two hold the subscribers we predict for; three describe them.
+          We turn every table into <strong class="text-text-primary">one row per subscriber</strong> and left-join them, so no subscriber is dropped.
+          The coverage column shows the share of the <span data-sd="data.train.subscribers" data-fmt="int"></span> labelled subscribers who appear in each table.
+        </p>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+          <table class="w-full text-xs">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr>
+                <th class="text-left px-4 py-3">File</th>
+                <th class="text-right px-4 py-3">Rows</th>
+                <th class="text-right px-4 py-3">Columns</th>
+                <th class="text-left px-4 py-3">One row is</th>
+                <th class="text-left px-4 py-3">Key columns</th>
+                <th class="text-right px-4 py-3">Train coverage</th>
+              </tr>
+            </thead>
+            <tbody id="dsn-table-rows" class="divide-y divide-border-subtle"></tbody>
+          </table>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Labelled subscribers</span>
+            <div class="text-2xl font-extrabold text-text-primary my-1 font-mono" data-sd="data.train.subscribers" data-fmt="int"></div>
+            <p class="text-[10px] text-text-muted">train_data.csv, no duplicates</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Churn rate</span>
+            <div class="text-2xl font-extrabold text-accent-danger my-1 font-mono" data-sd="data.train.churn_rate" data-fmt="pct2"></div>
+            <p class="text-[10px] text-text-muted"><span data-sd="data.train.churners" data-fmt="int"></span> churners</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Features per subscriber</span>
+            <div class="text-2xl font-extrabold text-text-primary my-1 font-mono" data-sd="data.features.n_features"></div>
+            <p class="text-[10px] text-text-muted">6 demographic &bull; 15 billing &bull; 12 listening</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Cutoff date</span>
+            <div class="text-2xl font-extrabold text-text-primary my-1 font-mono">2017-03-31</div>
+            <p class="text-[10px] text-text-muted">all inputs are on or before this date</p>
+          </div>
+        </div>
+
+        <h2 class="text-xl sm:text-2xl font-extrabold text-text-primary tracking-tight mt-12 mb-2">Columns in each raw file</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-5">
+          27 columns across the five files (2 + 1 + 6 + 9 + 9). <span class="font-mono">msno</span> is in every file and is the join key.
+          Data types are what pandas infers from the CSV; dates are stored as YYYYMMDD integers and parsed during feature engineering.
+        </p>
+        <div id="dsn-raw-schema" class="space-y-3"></div>
+
+        <h2 class="text-xl sm:text-2xl font-extrabold text-text-primary tracking-tight mt-12 mb-2">The feature matrix</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-5">
+          After aggregating each table to one row per subscriber and joining, the labelled data is
+          <strong class="text-text-primary font-mono">946,686 rows &times; 35 columns</strong>
+          (<span class="font-mono">msno</span> + <span class="font-mono">is_churn</span> + 33 model features). Every feature is <span class="font-mono">float32</span>, so missing values stay as NaN.
+          It is split 70 / 10 / 20 into train (<span class="font-mono">662,679</span>), validation (<span class="font-mono">94,669</span>) and test (<span class="font-mono">189,338</span>) rows.
+          The unlabelled Kaggle test matrix is <span class="font-mono">24,274 &times; 34</span> (no target).
+        </p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
+          <div class="p-4 rounded-2xl bg-surface-card border border-border-subtle"><span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Rows</span><div class="text-xl font-extrabold text-text-primary font-mono">946,686</div></div>
+          <div class="p-4 rounded-2xl bg-surface-card border border-border-subtle"><span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Total columns</span><div class="text-xl font-extrabold text-text-primary font-mono">35</div></div>
+          <div class="p-4 rounded-2xl bg-surface-card border border-border-subtle"><span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Model features</span><div class="text-xl font-extrabold text-text-primary font-mono">33</div></div>
+          <div class="p-4 rounded-2xl bg-surface-card border border-border-subtle"><span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Feature dtype</span><div class="text-xl font-extrabold text-text-primary font-mono">float32</div></div>
+        </div>
+        <div id="dsn-feature-schema" class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-auto max-h-[480px]"></div>
+      </div>
+    </section>

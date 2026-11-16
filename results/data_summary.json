@@ -1,0 +1,50 @@
+{
+ "train": {
+  "subscribers": 946686,
+  "churners": 85147,
+  "churn_rate": 0.08994
+ },
+ "kaggle_test": {
+  "subscribers": 24274
+ },
+ "members": {
+  "rows": 6769473,
+  "cols": 6,
+  "age_invalid_pct": 67.2,
+  "gender_blank_pct": 65.4,
+  "train_coverage_pct": 88.7
+ },
+ "transactions": {
+  "rows": 1431009,
+  "cols": 9,
+  "date_min": "2015-01-01",
+  "date_max": "2017-03-31",
+  "train_coverage_pct": 96.1
+ },
+ "user_logs": {
+  "rows": 18396362,
+  "cols": 9,
+  "bad_secs_rows": 4200,
+  "train_coverage_pct": 77.7
+ },
+ "features": {
+  "rows": 946686,
+  "n_features": 33,
+  "missing_pct": {
+   "city": 11.32,
+   "registered_via": 11.32,
+   "gender": 11.32,
+   "age": 60.19,
+   "tenure_days": 11.32,
+   "avg_plan_days": 3.85,
+   "auto_renew_ratio": 3.85,
+   "last_payment_method": 3.85,
+   "last_plan_days": 3.85,
+   "last_amount_paid": 3.85,
+   "last_auto_renew": 3.85,
+   "last_is_cancel": 3.85,
+   "days_since_last_tx": 3.85,
+   "days_until_expiration": 3.85
+  }
+ }
+}

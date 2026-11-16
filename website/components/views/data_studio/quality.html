@@ -1,0 +1,39 @@
+    <section id="dsn-quality" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 4 of 9: Data quality"><span class="chap-no" aria-hidden="true">04</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Data quality</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">What is missing or wrong, and what we did</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8">
+          Most gaps come from a subscriber being absent from a table. Absence is informative here (for example, subscribers without any
+          transaction churn far more often), so we keep these subscribers and add a flag instead of dropping or blindly filling them.
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-4">Issues found</h3>
+            <ul class="space-y-3 text-xs text-text-secondary leading-relaxed">
+              <li><strong class="text-text-primary">Age (<code>bd</code>) is unusable for most members.</strong>
+                <span data-sd="data.members.age_invalid_pct" data-fmt="raw1"></span>% of member rows have age 0, negative or above 90.
+                We treat ages outside 10&ndash;90 as missing.</li>
+              <li><strong class="text-text-primary">Gender is mostly blank</strong> (<span data-sd="data.members.gender_blank_pct" data-fmt="raw1"></span>% of member rows).
+                We encode it as female / male / not given.</li>
+              <li><strong class="text-text-primary">No member profile</strong> for <span data-sd="eda.missing_pct.city" data-fmt="raw1"></span>% of labelled subscribers
+                &rarr; <code>has_member = 0</code>; demographics left missing.</li>
+              <li><strong class="text-text-primary">No transactions</strong> for <span data-sd="eda.missing_pct.last_auto_renew" data-fmt="raw1"></span>% of subscribers. These churn at
+                <span data-ds-break="has_tx|0.0"></span> &rarr; <code>has_tx = 0</code>, counts set to 0, &ldquo;last transaction&rdquo; fields left missing.</li>
+              <li><strong class="text-text-primary">No March listening logs</strong> for <span data-ds-share="has_logs|0.0"></span> of subscribers
+                &rarr; <code>has_logs = 0</code>, listening totals set to 0, days since last listen = 31.</li>
+              <li><strong class="text-text-primary">Impossible listening times:</strong> <span data-sd="data.user_logs.bad_secs_rows" data-fmt="int"></span> daily log rows have
+                <code>total_secs</code> below 0 or above 86&nbsp;400 (one day); clipped to [0,&nbsp;86&nbsp;400].</li>
+              <li><strong class="text-text-primary">Heavy skew</strong> in money and volume columns (skewness of <code>tx_count</code> = <span data-sd="eda.skew.tx_count" data-fmt="raw1"></span>):
+                <code>log1p</code> + scaling for logistic regression only; trees do not need it.</li>
+            </ul>
+          </div>
+
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Missing values left after the joins</h3>
+            <p class="text-[11px] text-text-secondary mb-4">% of labelled subscribers. Remaining gaps are imputed inside each model pipeline (median, learned on the training split only) or handled natively by LightGBM.</p>
+            <div class="h-80 relative"><canvas id="dsn-missing-chart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </section>

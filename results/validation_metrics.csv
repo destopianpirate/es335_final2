@@ -1,0 +1,7 @@
+model,pr_auc,roc_auc,log_loss,f1@0.5
+Majority (prior),0.0899,0.5,0.3024,0.0
+Rule: auto-renew off,0.3162,0.7744,0.2287,0.0
+Logistic regression,0.8991,0.976,0.0854,0.8512
+Random forest,0.9641,0.9951,0.0461,0.9013
+LightGBM (default),0.967,0.9957,0.0439,0.9035
+LightGBM (tuned),0.9686,0.9962,0.0423,0.9064

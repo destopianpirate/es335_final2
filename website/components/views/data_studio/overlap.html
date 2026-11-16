@@ -1,0 +1,18 @@
+    <section id="dsn-overlap" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 3 of 9: File overlap"><span class="chap-no" aria-hidden="true">03</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">File overlap</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Who appears in which file</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">
+          All five files share the subscriber ID <span class="font-mono">msno</span>. The matrix counts distinct subscribers.
+          The diagonal is the size of one file; every other cell is the number of subscribers found in both files, and the small percentage is that overlap as a share of the <em>row</em> file.
+          This is why we left-join everything onto the training and test IDs and add a "has this table" flag instead of dropping subscribers.
+        </p>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" id="dsn-overlap-cards"></div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+          <table class="w-full text-xs" id="dsn-overlap-table"></table>
+        </div>
+        <p class="text-xs text-text-secondary mt-5 max-w-4xl" id="dsn-overlap-note"></p>
+      </div>
+    </section>

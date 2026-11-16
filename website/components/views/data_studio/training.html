@@ -1,0 +1,39 @@
+    <section id="dsn-training" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 8 of 9: Data for training - training split"><span class="chap-no" aria-hidden="true">08</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Data for training &middot; training split</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-8">Feature checks before modelling</h2>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card mb-8">
+          <div class="px-5 pt-5 pb-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Feature summary</h3>
+            <p class="text-[11px] text-text-secondary mt-1">All 33 model features on the 6,62,679 training subscribers. Click a column header to sort.</p>
+          </div>
+          <div class="overflow-x-auto max-h-[32rem] overflow-y-auto">
+            <table class="w-full text-[11px]">
+              <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px] sticky top-0" id="dsn-summary-head"></thead>
+              <tbody id="dsn-summary-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Churn rate by feature value</h3>
+            <p class="text-[11px] text-text-secondary mb-3" id="dsn-decile-note"></p>
+            <select id="dsn-decile-select" aria-label="Feature" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary mb-4"></select>
+            <div class="h-72 relative"><canvas id="dsn-decile-chart"></canvas></div>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Churn rate when a value is missing</h3>
+            <p class="text-[11px] text-text-secondary mb-4">Each group of features that is missing together. Missingness carries signal, so it is kept as a flag and not dropped.</p>
+            <div class="h-80 relative"><canvas id="dsn-missing-churn-chart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Distribution shift: population stability index against the training split</h3>
+          <p class="text-[11px] text-text-secondary mb-4" id="dsn-shift-note"></p>
+          <div class="h-[36rem] relative"><canvas id="dsn-shift-chart"></canvas></div>
+        </div>
+      </div>
+    </section>

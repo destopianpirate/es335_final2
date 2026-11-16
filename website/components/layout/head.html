@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Early Churn Prediction · ES 335</title>
+  <meta name="description" content="Machine learning research project and interactive analytics portal investigating whether daily music listening patterns and temporal velocity improve subscription churn prediction beyond basic billing records."/>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23000000'/><text x='16' y='21' font-size='14' font-weight='bold' font-family='sans-serif' text-anchor='middle' fill='%23FFFFFF'>ML</text></svg>"/>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <!-- Google Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- GSAP Animation Platform -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- Dual-Theme Engine (Day / Night) -->
+  <script src="js/theme.js"></script>
+
+  <!-- Tailwind Configuration with Project Tokens -->
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "page-bg": "var(--page-bg)",
+            "surface-card": "var(--surface-card)",
+            "surface-subtle": "var(--surface-subtle)",
+            "border-subtle": "var(--border-subtle)",
+            "border-strong": "var(--border-strong)",
+            "text-primary": "var(--text-primary)",
+            "text-secondary": "var(--text-secondary)",
+            "text-muted": "var(--text-muted)",
+            "metric-highlight": "#1D4ED8",
+            "accent-success": "#15803D",
+            "accent-warning": "#B45309",
+            "accent-danger": "#B91C1C",
+            "accent-blue": "#2563EB",
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          boxShadow: {
+            'subtle-card': '0 4px 20px -2px rgba(18, 18, 18, 0.03), 0 2px 6px -1px rgba(18, 18, 18, 0.02)',
+            'subtle-hover': '0 10px 25px -4px rgba(18, 18, 18, 0.06), 0 4px 10px -2px rgba(18, 18, 18, 0.03)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>

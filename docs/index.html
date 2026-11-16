@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Early Churn Prediction · ES 335</title>
+  <meta name="description" content="Machine learning research project and interactive analytics portal investigating whether daily music listening patterns and temporal velocity improve subscription churn prediction beyond basic billing records."/>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23000000'/><text x='16' y='21' font-size='14' font-weight='bold' font-family='sans-serif' text-anchor='middle' fill='%23FFFFFF'>ML</text></svg>"/>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <!-- Google Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- GSAP Animation Platform -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- Dual-Theme Engine (Day / Night) -->
+  <script src="js/theme.js"></script>
+
+  <!-- Tailwind Configuration with Project Tokens -->
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "page-bg": "var(--page-bg)",
+            "surface-card": "var(--surface-card)",
+            "surface-subtle": "var(--surface-subtle)",
+            "border-subtle": "var(--border-subtle)",
+            "border-strong": "var(--border-strong)",
+            "text-primary": "var(--text-primary)",
+            "text-secondary": "var(--text-secondary)",
+            "text-muted": "var(--text-muted)",
+            "metric-highlight": "#1D4ED8",
+            "accent-success": "#15803D",
+            "accent-warning": "#B45309",
+            "accent-danger": "#B91C1C",
+            "accent-blue": "#2563EB",
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          boxShadow: {
+            'subtle-card': '0 4px 20px -2px rgba(18, 18, 18, 0.03), 0 2px 6px -1px rgba(18, 18, 18, 0.02)',
+            'subtle-hover': '0 10px 25px -4px rgba(18, 18, 18, 0.06), 0 4px 10px -2px rgba(18, 18, 18, 0.03)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+
+<body class="bg-page-bg text-text-primary min-h-screen flex flex-col selection:bg-[#E2E8F0] selection:text-text-primary font-sans">
+
+  <!-- Mobile Backdrop Overlay -->
+  <div id="sidebar-mobile-backdrop" onclick="closeMobileSidebar()" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity"></div>
+
+    <aside id="app-sidebar" class="sidebar-collapsed fixed top-0 left-0 bottom-0 z-50 h-screen bg-white dark:bg-[#121212] flex flex-col justify-between transition-all duration-300 w-[76px] -translate-x-full lg:translate-x-0 border-r border-slate-300 dark:border-[#222222] shadow-xs" aria-label="Sidebar Navigation">
+    
+    <!-- Top Header: Lab Branding & Collapse Action -->
+    <div id="sidebar-header" class="h-16 px-4 flex items-center justify-between bg-white dark:bg-[#121212] shrink-0 border-b border-border-subtle dark:border-[#222222] relative transition-all duration-200">
+      <a href="#overview" id="sidebar-brand-link" class="flex items-center gap-3 overflow-hidden group" title="Return to Overview">
+        <div class="w-8 h-8 rounded-lg bg-black text-white dark:border dark:border-[#444444] flex items-center justify-center font-black text-xs tracking-wider shrink-0 group-hover:bg-black transition-colors">
+          ML
+        </div>
+        <div class="sidebar-text flex flex-col min-w-0 transition-opacity duration-200">
+          <span class="font-bold text-xs tracking-tight text-slate-900 dark:text-white leading-tight"><span class="font-medium text-slate-500 dark:text-slate-400">ES 335</span> Churn Project</span>
+          <span class="text-[10px] font-medium text-slate-500 dark:text-slate-400 tracking-normal">IIT Gandhinagar</span>
+        </div>
+      </a>
+
+      <!-- Collapsed Website Logo (Shown in collapsed mode when NOT hovered) -->
+      <div id="sidebar-collapsed-logo" class="hidden items-center justify-center cursor-pointer rounded-full" onclick="toggleSidebarCollapse()" title="Click to Expand Sidebar" aria-label="Expand Sidebar">
+        <div class="w-8 h-8 rounded-lg bg-black text-white dark:border dark:border-[#444444] flex items-center justify-center font-black text-xs tracking-wider shadow-xs">
+          ML
+        </div>
+      </div>
+      
+      <!-- Collapse/Expand Toggle Button (In collapsed mode: appears when mouse hovers over sidebar) -->
+      <button type="button" onclick="handleSidebarCollapseClick()" id="sidebar-collapse-btn" class="p-1.5 rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-[#202020] dark:hover:text-white transition-colors flex items-center justify-center cursor-pointer shrink-0" title="Toggle Sidebar" aria-label="Toggle Sidebar">
+        <span id="sidebar-collapse-icon" class="material-symbols-outlined text-[18px]">dock_to_right</span>
+      </button>
+    </div>
+
+    <!-- Project Members Section -->
+    <div id="sidebar-members-section" class="px-3 py-2 space-y-1 shrink-0 border-b border-border-subtle dark:border-[#222222] transition-all">
+      <div id="sidebar-team-title" class="sidebar-text px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+        <span>Team</span>
+      </div>
+
+      <!-- Member Card 1: Ayush Singh (Border removed, circular shape preserved) -->
+      <div class="sidebar-member-box relative cursor-pointer px-2 py-1.5 rounded-full hover:bg-slate-50 dark:hover:bg-[#1E1E1E] transition-colors flex items-center gap-2.5" title="Ayush Singh (25110068) - open portfolio"><a href="https://destopianpirate.github.io" target="_blank" rel="noopener noreferrer" aria-label="Ayush Singh portfolio" class="absolute inset-0 z-10 rounded-full"></a>
+        <div class="sidebar-member-avatar relative overflow-hidden w-6 h-6 rounded-full bg-slate-100 text-slate-700 dark:bg-[#202020] dark:text-[#E2E8F0] flex items-center justify-center font-bold text-[10px] shrink-0 transition-all border-none">
+          AS
+        <img src="https://github.com/destopianpirate.png?size=64" alt="destopianpirate" loading="lazy" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full rounded-full object-cover" onerror="this.remove()"></div>
+        <div class="sidebar-text flex items-center justify-between min-w-0 flex-1">
+          <span class="font-medium text-xs text-slate-800 dark:text-white truncate">Ayush Singh</span>
+          <span class="flex items-center gap-1.5 shrink-0"><a href="https://github.com/destopianpirate" target="_blank" rel="noopener noreferrer" title="destopianpirate on GitHub" aria-label="destopianpirate on GitHub" class="relative z-20 member-gh member-ink shrink-0 hover:opacity-70 transition-opacity"><svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a><span class="font-mono text-[10px] member-ink">25110068</span></span>
+        </div>
+      </div>
+
+      <!-- Member Card 2: Avnish Yadav (Border removed, circular shape preserved) -->
+      <div class="sidebar-member-box px-2 py-1.5 rounded-full hover:bg-slate-50 dark:hover:bg-[#1E1E1E] transition-colors flex items-center gap-2.5" title="Avnish Yadav (25110067)">
+        <div class="sidebar-member-avatar relative overflow-hidden w-6 h-6 rounded-full bg-slate-100 text-slate-700 dark:bg-[#202020] dark:text-[#E2E8F0] flex items-center justify-center font-bold text-[10px] shrink-0 transition-all border-none">
+          AY
+        <img src="https://github.com/LostImmortal.png?size=64" alt="LostImmortal" loading="lazy" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full rounded-full object-cover" onerror="this.remove()"></div>
+        <div class="sidebar-text flex items-center justify-between min-w-0 flex-1">
+          <span class="font-medium text-xs text-slate-800 dark:text-white truncate">Avnish Yadav</span>
+          <span class="flex items-center gap-1.5 shrink-0"><a href="https://github.com/LostImmortal" target="_blank" rel="noopener noreferrer" title="LostImmortal on GitHub" aria-label="LostImmortal on GitHub" class="member-gh member-ink shrink-0 hover:opacity-70 transition-opacity"><svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a><span class="font-mono text-[10px] member-ink">25110067</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scrollable Navigation Sections -->
+    <div id="sidebar-nav-container" class="flex-1 overflow-y-auto px-3 py-2 space-y-2 text-xs font-semibold">
+      
+      <!-- NAV SECTION 1: OVERVIEW -->
+      <div class="sidebar-accordion">
+        <div id="row-overview" class="sidebar-nav-row active-nav-row w-full flex items-center justify-between text-white hover:bg-black rounded-full px-3 py-2 transition-colors group">
+          <a href="#overview" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Overview">
+            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-white shrink-0">grid_view</span>
+            <span class="sidebar-text font-bold text-xs text-white truncate tracking-tight">Overview</span>
+          </a>
+          <button type="button" onclick="event.preventDefault(); event.stopPropagation(); toggleSidebarAccordion('model-portal')" class="sidebar-arrow p-1 text-slate-300 hover:text-white cursor-pointer shrink-0 transition-colors" title="Toggle Sections" aria-label="Toggle Overview Subsections">
+            <span id="arrow-model-portal" class="material-symbols-outlined text-[16px] inline-block transition-transform duration-200">chevron_right</span>
+          </button>
+        </div>
+        
+        <!-- Subheadings under Overview (NO grey dot, NO numbers, collapsed by default) -->
+        <div id="subheadings-model-portal" class="hidden pl-4 pr-1 py-1.5 space-y-0.5 text-[11px] font-medium bg-transparent">
+          <div class="space-y-0.5">
+            <a href="#overview" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Question &amp; Answer</span>
+            </a>
+            <a href="#ovn-data" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Data</span>
+            </a>
+            <a href="#ovn-preprocessing" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Preprocessing</span>
+            </a>
+            <a href="#ovn-models" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Baseline &amp; Methods</span>
+            </a>
+            <a href="#ovn-evaluation" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Evaluation</span>
+            </a>
+            <a href="#ovn-results" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Results</span>
+            </a>
+            <a href="#ovn-errors" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Errors</span>
+            </a>
+            <a href="#ovn-limitations" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Limitations</span>
+            </a>
+            <a href="#ovn-conclusion" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Conclusion</span>
+            </a>
+            <a href="#ovn-repro" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Reproduction Steps</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- NAV SECTION 2: DATA STUDIO -->
+      <div class="sidebar-accordion">
+        <div id="row-data-studio" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
+          <a href="#data-studio" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Data Studio">
+            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-slate-500 group-hover:text-slate-900 shrink-0">database</span>
+            <span class="sidebar-text font-bold text-xs text-slate-800 group-hover:text-slate-900 truncate tracking-tight">Data Studio</span>
+          </a>
+          <button type="button" onclick="event.preventDefault(); event.stopPropagation(); toggleSidebarAccordion('data-studio')" class="sidebar-arrow p-1 text-slate-400 hover:text-slate-700 cursor-pointer shrink-0 transition-colors" title="Toggle Sections" aria-label="Toggle Data Studio Subsections">
+            <span id="arrow-data-studio" class="material-symbols-outlined text-[16px] inline-block transition-transform duration-200">chevron_right</span>
+          </button>
+        </div>
+        
+        <!-- Subheadings under Data Studio (NO grey dot, NO numbers, collapsed by default) -->
+        <div id="subheadings-data-studio" class="hidden pl-4 pr-1 py-1.5 space-y-0.5 text-[11px] font-medium bg-transparent">
+          <div class="space-y-0.5">
+            <a href="#data-studio" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">The Five Tables</span>
+            </a>
+            <a href="#dsn-raw" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Raw Data</span>
+            </a>
+            <a href="#dsn-overlap" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">File Overlap</span>
+            </a>
+            <a href="#dsn-quality" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Data Quality</span>
+            </a>
+            <a href="#dsn-signals" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Churn Signal Explorer</span>
+            </a>
+            <a href="#dsn-explorer" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Churn by Group</span>
+            </a>
+            <a href="#dsn-features" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Feature Analysis</span>
+            </a>
+            <a href="#dsn-training" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Data for Training</span>
+            </a>
+            <a href="#dsn-split" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Train / Val / Test Split</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- NAV SECTION 3: MODEL PREDICTOR (single <a>, perfectly centered in collapsed mode) -->
+      <div class="sidebar-accordion">
+        <div id="row-model-predictor" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
+          <a href="#model-predictor" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Model Predictor">
+            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-slate-500 group-hover:text-slate-900 shrink-0">model_training</span>
+            <span class="sidebar-text font-bold text-xs text-slate-800 group-hover:text-slate-900 truncate tracking-tight">Model Predictor</span>
+          </a>
+          <span class="sidebar-arrow p-1 text-slate-400 group-hover:text-slate-700 shrink-0 pointer-events-none" aria-hidden="true">
+            <span class="material-symbols-outlined text-[16px] inline-block">chevron_right</span>
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sidebar footer: Day/Night theme switcher -->
+    <div id="sidebar-bottom-container" class="p-3 shrink-0 border-t border-border-subtle dark:border-[#222222] w-full flex items-center justify-between gap-2">
+      <span class="flex-1"></span>
+
+      <!-- Day / Night Theme Switcher (Laptop / Sidebar) -->
+      <label id="theme-toggle-button" for="toggle" tabindex="0" title="Switch Theme (Day / Night)" aria-label="Switch Theme (Day / Night)" class="shrink-0 flex items-center cursor-pointer">
+        <input type="checkbox" id="toggle">
+        <svg viewBox="0 0 69.667 44" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="container">
+              <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.15"/>
+            </filter>
+            <filter id="sun-outer">
+              <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#f8e664" flood-opacity="0.3"/>
+            </filter>
+            <filter id="sun">
+              <feDropShadow dx="0" dy="0.5" stdDeviation="0.5" flood-opacity="0.1"/>
+            </filter>
+            <filter id="moon">
+              <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#cce6ee" flood-opacity="0.3"/>
+            </filter>
+            <filter id="cloud">
+              <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.15"/>
+            </filter>
+          </defs>
+          <g transform="translate(3.5 3.5)" data-name="Component 15 – 1" id="Component_15_1">
+            
+            <g filter="url(#container)" transform="matrix(1, 0, 0, 1, -3.5, -3.5)">
+              <rect fill="#83cbd8" transform="translate(3.5 3.5)" rx="17.5" height="35" width="60.667" data-name="container" id="container"></rect>
+            </g>
+            
+            <g transform="translate(2.333 2.333)" id="button">
+              
+              <g data-name="sun" id="sun">
+                <g filter="url(#sun-outer)" transform="matrix(1, 0, 0, 1, -5.83, -5.83)">
+                  <circle fill="#f8e664" transform="translate(5.83 5.83)" r="15.167" cy="15.167" cx="15.167" data-name="sun-outer" id="sun-outer-2"></circle>
+                </g>
+                <g filter="url(#sun)" transform="matrix(1, 0, 0, 1, -5.83, -5.83)">
+                  <path fill="rgba(246,254,247,0.29)" transform="translate(9.33 9.33)" d="M11.667,0A11.667,11.667,0,1,1,0,11.667,11.667,11.667,0,0,1,11.667,0Z" data-name="sun" id="sun-3"></path>
+                </g>
+                <circle fill="#fcf4b9" transform="translate(8.167 8.167)" r="7" cy="7" cx="7" id="sun-inner"></circle>
+              </g>
+              
+              <g data-name="moon" id="moon">
+                <g filter="url(#moon)" transform="matrix(1, 0, 0, 1, -31.5, -5.83)">
+                  <circle fill="#cce6ee" transform="translate(31.5 5.83)" r="15.167" cy="15.167" cx="15.167" data-name="moon" id="moon-3"></circle>
+                </g>
+                <g fill="#a6cad0" transform="translate(-24.415 -1.009)" id="patches">
+                  <circle transform="translate(43.009 4.496)" r="2" cy="2" cx="2"></circle>
+                  <circle transform="translate(39.366 17.952)" r="2" cy="2" cx="2" data-name="patch"></circle>
+                  <circle transform="translate(33.016 8.044)" r="1" cy="1" cx="1" data-name="patch"></circle>
+                  <circle transform="translate(51.081 18.888)" r="1" cy="1" cx="1" data-name="patch"></circle>
+                  <circle transform="translate(33.016 22.503)" r="1" cy="1" cx="1" data-name="patch"></circle>
+                  <circle transform="translate(50.081 10.53)" r="1.5" cy="1.5" cx="1.5" data-name="patch"></circle>
+                </g>
+              </g>
+            </g>
+            
+            <g filter="url(#cloud)" transform="matrix(1, 0, 0, 1, -3.5, -3.5)">
+              <path fill="#fff" transform="translate(-3466.47 -160.94)" d="M3512.81,173.815a4.463,4.463,0,0,1,2.243.62.95.95,0,0,1,.72-1.281,4.852,4.852,0,0,1,2.623.519c.034.02-.5-1.968.281-2.716a2.117,2.117,0,0,1,2.829-.274,1.821,1.821,0,0,1,.854,1.858c.063.037,2.594-.049,3.285,1.273s-.865,2.544-.807,2.626a12.192,12.192,0,0,1,2.278.892c.553.448,1.106,1.992-1.62,2.927a7.742,7.742,0,0,1-3.762-.3c-1.28-.49-1.181-2.65-1.137-2.624s-1.417,2.2-2.623,2.2a4.172,4.172,0,0,1-2.394-1.206,3.825,3.825,0,0,1-2.771.774c-3.429-.46-2.333-3.267-2.2-3.55A3.721,3.721,0,0,1,3512.81,173.815Z" data-name="cloud" id="cloud"></path>
+            </g>
+
+            <g fill="#def8ff" transform="translate(3.585 1.325)" id="stars">
+              <path transform="matrix(-1, 0.017, -0.017, -1, 24.231, 3.055)" d="M.774,0,.566.559,0,.539.458.933.25,1.492l.485-.361.458.394L1.024.953,1.509.592.943.572Z"></path>
+              <path transform="matrix(-0.777, 0.629, -0.629, -0.777, 23.185, 12.358)" d="M1.341.529.836.472.736,0,.505.46,0,.4.4.729l-.231.46L.605.932l.4.326L.9.786Z" data-name="star"></path>
+              <path transform="matrix(0.438, 0.899, -0.899, 0.438, 23.177, 29.735)" d="M.015,1.065.475.9l.285.365L.766.772l.46-.164L.745.494.751,0,.481.407,0,.293.285.658Z" data-name="star"></path>
+              <path transform="translate(12.677 0.388) rotate(104)" d="M1.161,1.6,1.059,1,1.574.722.962.607.86,0,.613.572,0,.457.446.881.2,1.454l.516-.274Z" data-name="star"></path>
+              <path transform="matrix(-0.07, 0.998, -0.998, -0.07, 11.066, 15.457)" d="M.873,1.648l.114-.62L1.579.945,1.03.62,1.144,0,.706.464.157.139.438.7,0,1.167l.592-.083Z" data-name="star"></path>
+              <path transform="translate(8.326 28.061) rotate(11)" d="M.593,0,.638.724,0,.982l.7.211.045.724.36-.64.7.211L1.342.935,1.7.294,1.063.552Z" data-name="star"></path>
+              <path transform="translate(5.012 5.962) rotate(172)" d="M.816,0,.5.455,0,.311.323.767l-.312.455.516-.215.323.456L.827.911,1.343.7.839.552Z" data-name="star"></path>
+              <path transform="translate(2.218 14.616) rotate(169)" d="M1.261,0,.774.571.114.3.487.967,0,1.538.728,1.32l.372.662.047-.749.728-.218L1.215.749Z" data-name="star"></path>
+            </g>
+          </g>
+        </svg>
+      </label>
+    </div>
+
+  </aside>
+
+
+
+  <div id="app-main-layout" class="transition-all duration-300 lg:pl-[76px] flex-grow flex flex-col pt-14 lg:pt-0">
+
+    <!-- 1. MOBILE TOP NAVBAR (Only visible on screens < 1024px) -->
+<header id="mobile-top-navbar" class="lg:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-white/95 dark:bg-[#121212]/95 backdrop-blur-md border-b border-border-subtle px-4 flex items-center justify-between transition-colors duration-200" aria-label="Mobile Navigation Bar">
+  
+  <!-- Left-most: Three horizontal lines (directly opens expanded sidebar) -->
+  <button type="button" onclick="openMobileSidebarExpanded()" class="p-2 -ml-1 rounded-xl text-text-primary hover:bg-surface-subtle transition-colors flex items-center justify-center cursor-pointer" title="Open Navigation Menu" aria-label="Open Navigation Menu">
+    <span class="material-symbols-outlined text-[24px]">menu</span>
+  </button>
+
+  <!-- Middle: Machine Learning Title -->
+  <div class="font-bold text-sm tracking-tight text-text-primary select-none">
+    Machine Learning
+  </div>
+
+  <!-- Right-most: Day and Night theme changer (Mobile SVG Switch) -->
+  <label id="mobile-theme-toggle-button" for="mobile-toggle" class="flex items-center cursor-pointer -mr-1" title="Switch to Night Mode" aria-label="Switch to Night Mode">
+    <input type="checkbox" id="mobile-toggle">
+    <svg viewBox="0 0 69.667 44" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="mobile-container">
+          <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.15"/>
+        </filter>
+        <filter id="mobile-sun-outer">
+          <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#f8e664" flood-opacity="0.3"/>
+        </filter>
+        <filter id="mobile-sun">
+          <feDropShadow dx="0" dy="0.5" stdDeviation="0.5" flood-opacity="0.1"/>
+        </filter>
+        <filter id="mobile-moon">
+          <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#cce6ee" flood-opacity="0.3"/>
+        </filter>
+        <filter id="mobile-cloud">
+          <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+      <g transform="translate(3.5 3.5)" data-name="Component 15 – 1">
+        <g filter="url(#mobile-container)" transform="matrix(1, 0, 0, 1, -3.5, -3.5)">
+          <rect fill="#83cbd8" transform="translate(3.5 3.5)" rx="17.5" height="35" width="60.667" id="mobile-container" class="theme-svg-container"></rect>
+        </g>
+        
+        <g transform="translate(2.333 2.333)" id="mobile-button" class="theme-svg-button">
+          <g data-name="sun" id="mobile-sun" class="theme-svg-sun">
+            <g filter="url(#mobile-sun-outer)" transform="matrix(1, 0, 0, 1, -5.83, -5.83)">
+              <circle fill="#f8e664" transform="translate(5.83 5.83)" r="15.167" cy="15.167" cx="15.167"></circle>
+            </g>
+            <g filter="url(#mobile-sun)" transform="matrix(1, 0, 0, 1, -5.83, -5.83)">
+              <path fill="rgba(246,254,247,0.29)" transform="translate(9.33 9.33)" d="M11.667,0A11.667,11.667,0,1,1,0,11.667,11.667,11.667,0,0,1,11.667,0Z"></path>
+            </g>
+            <circle fill="#fcf4b9" transform="translate(8.167 8.167)" r="7" cy="7" cx="7"></circle>
+          </g>
+          
+          <g data-name="moon" id="mobile-moon" class="theme-svg-moon">
+            <g filter="url(#mobile-moon)" transform="matrix(1, 0, 0, 1, -31.5, -5.83)">
+              <circle fill="#cce6ee" transform="translate(31.5 5.83)" r="15.167" cy="15.167" cx="15.167"></circle>
+            </g>
+            <g fill="#a6cad0" transform="translate(-24.415 -1.009)" id="mobile-patches" class="theme-svg-patches">
+              <circle transform="translate(43.009 4.496)" r="2" cy="2" cx="2"></circle>
+              <circle transform="translate(39.366 17.952)" r="2" cy="2" cx="2"></circle>
+              <circle transform="translate(33.016 8.044)" r="1" cy="1" cx="1" data-name="patch"></circle>
+              <circle transform="translate(51.081 18.888)" r="1" cy="1" cx="1" data-name="patch"></circle>
+              <circle transform="translate(33.016 22.503)" r="1" cy="1" cx="1" data-name="patch"></circle>
+              <circle transform="translate(50.081 10.53)" r="1.5" cy="1.5" cx="1.5" data-name="patch"></circle>
+            </g>
+          </g>
+        </g>
+        
+        <g filter="url(#mobile-cloud)" transform="matrix(1, 0, 0, 1, -3.5, -3.5)">
+          <path fill="#fff" transform="translate(-3466.47 -160.94)" d="M3512.81,173.815a4.463,4.463,0,0,1,2.243.62.95.95,0,0,1,.72-1.281,4.852,4.852,0,0,1,2.623.519c.034.02-.5-1.968.281-2.716a2.117,2.117,0,0,1,2.829-.274,1.821,1.821,0,0,1,.854,1.858c.063.037,2.594-.049,3.285,1.273s-.865,2.544-.807,2.626a12.192,12.192,0,0,1,2.278.892c.553.448,1.106,1.992-1.62,2.927a7.742,7.742,0,0,1-3.762-.3c-1.28-.49-1.181-2.65-1.137-2.624s-1.417,2.2-2.623,2.2a4.172,4.172,0,0,1-2.394-1.206,3.825,3.825,0,0,1-2.771.774c-3.429-.46-2.333-3.267-2.2-3.55A3.721,3.721,0,0,1,3512.81,173.815Z" id="mobile-cloud" class="theme-svg-cloud"></path>
+        </g>
+
+        <g fill="#def8ff" transform="translate(3.585 1.325)" id="mobile-stars" class="theme-svg-stars">
+          <path transform="matrix(-1, 0.017, -0.017, -1, 24.231, 3.055)" d="M.774,0,.566.559,0,.539.458.933.25,1.492l.485-.361.458.394L1.024.953,1.509.592.943.572Z"></path>
+          <path transform="matrix(-0.777, 0.629, -0.629, -0.777, 23.185, 12.358)" d="M1.341.529.836.472.736,0,.505.46,0,.4.4.729l-.231.46L.605.932l.4.326L.9.786Z"></path>
+          <path transform="matrix(0.438, 0.899, -0.899, 0.438, 23.177, 29.735)" d="M.015,1.065.475.9l.285.365L.766.772l.46-.164L.745.494.751,0,.481.407,0,.293.285.658Z"></path>
+          <path transform="translate(12.677 0.388) rotate(104)" d="M1.161,1.6,1.059,1,1.574.722.962.607.86,0,.613.572,0,.457.446.881.2,1.454l.516-.274Z"></path>
+          <path transform="matrix(-0.07, 0.998, -0.998, -0.07, 11.066, 15.457)" d="M.873,1.648l.114-.62L1.579.945,1.03.62,1.144,0,.706.464.157.139.438.7,0,1.167l.592-.083Z"></path>
+          <path transform="translate(8.326 28.061) rotate(11)" d="M.593,0,.638.724,0,.982l.7.211.045.724.36-.64.7.211L1.342.935,1.7.294,1.063.552Z"></path>
+          <path transform="translate(5.012 5.962) rotate(172)" d="M.816,0,.5.455,0,.311.323.767l-.312.455.516-.215.323.456L.827.911,1.343.7.839.552Z"></path>
+          <path transform="translate(2.218 14.616) rotate(169)" d="M1.261,0,.774.571.114.3.487.967,0,1.538.728,1.32l.372.662.047-.749.728-.218L1.215.749Z"></path>
+        </g>
+      </g>
+    </svg>
+  </label>
+</header>
+
+
+
+
+    <main class="flex-grow">
+
+      <!-- VIEW 1: OVERVIEW (concise, reasoning from question to conclusion) -->
+      <div id="view-overview" class="view-panel">
+            <section id="ovn-question" class="ovn-hero relative overflow-hidden py-14 sm:py-20 border-b border-border-subtle bg-gradient-to-b from-page-bg to-surface-subtle">
+      <div class="ovn-hero-bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="grid-fade"></span></div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="mb-10">
+          <div class="max-w-6xl">
+            <h1 id="ovn-title" class="ovn-title text-3xl sm:text-4xl lg:text-[3.1rem] font-extrabold tracking-tight text-text-primary leading-[1.12] mb-8">
+              Early Prediction of Subscription Churn Using Listening Patterns and Temporal Engagement Features
+            </h1>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-10 gap-8 lg:gap-10 items-start">
+            <div class="lg:col-span-7">
+            <p class="hero-rise text-base sm:text-lg text-text-secondary leading-relaxed max-w-none" style="--d:900ms" id="ovn-abstract"></p>
+            <div class="hero-rise" style="--d:700ms">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8 hero-stats-grid">
+            <div class="hero-stat"><span class="material-symbols-outlined">group</span><div><div class="hero-num" data-hero="subs">&ndash;</div><div class="hero-lab">labelled subscribers</div></div></div>
+            <div class="hero-stat"><span class="material-symbols-outlined">person_off</span><div><div class="hero-num" data-hero="churn">&ndash;</div><div class="hero-lab">churn rate in the data</div></div></div>
+            <div class="hero-stat"><span class="material-symbols-outlined">target</span><div><div class="hero-num" data-hero="pr">&ndash;</div><div class="hero-lab">test PR-AUC (champion)</div></div></div>
+            <div class="hero-stat"><span class="material-symbols-outlined">show_chart</span><div><div class="hero-num" data-hero="roc">&ndash;</div><div class="hero-lab">test ROC-AUC (champion)</div></div></div>
+            </div>
+            </div>
+            </div>
+            <div class="lg:col-span-3 hero-rise" style="--d:500ms">
+            <nav class="hero-index" aria-label="Where to go next">
+              <p class="hi-kicker">Where to start</p>
+              <a class="hi-row" href="#dsn-tables">
+                <span class="hi-no">01</span>
+                <span class="hi-body"><b>Data Studio</b><small>Five tables, 33 features, every plot</small></span>
+                <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </a>
+              <a class="hi-row" href="#ovn-results">
+                <span class="hi-no">02</span>
+                <span class="hi-body"><b>Results</b><small>Six models, one untouched test split</small></span>
+                <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </a>
+              <a class="hi-row" href="#model-predictor">
+                <span class="hi-no">03</span>
+                <span class="hi-body"><b>Model</b><small>Score a subscriber yourself</small></span>
+                <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </a>
+              <a class="hi-repo" href="https://github.com/YOUR-USERNAME/YOUR-REPO" target="_blank" rel="noopener noreferrer" aria-label="Open the repository on GitHub">
+                <span class="hi-repo-logo"><svg viewBox="0 0 16 16" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></span>
+                <span class="hi-repo-body"><b>Repository</b><code>notebooks &middot; code &middot; results<i class="hi-caret"></i></code></span>
+                <svg class="hi-graph" viewBox="0 0 44 56" aria-hidden="true"><path d="M10 4v48M10 20c0 12 24 8 24 24" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="6" r="4"/><circle cx="10" cy="30" r="4"/><circle cx="10" cy="50" r="4"/><circle cx="34" cy="44" r="4"/></svg>
+              </a>
+            </nav>
+            </div>
+          </div>
+        </div>
+
+        <div class="rq-card hero-rise relative overflow-hidden mb-10" style="--d:700ms">
+          <div class="flex flex-col sm:flex-row items-start justify-between gap-4">
+            <div class="space-y-2">
+              <p class="text-xl sm:text-2xl lg:text-[1.75rem] font-extrabold tracking-tight text-text-primary leading-snug max-w-5xl">
+                Using only what is known on 31 March 2017, can we predict whether a KKBOX subscriber will churn (not renew within 30 days of plan expiry)?
+                And does their listening behaviour add predictive value beyond their billing records?
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-8 border-t border-border-subtle grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-[13px]">
+            <div class="rq-item space-y-1.5">
+              <span class="rq-chip"><span class="material-symbols-outlined">table_rows</span></span><span class="font-bold text-text-primary block text-sm">Unit and target</span>
+              <p class="text-text-secondary leading-relaxed">One row is one subscriber (<code>msno</code>) whose plan comes up for renewal around the end of March 2017. Target: <code>is_churn</code> = 1 if they make no new valid subscription within 30 days after expiry (<span data-sd="data.train.churn_rate" data-fmt="pct1"></span> of subscribers).</p>
+            </div>
+            <div class="rq-item space-y-1.5">
+              <span class="rq-chip"><span class="material-symbols-outlined">schedule</span></span><span class="font-bold text-text-primary block text-sm">When the prediction is made</span>
+              <p class="text-text-secondary leading-relaxed">On the cutoff date, <strong class="text-text-primary">31 March 2017</strong>, before the renewal decision. The use case: decide which subscribers to contact before their plan runs out.</p>
+            </div>
+            <div class="rq-item space-y-1.5">
+              <span class="rq-chip"><span class="material-symbols-outlined">inventory_2</span></span><span class="font-bold text-text-primary block text-sm">What is known then</span>
+              <p class="text-text-secondary leading-relaxed">The member profile, every transaction up to 31 March (plan, price, auto-renew, cancel, expiry date) and daily listening for March 2017. Nothing dated after the cutoff is used.</p>
+            </div>
+            <div class="rq-item space-y-1.5">
+              <span class="rq-chip"><span class="material-symbols-outlined">balance</span></span><span class="font-bold text-text-primary block text-sm">Limits of the claim</span>
+              <p class="text-text-secondary leading-relaxed">Results hold for this KKBOX snapshot only. We show association, not cause: a feature that predicts churn is not proven to cause it. See <a href="#ovn-limitations" class="underline">Limitations</a>.</p>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="text-xs font-bold uppercase tracking-wider text-text-muted mb-3">Findings</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10" id="ovn-findings"></div>
+      </div>
+    </section>
+
+            <section id="ovn-data" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 1 of 9: Data"><span class="chap-no" aria-hidden="true">01</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Data</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Source, size and key variables</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8">
+          <strong class="text-text-primary">Source:</strong> the public <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer">Customer Retention Datathon (Riyadh Edition) dataset</a> on Kaggle,
+          released by KKBOX, a music streaming service in Taiwan. Five CSV files (about 2 GB). The label <code>is_churn</code> was defined by KKBOX:
+          a subscriber churns if they make no new valid subscription within 30 days after their membership expires.
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Size</h3>
+            <ul class="text-xs text-text-secondary space-y-2 font-mono">
+              <li class="flex justify-between"><span>train_data</span><span><span data-sd="data.train.subscribers" data-fmt="int"></span> rows</span></li>
+              <li class="flex justify-between"><span>kaggle_test_data</span><span><span data-sd="data.kaggle_test.subscribers" data-fmt="int"></span> rows</span></li>
+              <li class="flex justify-between"><span>members</span><span><span data-sd="data.members.rows" data-fmt="int"></span> rows</span></li>
+              <li class="flex justify-between"><span>transactions</span><span><span data-sd="data.transactions.rows" data-fmt="int"></span> rows</span></li>
+              <li class="flex justify-between"><span>user_logs</span><span><span data-sd="data.user_logs.rows" data-fmt="int"></span> rows</span></li>
+            </ul>
+            <p class="text-[11px] text-text-muted mt-4">After joining: <span data-sd="data.train.subscribers" data-fmt="int"></span> labelled subscribers &times; <span data-sd="data.features.n_features"></span> features, <span data-sd="data.train.churn_rate" data-fmt="pct2"></span> churn.
+              <a href="#data-studio" class="underline">Table-by-table view &rarr;</a></p>
+          </div>
+
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card lg:col-span-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Key variables (33 features in three groups)</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+              <div>
+                <span class="font-bold block mb-1" style="color:#1D4ED8">Billing &bull; 15</span>
+                <p class="text-text-secondary leading-relaxed">From the full transaction history: auto-renew flag and cancel flag of the last transaction, days until the plan expires, plan length, amount paid, payment method, number of transactions, cancellations, discounts.</p>
+              </div>
+              <div>
+                <span class="font-bold block mb-1" style="color:#15803D">Listening &bull; 12</span>
+                <p class="text-text-secondary leading-relaxed">From March 2017 daily logs: active days, hours, songs per day, skip and completion ratios, share of listening in the last 7 days, days since last listen, day-to-day variability.</p>
+              </div>
+              <div>
+                <span class="font-bold block mb-1" style="color:#B45309">Demographic &bull; 6</span>
+                <p class="text-text-secondary leading-relaxed">From the member profile: city, registration channel, gender, age, account age, and whether a profile exists.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Class balance</h3>
+            <p class="text-[11px] text-text-secondary mb-3">Labelled subscribers by outcome. The imbalance rules out accuracy as the main metric.</p>
+            <div class="h-52 relative"><canvas id="ovn-data-balance"></canvas></div>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Churn by table presence</h3>
+            <p class="text-[11px] text-text-secondary mb-3">P profile, T transactions, L March logs. Missing transactions means very high churn.</p>
+            <div class="h-52 relative"><canvas id="ovn-data-coverage"></canvas></div>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Strongest single features</h3>
+            <p class="text-[11px] text-text-secondary mb-3">ROC-AUC of a feature used alone (training split). Billing dominates.</p>
+            <div class="h-52 relative"><canvas id="ovn-data-auc"></canvas></div>
+          </div>
+        </div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Quality issues</h3>
+          <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-xs text-text-secondary leading-relaxed list-disc pl-4">
+            <li>Class imbalance: <span data-sd="data.train.churn_rate" data-fmt="pct1"></span> churners.</li>
+            <li>Age is invalid (0, negative or &gt; 90) for <span data-sd="data.members.age_invalid_pct" data-fmt="raw1"></span>% of member rows; gender blank for <span data-sd="data.members.gender_blank_pct" data-fmt="raw1"></span>%.</li>
+            <li>Not every subscriber is in every table: member profile <span data-sd="data.members.train_coverage_pct" data-fmt="raw1"></span>%, transactions <span data-sd="data.transactions.train_coverage_pct" data-fmt="raw1"></span>%, March listening logs <span data-sd="data.user_logs.train_coverage_pct" data-fmt="raw1"></span>%.</li>
+            <li><span data-sd="data.user_logs.bad_secs_rows" data-fmt="int"></span> log rows have impossible listening time (&lt; 0 or &gt; 24 h).</li>
+            <li>Money and volume columns are heavily right-skewed.</li>
+            <li>Listening logs cover one month only (March 2017).</li>
+          </ul>
+          <p class="text-[11px] text-text-muted mt-4"><strong class="text-text-primary">Access limits.</strong> The data is downloaded from <a href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer" class="underline">its Kaggle page</a> after accepting the competition rules, so the raw CSVs are not in our repository; the README explains how to get them. Subscriber IDs are anonymised hashes and there are no names or contact details. All plots and summaries: <a href="#data-studio" class="underline">Data Studio</a>.</p>
+        </div>
+      </div>
+    </section>
+
+            <section id="ovn-preprocessing" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 2 of 9: Preprocessing"><span class="chap-no" aria-hidden="true">02</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Preprocessing</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Choices and why</h2>
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+          <table class="w-full text-xs">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr><th class="text-left px-4 py-3 w-1/3">Choice</th><th class="text-left px-4 py-3">Why</th></tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle text-text-secondary leading-relaxed">
+              <tr><td class="px-4 py-3 font-semibold text-text-primary">Aggregate every table to one row per subscriber, using only data up to 31 March 2017</td>
+                  <td class="px-4 py-3">The unit of prediction is the subscriber. Nothing after the cutoff is used, so no future information leaks into the features.</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary">Left joins, nobody dropped, plus <code>has_member</code> / <code>has_tx</code> / <code>has_logs</code> flags</td>
+                  <td class="px-4 py-3">Dropping subscribers missing from any table would remove 25 % of them (65 % if invalid ages also count). Absence is informative: subscribers with no transactions churn at <span data-ds-break="has_tx|0.0"></span>.</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary">No listening logs &rarr; zeros and "31 days since last listen"</td>
+                  <td class="px-4 py-3">A subscriber with no March plays did listen zero hours; this is the true value, not a missing one.</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary">Ages outside 10&ndash;90 &rarr; missing; daily listening clipped to [0, 24 h]</td>
+                  <td class="px-4 py-3">These values are impossible and would distort means and splits.</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary">Remaining gaps imputed inside each model pipeline (median, fitted on train only); LightGBM uses its native missing-value handling</td>
+                  <td class="px-4 py-3">Learning fill values from the training split only keeps validation and test unseen. No feature selection was done: every model uses all 33 features, so no choice depends on held-out data.</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary"><code>log1p</code> + standardisation + one-hot codes, for logistic regression only</td>
+                  <td class="px-4 py-3">A linear model needs comparable scales and suffers from heavy skew. Tree models are invariant to monotone transforms, so they get the raw values.</td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary">City, registration channel, payment method treated as categories</td>
+                  <td class="px-4 py-3">They are ID codes, not quantities.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="ovn-models" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 3 of 9: Baseline and methods"><span class="chap-no" aria-hidden="true">03</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Baseline and methods</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">From a constant guess to tuned boosting</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">Every model outputs a churn probability and, apart from the baselines, is trained by minimising log loss on the training split. Every hyperparameter was chosen on the validation split; the test split played no part.</p>
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mb-8">
+          <table class="w-full text-xs">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr><th class="text-left px-4 py-3">Model</th><th class="text-left px-4 py-3">Objective / core idea</th><th class="text-left px-4 py-3">Assumptions</th><th class="text-left px-4 py-3">Why here</th><th class="text-left px-4 py-3">Tuned on validation</th></tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle text-text-secondary leading-relaxed">
+              <tr><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-text-muted">Baseline</span><div class="font-semibold text-text-primary">Majority (prior)</div></td>
+                <td class="px-4 py-3 align-top">Training churn rate for every subscriber.</td><td class="px-4 py-3 align-top">None.</td><td class="px-4 py-3 align-top">The floor: any useful model must beat it.</td><td class="px-4 py-3 align-top">None.</td></tr>
+              <tr><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-text-muted">Baseline</span><div class="font-semibold text-text-primary">Rule: auto-renew off</div></td>
+                <td class="px-4 py-3 align-top">Training churn rate of the subscriber's auto-renew group.</td><td class="px-4 py-3 align-top">One flag explains churn.</td><td class="px-4 py-3 align-top">The strongest single raw signal; what a business could do without ML.</td><td class="px-4 py-3 align-top">None.</td></tr>
+              <tr><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-text-muted">Linear</span><div class="font-semibold text-text-primary">Logistic regression</div></td>
+                <td class="px-4 py-3 align-top">L2-penalised log loss on log-scaled, standardised and one-hot features.</td><td class="px-4 py-3 align-top">Log-odds of churn are linear in the (log-scaled) features; no interactions.</td><td class="px-4 py-3 align-top">Simple, fast, interpretable; tests whether a linear boundary is enough.</td><td class="px-4 py-3 align-top">Penalty strength C &isin; {0.01, 0.1, 1, 10}.</td></tr>
+              <tr><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-text-muted">Bagging</span><div class="font-semibold text-text-primary">Random forest</div></td>
+                <td class="px-4 py-3 align-top">150 trees, log loss on validation for model choice.</td><td class="px-4 py-3 align-top">Few: handles thresholds and interactions, needs no scaling.</td><td class="px-4 py-3 align-top">Churn depends on thresholds (expiry, plan length) and interactions; averaging reduces variance.</td><td class="px-4 py-3 align-top">Leaf size &isin; {5, 20, 50}, features per split &isin; {&radic;p, 0.5p}.</td></tr>
+              <tr><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-text-muted">Boosting</span><div class="font-semibold text-text-primary">LightGBM (default)</div></td>
+                <td class="px-4 py-3 align-top">Log loss, learning rate 0.05, native categorical and missing-value handling.</td><td class="px-4 py-3 align-top">Same as random forest; learns missing-value branches natively.</td><td class="px-4 py-3 align-top">Reference point before tuning.</td><td class="px-4 py-3 align-top">Number of trees by early stopping on validation.</td></tr>
+              <tr class="bg-surface-subtle"><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-accent-success">Champion</span><div class="font-semibold text-text-primary">LightGBM (tuned)</div></td>
+                <td class="px-4 py-3 align-top">Log loss, hyperparameters from 30 Optuna (TPE) trials.</td><td class="px-4 py-3 align-top">As above.</td><td class="px-4 py-3 align-top">Best validation log loss of all candidates.</td><td class="px-4 py-3 align-top">Learning rate, leaves, min. leaf size, row/column sampling, L2; <span data-sd="champion.n_trees"></span> trees.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Logistic regression: C</h3>
+            <table class="w-full text-xs font-mono"><thead class="text-text-muted text-[10px] uppercase"><tr><th class="text-left py-1">C</th><th class="text-right py-1">val log loss</th></tr></thead><tbody id="ovn-tune-lr" class="divide-y divide-border-subtle"></tbody></table>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Random forest grid</h3>
+            <table class="w-full text-xs font-mono"><thead class="text-text-muted text-[10px] uppercase"><tr><th class="text-left py-1">leaf</th><th class="text-left py-1">features</th><th class="text-right py-1">val log loss</th></tr></thead><tbody id="ovn-tune-rf" class="divide-y divide-border-subtle"></tbody></table>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">LightGBM: Optuna search</h3>
+            <p class="text-[11px] text-text-secondary mb-3">Validation log loss of each trial and the best so far.</p>
+            <div class="h-44 relative"><canvas id="ovn-optuna-chart"></canvas></div>
+          </div>
+        </div>
+        <p class="text-xs text-text-secondary mt-6 max-w-4xl"><strong class="text-text-primary">Ablation.</strong> To answer the second half of the question, the tuned LightGBM is retrained on three feature sets: billing + demographics, listening + demographics, and all features.</p>
+      </div>
+    </section>
+
+    <section id="ovn-evaluation" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 4 of 9: Evaluation"><span class="chap-no" aria-hidden="true">04</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Evaluation</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Split and metrics</h2>
+        <dl class="led">
+          <div class="led-row">
+            <dt><span class="led-big">70 / 10 / 20</span><span class="led-cap">Split</span></dt>
+            <dd>Stratified random split, seed 42: <strong>70 % train</strong> (fit), <strong>10 % validation</strong> (model choice, tuning, threshold) and <strong>20 % test</strong> (used once).
+              Churn rate is <span data-sd="eda.split.test.churn_rate" data-fmt="pct2"></span> in every part. <a href="#dsn-split" class="underline">Split table &rarr;</a></dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">PR-AUC</span><span class="led-cap">Main metric</span></dt>
+            <dd>Churners are only 9&nbsp;% of subscribers, so PR-AUC is the main metric; its no-skill level is 0.09. ROC-AUC, log loss and Brier are reported alongside, and log loss is also the tuning objective.
+              Precision, recall, F1 and accuracy are taken at the decision threshold; accuracy is read against the 0.91 of the majority baseline.</dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">&tau; = <span data-sd="champion.threshold" data-fmt="f2"></span></span><span class="led-cap">Threshold</span></dt>
+            <dd>To flag subscribers we need a cut-off on the probability. We pick the one that maximises F1 on <em>validation</em>, then apply it unchanged to test.</dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">1&thinsp;000</span><span class="led-cap">Bootstrap resamples</span></dt>
+            <dd>Test metrics get 95&nbsp;% intervals from 1&nbsp;000 bootstrap resamples of the test set; the ablation uses a <em>paired</em> bootstrap (both models scored on the same resample).
+              This shows how much a number could move with another sample of subscribers from the same population. It cannot tell how the model would do in a later month, or why subscribers churn.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+            <section id="ovn-results" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 5 of 9: Results (test split)"><span class="chap-no" aria-hidden="true">05</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Results (test split)</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">How well each model does on unseen subscribers</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8" id="ovn-results-lead"></p>
+
+        <!-- Champion headline metrics -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div class="p-5 rounded-2xl bg-surface-card border-2 border-text-primary">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">PR-AUC (main)</span>
+            <div class="text-3xl font-extrabold text-text-primary my-1 font-mono" id="ovn-m-pr"></div>
+            <p class="text-[10px] text-text-muted font-mono">95% CI [<span data-sd="champion.ci.pr_auc.low" data-fmt="f4"></span>, <span data-sd="champion.ci.pr_auc.high" data-fmt="f4"></span>]</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">ROC-AUC</span>
+            <div class="text-3xl font-extrabold text-text-primary my-1 font-mono" id="ovn-m-roc"></div>
+            <p class="text-[10px] text-text-muted font-mono">95% CI [<span data-sd="champion.ci.roc_auc.low" data-fmt="f4"></span>, <span data-sd="champion.ci.roc_auc.high" data-fmt="f4"></span>]</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Log loss</span>
+            <div class="text-3xl font-extrabold text-text-primary my-1 font-mono" id="ovn-m-ll"></div>
+            <p class="text-[10px] text-text-muted font-mono">95% CI [<span data-sd="champion.ci.log_loss.low" data-fmt="f4"></span>, <span data-sd="champion.ci.log_loss.high" data-fmt="f4"></span>]</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">F1 at &tau; = <span data-sd="champion.threshold" data-fmt="f2"></span></span>
+            <div class="text-3xl font-extrabold text-accent-success my-1 font-mono" id="ovn-m-f1"></div>
+            <p class="text-[10px] text-text-muted font-mono" id="ovn-m-pr-rec"></p>
+          </div>
+        </div>
+
+        <!-- Model comparison table + curves -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-10">
+          <div class="lg:col-span-3 bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+            <div class="px-5 pt-5 pb-2 flex items-center justify-between gap-2">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">All models, test split</h3>
+              <span class="text-[10px] text-text-muted">P / R / F1 at &tau; = <span data-sd="champion.threshold" data-fmt="f2"></span></span>
+            </div>
+            <table class="w-full text-xs">
+              <thead class="text-text-muted uppercase tracking-wider text-[10px] border-b border-border-subtle">
+                <tr><th class="text-left px-5 py-2">Model</th><th class="text-right px-2 py-2">PR-AUC</th><th class="text-right px-2 py-2">ROC-AUC</th>
+                  <th class="text-right px-2 py-2">Log loss</th><th class="text-right px-2 py-2">Brier</th><th class="text-right px-2 py-2">Accuracy</th><th class="text-right px-2 py-2">Precision</th><th class="text-right px-2 py-2">Recall</th><th class="text-right px-5 py-2">F1</th></tr>
+              </thead>
+              <tbody id="ovn-model-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+            </table>
+            <p class="text-[11px] text-text-muted px-5 py-3" id="ovn-model-note"></p>
+          </div>
+          <div class="lg:col-span-2 bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary" id="ovn-curve-title">Precision&ndash;recall curve</h3>
+              <div id="ovn-curve-seg"></div>
+            </div>
+            <div class="h-72 relative"><canvas id="ovn-curve-chart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Metric comparison -->
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mb-10">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+            <div>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Compare models on any metric</h3>
+              <p class="text-[11px] text-text-secondary mt-1" id="ovn-metric-note"></p>
+            </div>
+            <div id="ovn-metric-buttons"></div>
+          </div>
+          <div class="h-64 relative"><canvas id="ovn-metric-chart"></canvas></div>
+        </div>
+
+        <!-- INTERACTION: threshold explorer -->
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 sm:p-8 shadow-subtle-card mb-10">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-text-primary flex items-center gap-2"><span class="material-symbols-outlined">tune</span>Threshold explorer</h3>
+              <p class="text-xs text-text-secondary mt-1 max-w-2xl">The champion gives every test subscriber a churn probability. Move the threshold to see the trade-off between catching churners (recall) and raising false alarms. These are the real test-set counts.</p>
+            </div>
+            <div class="flex items-center gap-3 w-full md:w-96">
+              <span class="text-[10px] font-bold text-text-muted">0.01</span>
+              <input id="ovn-tau" aria-label="Decision threshold" type="range" min="0" max="97" step="1" class="flex-1 accent-[#1D4ED8]" oninput="ovnOnTau(this.value)"/>
+              <span class="text-[10px] font-bold text-text-muted">0.98</span>
+              <span class="px-2.5 py-1 rounded-lg bg-text-primary text-surface-card text-xs font-mono font-bold whitespace-nowrap">&tau; = <span id="ovn-tau-val"></span></span>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+            <div class="grid grid-cols-2 gap-2 text-center font-mono">
+              <div class="p-3 rounded-xl border border-border-subtle bg-[#DCFCE7]/40"><div class="text-[10px] font-sans font-bold text-text-muted uppercase">Caught churners (TP)</div><div class="text-xl font-extrabold text-accent-success" id="ovn-tp"></div></div>
+              <div class="p-3 rounded-xl border border-border-subtle"><div class="text-[10px] font-sans font-bold text-text-muted uppercase">False alarms (FP)</div><div class="text-xl font-extrabold text-accent-warning" id="ovn-fp"></div></div>
+              <div class="p-3 rounded-xl border border-border-subtle"><div class="text-[10px] font-sans font-bold text-text-muted uppercase">Missed churners (FN)</div><div class="text-xl font-extrabold text-accent-danger" id="ovn-fn"></div></div>
+              <div class="p-3 rounded-xl border border-border-subtle"><div class="text-[10px] font-sans font-bold text-text-muted uppercase">Correct renewals (TN)</div><div class="text-xl font-extrabold text-text-primary" id="ovn-tn"></div></div>
+            </div>
+            <div class="space-y-3 text-xs">
+              <div class="flex justify-between border-b border-border-subtle pb-2"><span class="text-text-secondary">Precision</span><span class="font-mono font-bold text-text-primary" id="ovn-prec"></span></div>
+              <div class="flex justify-between border-b border-border-subtle pb-2"><span class="text-text-secondary">Recall</span><span class="font-mono font-bold text-text-primary" id="ovn-rec"></span></div>
+              <div class="flex justify-between border-b border-border-subtle pb-2"><span class="text-text-secondary">F1</span><span class="font-mono font-bold text-text-primary" id="ovn-f1"></span></div>
+              <div class="flex justify-between"><span class="text-text-secondary">Subscribers flagged</span><span class="font-mono font-bold text-text-primary" id="ovn-flag"></span></div>
+            </div>
+            <div class="h-48 relative"><canvas id="ovn-tau-chart"></canvas></div>
+          </div>
+          <p class="text-[11px] text-text-muted mt-4" id="ovn-tau-note"></p>
+        </div>
+
+        <!-- What the mistakes cost -->
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 sm:p-8 shadow-subtle-card mb-10">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-text-primary flex items-center gap-2"><span class="material-symbols-outlined">balance</span>What the mistakes cost</h3>
+              <p class="text-xs text-text-secondary mt-1 max-w-2xl">The two errors are not equally expensive. A false alarm is one unnecessary retention offer. A missed churner is a lost subscriber, which usually costs more. Set how many times worse a miss is, and the best threshold moves.</p>
+            </div>
+            <div class="flex items-center gap-3 w-full md:w-96">
+              <span class="text-[10px] font-bold text-text-muted">1&times;</span>
+              <input id="ovn-cost-ratio" aria-label="Cost of a missed churner relative to a false alarm" type="range" min="1" max="50" step="1" value="10" class="flex-1 accent-[#1D4ED8]" oninput="ovnOnCost(this.value)"/>
+              <span class="text-[10px] font-bold text-text-muted">50&times;</span>
+              <span class="px-2.5 py-1 rounded-lg bg-text-primary text-surface-card text-xs font-mono font-bold whitespace-nowrap">miss = <span id="ovn-cost-val"></span>&times;</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 items-center">
+            <div class="lg:col-span-2 grid grid-cols-2 gap-3" id="ovn-cost-cards"></div>
+            <div class="lg:col-span-3 h-64 relative"><canvas id="ovn-cost-chart"></canvas></div>
+          </div>
+          <p class="text-[11px] text-text-muted mt-4" id="ovn-cost-note"></p>
+        </div>
+
+        <!-- Validation vs test -->
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mb-10">
+          <div class="px-6 pt-5">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Does it hold up? Validation vs test</h3>
+            <p class="text-[11px] text-text-secondary mt-1 max-w-3xl">Every model was chosen and tuned on the validation split, then scored once on the test split. A small gap means the tuning did not simply memorise the validation subscribers.</p>
+          </div>
+          <table class="w-full text-xs mt-3">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr><th class="text-left px-6 py-2">Model</th><th class="text-right px-3 py-2">PR-AUC val</th><th class="text-right px-3 py-2">PR-AUC test</th><th class="text-right px-3 py-2">Gap</th>
+                <th class="text-right px-3 py-2">Log loss val</th><th class="text-right px-6 py-2">Log loss test</th></tr>
+            </thead>
+            <tbody id="ovn-gap-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+          </table>
+          <p class="text-[11px] text-text-muted px-6 py-3" id="ovn-gap-note"></p>
+        </div>
+
+        <!-- Score distribution + gains -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Predicted probability by true class</h3>
+            <p class="text-[11px] text-text-secondary mb-4">Champion scores for test renewers and churners (log scale); red line = &tau;.</p>
+            <div class="h-64 relative"><canvas id="ovn-score-chart"></canvas></div>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Cumulative gains</h3>
+            <p class="text-[11px] text-text-secondary mb-4" id="ovn-gains-note"></p>
+            <div class="h-64 relative"><canvas id="ovn-gains-chart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Ablation + importance -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Does listening help? Feature-set ablation</h3>
+            <p class="text-[11px] text-text-secondary mb-4">Same tuned LightGBM, three feature sets. Test PR-AUC with 95% bootstrap interval.</p>
+            <div class="h-56 relative"><canvas id="ovn-ablation-chart"></canvas></div>
+            <p class="text-xs text-text-secondary mt-4 leading-relaxed" id="ovn-ablation-text"></p>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">What the champion relies on</h3>
+            <p class="text-[11px] text-text-secondary mb-4">Share of total split gain, top 12 features. <span style="color:#1D4ED8" class="font-bold">billing</span>, <span style="color:#15803D" class="font-bold">listening</span>, <span style="color:#B45309" class="font-bold">demographic</span>.</p>
+            <div class="h-72 relative"><canvas id="ovn-importance-chart"></canvas></div>
+            <p class="text-xs text-text-secondary mt-3" id="ovn-importance-text"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+            <section id="ovn-errors" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 6 of 9: Error analysis"><span class="chap-no" aria-hidden="true">06</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Error analysis</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Where the champion goes wrong</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8" id="ovn-errors-lead"></p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-8">
+          <div class="lg:col-span-3 bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+            <div class="px-5 pt-5 pb-2">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Recall and precision by segment (test, &tau; = <span data-sd="champion.threshold" data-fmt="f2"></span>)</h3>
+            </div>
+            <table class="w-full text-xs">
+              <thead class="text-text-muted uppercase tracking-wider text-[10px] border-b border-border-subtle">
+                <tr><th class="text-left px-5 py-2">Segment</th><th class="text-right px-3 py-2">Subscribers</th><th class="text-right px-3 py-2">Churn rate</th>
+                  <th class="text-right px-3 py-2">Recall</th><th class="text-right px-3 py-2">Precision</th><th class="text-right px-3 py-2">Missed</th><th class="text-right px-5 py-2">False alarms</th></tr>
+              </thead>
+              <tbody id="ovn-segment-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+            </table>
+          </div>
+          <div class="lg:col-span-2 bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Calibration</h3>
+            <p class="text-[11px] text-text-secondary mb-4">Test subscribers in 10 bins of predicted probability.</p>
+            <div class="h-64 relative"><canvas id="ovn-calibration-chart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+          <div class="px-5 pt-5 pb-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">What missed churners look like (medians)</h3>
+            <p class="text-[11px] text-text-secondary mt-1">TP = churners caught, FN = churners missed, FP = renewers wrongly flagged, TN = renewers correctly left alone.</p>
+          </div>
+          <table class="w-full text-xs">
+            <thead class="text-text-muted uppercase tracking-wider text-[10px] border-b border-border-subtle">
+              <tr><th class="text-left px-5 py-2">Feature</th><th class="text-right px-3 py-2">TP</th><th class="text-right px-3 py-2 text-accent-danger">FN</th><th class="text-right px-3 py-2">FP</th><th class="text-right px-5 py-2">TN</th></tr>
+            </thead>
+            <tbody id="ovn-profile-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+          </table>
+          <p class="text-xs text-text-secondary px-5 py-4 leading-relaxed" id="ovn-errors-text"></p>
+        </div>
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mt-8">
+          <div class="px-5 pt-5 pb-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Representative errors</h3>
+            <p class="text-[11px] text-text-secondary mt-1">Real test subscribers: missed churners and false alarms at the 25th, 50th and 75th percentile of their predicted probability.</p>
+          </div>
+          <table class="w-full text-xs">
+            <thead class="text-text-muted uppercase tracking-wider text-[10px] border-b border-border-subtle">
+              <tr><th class="text-left px-5 py-2">Error</th><th class="text-right px-3 py-2">Predicted</th><th class="text-right px-3 py-2">Auto-renew</th><th class="text-right px-3 py-2">Cancel</th>
+                <th class="text-right px-3 py-2">Days to expiry</th><th class="text-right px-3 py-2">Plan days</th><th class="text-right px-3 py-2">Active days</th><th class="text-right px-3 py-2">Days since listen</th><th class="text-right px-5 py-2">Hours</th></tr>
+            </thead>
+            <tbody id="ovn-example-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+          </table>
+          <p class="text-xs text-text-secondary px-5 py-4 leading-relaxed" id="ovn-example-text"></p>
+        </div>
+      </div>
+    </section>
+
+            <section id="ovn-limitations" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 7 of 9: Limitations"><span class="chap-no" aria-hidden="true">07</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Limitations</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">What these results do not show</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Billing state almost encodes the label</h3>
+            <p class="text-text-secondary leading-relaxed">KKBOX defines churn from transactions, and the last transaction (cancel flag, expiry date, auto-renew) already tells most of the story. The very high scores mean "easy for subscribers whose billing already shows the decision", not "we can read intentions".</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">One snapshot, random split</h3>
+            <p class="text-text-secondary leading-relaxed">Train and test subscribers come from the same month. We do not show that the model keeps working for a later month, when prices, promotions or user mix may change.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Hard cases stay hard</h3>
+            <p class="text-text-secondary leading-relaxed" id="ovn-hard-cases"></p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Prediction is not causation</h3>
+            <p class="text-text-secondary leading-relaxed">Feature importance shows what the model uses, not what makes people leave. For example, switching a subscriber's auto-renew on would not necessarily keep them: auto-renew is partly a sign of an earlier decision to stay. Testing an intervention would need an experiment.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Listening data is thin</h3>
+            <p class="text-text-secondary leading-relaxed">Only March 2017 is used, and about a fifth of subscribers have no logs at all. A longer listening history might show a larger effect than our ablation finds.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Threshold and tuning use the same validation split</h3>
+            <p class="text-text-secondary leading-relaxed">This makes validation scores slightly optimistic; test scores are not affected because the test split was never used for any choice.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Predictor page is approximate</h3>
+            <p class="text-text-secondary leading-relaxed">The <a href="#model-predictor" class="underline">predictor</a> runs the real champion model, but asks for 16 inputs; the other features are filled with training medians for similar subscribers. Treat it as an illustration of the model, not a scoring tool. Demographic features (age, city) also raise fairness questions if used for decisions.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">Privacy and fairness</h3>
+            <p class="text-text-secondary leading-relaxed">Subscriber IDs are anonymised hashes and there are no names or contact details. But age and gender are model inputs, and we did not check whether error rates differ between age or gender groups. Before any real use, audit those groups, and use the scores to offer help to people likely to leave, not to treat them worse.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <h3 class="font-bold text-text-primary mb-1">The Kaggle test set has no labels</h3>
+            <p class="text-text-secondary leading-relaxed">The competition test file lists <span data-sd="data.kaggle_test.subscribers" data-fmt="int"></span> subscribers without the answer. We predict them (<code>results/submission.csv</code>) but cannot score them here, so every number on this page comes from our own labelled test split.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ovn-conclusion" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-card">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 8 of 9: Conclusion"><span class="chap-no" aria-hidden="true">08</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Conclusion</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Answer to the question</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm" id="ovn-conclusion-cards"></div>
+        <p class="text-xs text-text-secondary mt-6 max-w-4xl leading-relaxed" id="ovn-conclusion-text"></p>
+      </div>
+    </section>
+
+    <section id="ovn-repro" class="py-14 sm:py-16 bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 9 of 9: Reproduction steps"><span class="chap-no" aria-hidden="true">09</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Reproduction steps</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Everything on this page comes from seven notebooks</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <ol class="text-xs text-text-secondary space-y-2 list-decimal pl-4">
+              <li><a class="underline font-mono text-text-primary" href="https://github.com/YOUR-USERNAME/YOUR-REPO/blob/main/notebooks/01_raw_data_analysis.ipynb">01_raw_data_analysis</a>: detailed analysis of the 5 raw tables.</li>
+              <li><a class="underline font-mono text-text-primary" href="https://github.com/YOUR-USERNAME/YOUR-REPO/blob/main/notebooks/02_feature_engineering.ipynb">02_feature_engineering</a>: one row per subscriber, 33 features.</li>
+              <li><a class="underline font-mono text-text-primary" href="https://github.com/YOUR-USERNAME/YOUR-REPO/blob/main/notebooks/03_feature_analysis_and_split.ipynb">03_feature_analysis_and_split</a>: the 70/10/20 split, then feature plots on the training split.</li>
+              <li><a class="underline font-mono text-text-primary" href="https://github.com/YOUR-USERNAME/YOUR-REPO/blob/main/notebooks/04_baselines.ipynb">04_baselines</a>: majority and rule baselines, tuned logistic regression.</li>
+              <li><a class="underline font-mono text-text-primary" href="https://github.com/YOUR-USERNAME/YOUR-REPO/blob/main/notebooks/05_tree_models_and_tuning.ipynb">05_tree_models_and_tuning</a>: random forest grid, LightGBM with Optuna, threshold, ablation.</li>
+              <li><a class="underline font-mono text-text-primary" href="https://github.com/YOUR-USERNAME/YOUR-REPO/blob/main/notebooks/06_test_evaluation.ipynb">06_test_evaluation</a>: test metrics, all curves, bootstrap, error analysis.</li>
+              <li><a class="underline font-mono text-text-primary" href="https://github.com/YOUR-USERNAME/YOUR-REPO/blob/main/notebooks/07_website_export.ipynb">07_website_export</a>: numbers and the browser model for this site.</li>
+            </ol>
+            <p class="text-[11px] text-text-muted mt-4">Full metric tables: <a class="underline" href="https://github.com/YOUR-USERNAME/YOUR-REPO/blob/main/results/test_metrics.csv">results/test_metrics.csv</a>, <a class="underline" href="https://github.com/YOUR-USERNAME/YOUR-REPO/blob/main/results/validation_metrics.csv">results/validation_metrics.csv</a>. Setup, data download, AI-use disclosure and citations: <a class="underline" href="https://github.com/YOUR-USERNAME/YOUR-REPO#readme">README</a>.</p>
+          </div>
+          <div class="bg-[#121212] text-[#E2E8F0] rounded-2xl p-6 font-mono text-[11px] leading-relaxed overflow-x-auto">
+<pre># 1. put the 5 Kaggle CSVs in data/raw/
+pip install -r requirements.txt
+cd notebooks
+jupyter nbconvert --to notebook --execute --inplace 0*.ipynb   # in order 01 to 07
+# 2. rebuild this website into docs/
+cd .. &amp;&amp; python website/build.py --repo &lt;repo-url&gt;
+node website/tests/check_model_parity.mjs   # browser model == Python</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+      </div>
+
+      <!-- VIEW 2: DATA STUDIO (main data points only) -->
+      <div id="view-data-studio" class="view-panel hidden">
+            <section id="dsn-tables" class="py-14 sm:py-16 border-b border-border-subtle bg-gradient-to-b from-page-bg to-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 1 of 9: The five tables"><span class="chap-no" aria-hidden="true">01</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">The five tables</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-text-primary mt-1 mb-3">The five raw tables</h1>
+        <p class="text-sm sm:text-base text-text-secondary leading-relaxed max-w-4xl mb-8">
+          The KKBOX churn data comes as five CSV files. Two hold the subscribers we predict for; three describe them.
+          We turn every table into <strong class="text-text-primary">one row per subscriber</strong> and left-join them, so no subscriber is dropped.
+          The coverage column shows the share of the <span data-sd="data.train.subscribers" data-fmt="int"></span> labelled subscribers who appear in each table.
+        </p>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+          <table class="w-full text-xs">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr>
+                <th class="text-left px-4 py-3">File</th>
+                <th class="text-right px-4 py-3">Rows</th>
+                <th class="text-right px-4 py-3">Columns</th>
+                <th class="text-left px-4 py-3">One row is</th>
+                <th class="text-left px-4 py-3">Key columns</th>
+                <th class="text-right px-4 py-3">Train coverage</th>
+              </tr>
+            </thead>
+            <tbody id="dsn-table-rows" class="divide-y divide-border-subtle"></tbody>
+          </table>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Labelled subscribers</span>
+            <div class="text-2xl font-extrabold text-text-primary my-1 font-mono" data-sd="data.train.subscribers" data-fmt="int"></div>
+            <p class="text-[10px] text-text-muted">train_data.csv, no duplicates</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Churn rate</span>
+            <div class="text-2xl font-extrabold text-accent-danger my-1 font-mono" data-sd="data.train.churn_rate" data-fmt="pct2"></div>
+            <p class="text-[10px] text-text-muted"><span data-sd="data.train.churners" data-fmt="int"></span> churners</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Features per subscriber</span>
+            <div class="text-2xl font-extrabold text-text-primary my-1 font-mono" data-sd="data.features.n_features"></div>
+            <p class="text-[10px] text-text-muted">6 demographic &bull; 15 billing &bull; 12 listening</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Cutoff date</span>
+            <div class="text-2xl font-extrabold text-text-primary my-1 font-mono">2017-03-31</div>
+            <p class="text-[10px] text-text-muted">all inputs are on or before this date</p>
+          </div>
+        </div>
+
+        <h2 class="text-xl sm:text-2xl font-extrabold text-text-primary tracking-tight mt-12 mb-2">Columns in each raw file</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-5">
+          27 columns across the five files (2 + 1 + 6 + 9 + 9). <span class="font-mono">msno</span> is in every file and is the join key.
+          Data types are what pandas infers from the CSV; dates are stored as YYYYMMDD integers and parsed during feature engineering.
+        </p>
+        <div id="dsn-raw-schema" class="space-y-3"></div>
+
+        <h2 class="text-xl sm:text-2xl font-extrabold text-text-primary tracking-tight mt-12 mb-2">The feature matrix</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-5">
+          After aggregating each table to one row per subscriber and joining, the labelled data is
+          <strong class="text-text-primary font-mono">946,686 rows &times; 35 columns</strong>
+          (<span class="font-mono">msno</span> + <span class="font-mono">is_churn</span> + 33 model features). Every feature is <span class="font-mono">float32</span>, so missing values stay as NaN.
+          It is split 70 / 10 / 20 into train (<span class="font-mono">662,679</span>), validation (<span class="font-mono">94,669</span>) and test (<span class="font-mono">189,338</span>) rows.
+          The unlabelled Kaggle test matrix is <span class="font-mono">24,274 &times; 34</span> (no target).
+        </p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
+          <div class="p-4 rounded-2xl bg-surface-card border border-border-subtle"><span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Rows</span><div class="text-xl font-extrabold text-text-primary font-mono">946,686</div></div>
+          <div class="p-4 rounded-2xl bg-surface-card border border-border-subtle"><span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Total columns</span><div class="text-xl font-extrabold text-text-primary font-mono">35</div></div>
+          <div class="p-4 rounded-2xl bg-surface-card border border-border-subtle"><span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Model features</span><div class="text-xl font-extrabold text-text-primary font-mono">33</div></div>
+          <div class="p-4 rounded-2xl bg-surface-card border border-border-subtle"><span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Feature dtype</span><div class="text-xl font-extrabold text-text-primary font-mono">float32</div></div>
+        </div>
+        <div id="dsn-feature-schema" class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-auto max-h-[480px]"></div>
+      </div>
+    </section>
+
+            <section id="dsn-raw" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 2 of 9: Raw data"><span class="chap-no" aria-hidden="true">02</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Raw data</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">What each table looks like</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">
+          Distributions of the raw columns before any cleaning (computed on the full files in notebook 01). Pick a table.
+        </p>
+        <div id="dsn-raw-tabs" role="tablist" aria-label="Raw table"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary" id="dsn-raw-t0"></h3>
+            <p class="text-[11px] text-text-secondary mb-3 mt-1" id="dsn-raw-n0"></p>
+            <div class="h-56 relative"><canvas id="dsn-raw-c0"></canvas></div>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary" id="dsn-raw-t1"></h3>
+            <p class="text-[11px] text-text-secondary mb-3 mt-1" id="dsn-raw-n1"></p>
+            <div class="h-56 relative"><canvas id="dsn-raw-c1"></canvas></div>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary" id="dsn-raw-t2"></h3>
+            <p class="text-[11px] text-text-secondary mb-3 mt-1" id="dsn-raw-n2"></p>
+            <div class="h-56 relative"><canvas id="dsn-raw-c2"></canvas></div>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary" id="dsn-raw-t3"></h3>
+            <p class="text-[11px] text-text-secondary mb-3 mt-1" id="dsn-raw-n3"></p>
+            <div class="h-56 relative"><canvas id="dsn-raw-c3"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+            <section id="dsn-overlap" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 3 of 9: File overlap"><span class="chap-no" aria-hidden="true">03</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">File overlap</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Who appears in which file</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">
+          All five files share the subscriber ID <span class="font-mono">msno</span>. The matrix counts distinct subscribers.
+          The diagonal is the size of one file; every other cell is the number of subscribers found in both files, and the small percentage is that overlap as a share of the <em>row</em> file.
+          This is why we left-join everything onto the training and test IDs and add a "has this table" flag instead of dropping subscribers.
+        </p>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" id="dsn-overlap-cards"></div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+          <table class="w-full text-xs" id="dsn-overlap-table"></table>
+        </div>
+        <p class="text-xs text-text-secondary mt-5 max-w-4xl" id="dsn-overlap-note"></p>
+      </div>
+    </section>
+
+            <section id="dsn-quality" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 4 of 9: Data quality"><span class="chap-no" aria-hidden="true">04</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Data quality</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">What is missing or wrong, and what we did</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8">
+          Most gaps come from a subscriber being absent from a table. Absence is informative here (for example, subscribers without any
+          transaction churn far more often), so we keep these subscribers and add a flag instead of dropping or blindly filling them.
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-4">Issues found</h3>
+            <ul class="space-y-3 text-xs text-text-secondary leading-relaxed">
+              <li><strong class="text-text-primary">Age (<code>bd</code>) is unusable for most members.</strong>
+                <span data-sd="data.members.age_invalid_pct" data-fmt="raw1"></span>% of member rows have age 0, negative or above 90.
+                We treat ages outside 10&ndash;90 as missing.</li>
+              <li><strong class="text-text-primary">Gender is mostly blank</strong> (<span data-sd="data.members.gender_blank_pct" data-fmt="raw1"></span>% of member rows).
+                We encode it as female / male / not given.</li>
+              <li><strong class="text-text-primary">No member profile</strong> for <span data-sd="eda.missing_pct.city" data-fmt="raw1"></span>% of labelled subscribers
+                &rarr; <code>has_member = 0</code>; demographics left missing.</li>
+              <li><strong class="text-text-primary">No transactions</strong> for <span data-sd="eda.missing_pct.last_auto_renew" data-fmt="raw1"></span>% of subscribers. These churn at
+                <span data-ds-break="has_tx|0.0"></span> &rarr; <code>has_tx = 0</code>, counts set to 0, &ldquo;last transaction&rdquo; fields left missing.</li>
+              <li><strong class="text-text-primary">No March listening logs</strong> for <span data-ds-share="has_logs|0.0"></span> of subscribers
+                &rarr; <code>has_logs = 0</code>, listening totals set to 0, days since last listen = 31.</li>
+              <li><strong class="text-text-primary">Impossible listening times:</strong> <span data-sd="data.user_logs.bad_secs_rows" data-fmt="int"></span> daily log rows have
+                <code>total_secs</code> below 0 or above 86&nbsp;400 (one day); clipped to [0,&nbsp;86&nbsp;400].</li>
+              <li><strong class="text-text-primary">Heavy skew</strong> in money and volume columns (skewness of <code>tx_count</code> = <span data-sd="eda.skew.tx_count" data-fmt="raw1"></span>):
+                <code>log1p</code> + scaling for logistic regression only; trees do not need it.</li>
+            </ul>
+          </div>
+
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Missing values left after the joins</h3>
+            <p class="text-[11px] text-text-secondary mb-4">% of labelled subscribers. Remaining gaps are imputed inside each model pipeline (median, learned on the training split only) or handled natively by LightGBM.</p>
+            <div class="h-80 relative"><canvas id="dsn-missing-chart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+            <section id="dsn-signals" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 5 of 9: Churn signals"><span class="chap-no" aria-hidden="true">05</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Churn signals</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Churn signal explorer</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">
+          Pick a variable to see the churn rate in each group of subscribers. The dashed line is the overall rate. Bar width does not show group size; hover a bar for the count.
+        </p>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 sm:p-8 shadow-subtle-card">
+          <div id="dsn-signal-buttons"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 h-80 relative"><canvas id="dsn-signal-chart"></canvas></div>
+            <div class="text-xs text-text-secondary leading-relaxed space-y-3">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-text-muted" id="dsn-signal-source"></span>
+                <h3 class="text-base font-bold text-text-primary mt-1" id="dsn-signal-title"></h3>
+              </div>
+              <p id="dsn-signal-note"></p>
+              <p class="text-[11px] text-text-muted" id="dsn-signal-range"></p>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-xs text-text-secondary mt-6 max-w-4xl">
+          <strong class="text-text-primary">Takeaway.</strong> Billing state (auto-renew, cancellation, expiry date, plan length) splits subscribers into groups with churn rates near 0&nbsp;% or near 100&nbsp;%.
+          Listening behaviour shifts the rate more gently: a silent streak of 15+ days multiplies it about five times, but most listening groups stay close to the average.
+          The models then test whether listening still adds information once billing is known (<a href="#ovn-results" class="underline">see Results</a>).
+        </p>
+      </div>
+    </section>
+
+            <section id="dsn-explorer" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 6 of 9: Churn by group"><span class="chap-no" aria-hidden="true">06</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Churn by group</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Churn by group: billing, listening and members</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">
+          The same idea as the signal explorer, for the groupings people usually ask about: payment method, plan length, price paid, number of transactions, listening time, city and registration channel.
+          Every table is measured on the <span data-sd="data.train.subscribers" data-fmt="int"></span> labelled subscribers. A missing group means the subscriber has no row in that table.
+        </p>
+
+        <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Auto-renew and cancellation, together</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10" id="dsn-cross-cards"></div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 sm:p-8 shadow-subtle-card">
+          <div id="dsn-group-buttons"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            <div class="lg:col-span-3 relative" id="dsn-group-chart-wrap"><canvas id="dsn-group-chart"></canvas></div>
+            <div class="lg:col-span-2 text-xs text-text-secondary leading-relaxed space-y-3">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-text-muted" id="dsn-group-source"></span>
+                <h3 class="text-base font-bold text-text-primary mt-1" id="dsn-group-title"></h3>
+              </div>
+              <p id="dsn-group-note"></p>
+              <div class="overflow-auto max-h-64 rounded-xl">
+                <table class="w-full text-[11px]">
+                  <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+                    <tr><th class="text-left px-3 py-2">Group</th><th class="text-right px-3 py-2">Subscribers</th><th class="text-right px-3 py-2">Share</th><th class="text-right px-3 py-2">Churn</th></tr>
+                  </thead>
+                  <tbody id="dsn-group-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+            <section id="dsn-features" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 7 of 9: Feature analysis - training split"><span class="chap-no" aria-hidden="true">07</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Feature analysis &middot; training split</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">How the 33 features relate to churn and to each other</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8">
+          Computed on the training split only, so nothing here looks at validation or test subscribers.
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Ranking power of each feature alone</h3>
+            <p class="text-[11px] text-text-secondary mb-4">ROC-AUC of each feature used alone as the score. Colour = feature group.</p>
+            <div class="h-[34rem] relative"><canvas id="dsn-auc-chart"></canvas></div>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Distribution by class</h3>
+            <p class="text-[11px] text-text-secondary mb-3">Share of renewers and of churners in each value range.</p>
+            <select id="dsn-hist-select" aria-label="Feature" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary mb-4"></select>
+            <div class="h-[28rem] relative"><canvas id="dsn-hist-chart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Correlation between features</h3>
+          <p class="text-[11px] text-text-secondary mb-4">Spearman correlation on 100k training subscribers. Blue = positive, red = negative. Hover a cell for the value.</p>
+          <div class="overflow-x-auto"><div id="dsn-corr" class="inline-block"></div></div>
+        </div>
+      </div>
+    </section>
+
+            <section id="dsn-training" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 8 of 9: Data for training - training split"><span class="chap-no" aria-hidden="true">08</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Data for training &middot; training split</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-8">Feature checks before modelling</h2>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card mb-8">
+          <div class="px-5 pt-5 pb-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Feature summary</h3>
+            <p class="text-[11px] text-text-secondary mt-1">All 33 model features on the 6,62,679 training subscribers. Click a column header to sort.</p>
+          </div>
+          <div class="overflow-x-auto max-h-[32rem] overflow-y-auto">
+            <table class="w-full text-[11px]">
+              <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px] sticky top-0" id="dsn-summary-head"></thead>
+              <tbody id="dsn-summary-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Churn rate by feature value</h3>
+            <p class="text-[11px] text-text-secondary mb-3" id="dsn-decile-note"></p>
+            <select id="dsn-decile-select" aria-label="Feature" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary mb-4"></select>
+            <div class="h-72 relative"><canvas id="dsn-decile-chart"></canvas></div>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Churn rate when a value is missing</h3>
+            <p class="text-[11px] text-text-secondary mb-4">Each group of features that is missing together. Missingness carries signal, so it is kept as a flag and not dropped.</p>
+            <div class="h-80 relative"><canvas id="dsn-missing-churn-chart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Distribution shift: population stability index against the training split</h3>
+          <p class="text-[11px] text-text-secondary mb-4" id="dsn-shift-note"></p>
+          <div class="h-[36rem] relative"><canvas id="dsn-shift-chart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+            <section id="dsn-split" class="py-14 sm:py-16 bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 9 of 9: Train / val / test"><span class="chap-no" aria-hidden="true">09</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Train / val / test</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Train / validation / test</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div class="text-sm text-text-secondary leading-relaxed space-y-3">
+            <p>One random split, stratified on <code>is_churn</code>, with a fixed seed (42). Every subscriber lands in exactly one part; the
+              assignment is saved as <code>data/processed/split_assignments.csv</code> so it can be checked.</p>
+            <p><strong class="text-text-primary">Train</strong> fits every model and every preprocessing step (imputation medians, scaling).
+              <strong class="text-text-primary">Validation</strong> compares models, tunes LightGBM and picks the decision threshold.
+              <strong class="text-text-primary">Test</strong> is used once, for the final numbers.</p>
+            <p class="text-xs text-text-muted">All rows come from the same March 2017 snapshot, so this is not a test on a later time period (see Limitations).</p>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-hidden">
+            <table class="w-full text-xs">
+              <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+                <tr><th class="text-left px-4 py-3">Part</th><th class="text-right px-4 py-3">Share</th><th class="text-right px-4 py-3">Subscribers</th><th class="text-right px-4 py-3">Churn rate</th></tr>
+              </thead>
+              <tbody id="dsn-split-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+      </div>
+
+      <!-- VIEW 3: MODEL PREDICTOR (runs the champion LightGBM in the browser) -->
+      <div id="view-model-predictor" class="view-panel hidden lg:h-[calc(100vh-46px)] lg:overflow-hidden flex flex-col">
+        <div id="model-predictor" class="w-full m-0 p-0 border-none shrink-0"></div>
+        <div class="shrink-0">
+          <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-3 pb-4 shrink-0">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 pb-3.5 border-b border-border-subtle mb-1">
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight font-sans leading-none">Subscriber Churn Predictor</h1>
+    </div>
+
+    <!-- Quick Archetype Presets (NO DOTS) -->
+    <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+      <span class="text-[11px] font-semibold text-text-muted mr-1">Presets:</span>
+      <button type="button" onclick="loadArchetype('loyal')" class="inline-flex items-center px-2.5 py-1 text-xs border border-border-subtle rounded-md hover:bg-surface-subtle text-text-secondary hover:text-text-primary transition-colors cursor-pointer bg-surface-card">
+        <span>Low Risk (Loyal)</span>
+      </button>
+      <button type="button" onclick="loadArchetype('disengaging')" class="inline-flex items-center px-2.5 py-1 text-xs border border-border-subtle rounded-md hover:bg-surface-subtle text-text-secondary hover:text-text-primary transition-colors cursor-pointer bg-surface-card">
+        <span>High Risk (Disengaging)</span>
+      </button>
+      <button type="button" onclick="loadArchetype('discount_hopper')" class="inline-flex items-center px-2.5 py-1 text-xs border border-border-subtle rounded-md hover:bg-surface-subtle text-text-secondary hover:text-text-primary transition-colors cursor-pointer bg-surface-card">
+        <span>Cancellation Logged</span>
+      </button>
+      <button type="button" onclick="resetSandboxDefaults()" class="px-2.5 py-1 text-xs border border-border-subtle rounded-md hover:bg-surface-subtle text-text-muted hover:text-text-secondary transition-colors cursor-pointer">
+        Reset
+      </button>
+    </div>
+  </div>
+</section>
+
+        </div>
+        <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-2.5 pb-2.5 w-full flex-1 min-h-0 flex flex-col">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 h-full min-h-0 flex-1">
+            <div class="lg:col-span-7 xl:col-span-7 h-full min-h-0 flex flex-col">
+              <div class="bg-surface-card border border-border-subtle rounded-xl shadow-xs h-full flex flex-col min-h-0 overflow-hidden">
+  <form id="sandbox-form" onsubmit="event.preventDefault(); runPrediction();" class="flex flex-col h-full min-h-0">
+    
+    <!-- Scrollable Form Body: Only this box scrolls internally -->
+    <div class="flex-1 min-h-0 overflow-y-auto p-5 sm:p-6 space-y-5 sm:space-y-6 flex flex-col justify-between">
+      
+      <!-- Group 1: Subscription & Billing Terms -->
+      <div>
+        <div class="text-[11px] font-bold text-text-primary uppercase tracking-wider mb-3 pb-2 border-b border-border-subtle flex items-center justify-between">
+          <span>1. Subscription & Billing Terms</span>
+          <span class="text-[10px] font-mono text-text-muted lowercase">transactions.csv</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3.5 sm:gap-4">
+          
+          <div class="sm:col-span-4">
+            <label for="sb-auto-renew" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Auto-Renew Status
+            </label>
+            <select id="sb-auto-renew" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong">
+              <option value="1" selected>Enabled (Auto-Pay)</option>
+              <option value="0">Disabled (Manual)</option>
+            </select>
+          </div>
+
+          <div class="sm:col-span-4">
+            <label for="sb-is-cancel" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Cancellation Flag
+            </label>
+            <select id="sb-is-cancel" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong">
+              <option value="0" selected>None (No Cancel)</option>
+              <option value="1">Submitted (Cancel)</option>
+            </select>
+          </div>
+
+          <div class="sm:col-span-4">
+            <label for="sb-plan-days" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Plan Duration
+            </label>
+            <select id="sb-plan-days" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong">
+              <option value="30" selected>30 Days (Monthly - 98%)</option>
+              <option value="0">0 Days (Free Pass / Trial)</option>
+              <option value="1">1 Day (Single Day Pass)</option>
+              <option value="3">3 Days (Weekend Pass)</option>
+              <option value="7">7 Days (1-Week Pass)</option>
+              <option value="10">10 Days (10-Day Promo)</option>
+              <option value="14">14 Days (2-Week Trial)</option>
+              <option value="35">35 Days (30d + 5d Bonus)</option>
+              <option value="60">60 Days (2-Month Plan)</option>
+              <option value="70">70 Days (70-Day Bundle)</option>
+              <option value="80">80 Days (80-Day Bundle)</option>
+              <option value="90">90 Days (Quarterly Plan)</option>
+              <option value="100">100 Days (100-Day Bundle)</option>
+              <option value="110">110 Days (110-Day Promo)</option>
+              <option value="120">120 Days (4-Month Plan)</option>
+              <option value="180">180 Days (Half-Year Plan)</option>
+              <option value="195">195 Days (180d + 15d Bonus)</option>
+              <option value="200">200 Days (200-Day Bundle)</option>
+              <option value="230">230 Days (230-Day Promo)</option>
+              <option value="240">240 Days (8-Month Plan)</option>
+              <option value="270">270 Days (9-Month Plan)</option>
+              <option value="360">360 Days (Annual Plan)</option>
+              <option value="365">365 Days (Full Calendar Year)</option>
+              <option value="395">395 Days (Annual + 1m Bonus)</option>
+              <option value="400">400 Days (400-Day Bundle)</option>
+              <option value="410">410 Days (410-Day Promo)</option>
+              <option value="415">415 Days (415-Day Bundle)</option>
+              <option value="450">450 Days (15-Month Plan)</option>
+            </select>
+          </div>
+
+          <div class="sm:col-span-3">
+            <label for="sb-amount-paid" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Amount Paid (NTD)
+            </label>
+            <input type="number" id="sb-amount-paid" value="149" min="0" max="2500" step="1" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
+          </div>
+
+          <div class="sm:col-span-3">
+            <label for="sb-expiration-days" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Days Until Expiry
+            </label>
+            <input type="number" id="sb-expiration-days" value="5" min="-30" max="450" step="1" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
+          </div>
+
+          <div class="sm:col-span-6">
+            <label for="sb-payment-method" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Payment Method
+            </label>
+            <select id="sb-payment-method" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong">
+              <option value="41" selected>Method 41: Credit Card Auto-Pay</option>
+              <option value="38">Method 38: LinePay / Mobile Direct</option>
+              <option value="39">Method 39: ATM Transfer</option>
+              <option value="36">Method 36: Convenience Store Cash</option>
+              <option value="40">Method 40: Digital Mobile Wallet</option>
+              <option value="37">Method 37: Web ATM Online Banking</option>
+              <option value="32">Method 32: Partner In-App Billing</option>
+              <option value="30">Method 30: Partner Carrier Bundle A</option>
+              <option value="31">Method 31: Partner Carrier Bundle B</option>
+              <option value="33">Method 33: Payment Gateway A</option>
+              <option value="34">Method 34: Payment Gateway B</option>
+              <option value="35">Method 35: Retail Prepaid Voucher</option>
+              <option value="29">Method 29: Regional Payment Provider</option>
+              <option value="28">Method 28: Digital Channel 28</option>
+              <option value="27">Method 27: Digital Channel 27</option>
+              <option value="26">Method 26: Carrier Billing 26</option>
+              <option value="23">Method 23: Gateway Channel 23</option>
+              <option value="22">Method 22: Telecom Direct 22</option>
+              <option value="21">Method 21: Telecom Direct 21</option>
+              <option value="20">Method 20: Retail Gateway 20</option>
+              <option value="19">Method 19: Online Gateway 19</option>
+              <option value="18">Method 18: Card Channel 18</option>
+              <option value="17">Method 17: Banking Direct 17</option>
+              <option value="16">Method 16: Banking Direct 16</option>
+              <option value="15">Method 15: Partner Gateway 15</option>
+              <option value="14">Method 14: Mobile Channel 14</option>
+              <option value="13">Method 13: Partner Bundle 13</option>
+              <option value="12">Method 12: In-Store Channel 12</option>
+              <option value="11">Method 11: Merchant Gateway 11</option>
+              <option value="10">Method 10: Special Channel 10</option>
+              <option value="8">Method 8: Legacy Channel 8</option>
+              <option value="6">Method 6: Legacy Channel 6</option>
+              <option value="3">Method 3: Legacy Channel 3</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Group 2: 30-Day Listening Engagement (NO SLIDERS: Direct Numeric Inputs) -->
+      <div>
+        <div class="text-[11px] font-bold text-text-primary uppercase tracking-wider mb-3 pb-2 border-b border-border-subtle flex items-center justify-between">
+          <span>2. 30-Day Listening Engagement</span>
+          <span class="text-[10px] font-mono text-text-muted lowercase">user_logs.csv</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
+          
+          <div>
+            <label for="sb-hours" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Listening Hours
+            </label>
+            <input type="number" id="sb-hours" value="22.5" min="0" max="250" step="0.5" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
+            <span class="text-[10px] text-text-muted block mt-0.5">30d sum (hrs)</span>
+          </div>
+
+          <div>
+            <label for="sb-active-days" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Active Days
+            </label>
+            <input type="number" id="sb-active-days" value="16" min="0" max="30" step="1" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
+            <span class="text-[10px] text-text-muted block mt-0.5">out of 30 days</span>
+          </div>
+
+          <div>
+            <label for="sb-inactivity" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Inactivity Streak
+            </label>
+            <input type="number" id="sb-inactivity" value="2" min="0" max="30" step="1" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
+            <span class="text-[10px] text-text-muted block mt-0.5">days dormant</span>
+          </div>
+
+          <div>
+            <label for="sb-velocity" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              7d / 30d Velocity
+            </label>
+            <input type="number" id="sb-velocity" value="0.25" min="0.0" max="2.0" step="0.01" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
+            <span class="text-[10px] text-text-muted block mt-0.5">0.23x = flat pace</span>
+          </div>
+
+          <div>
+            <label for="sb-skip-ratio" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Song Skip Rate
+            </label>
+            <input type="number" id="sb-skip-ratio" value="20" min="0" max="100" step="1" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
+            <span class="text-[10px] text-text-muted block mt-0.5">% skipped (&lt;25%)</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Group 3: Subscriber Profile & Demographics -->
+      <div>
+        <div class="text-[11px] font-bold text-text-primary uppercase tracking-wider mb-3 pb-2 border-b border-border-subtle flex items-center justify-between">
+          <span>3. Subscriber Profile & Demographics</span>
+          <span class="text-[10px] font-mono text-text-muted lowercase">members.csv</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
+          
+          <div>
+            <label for="sb-age" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Subscriber Age
+            </label>
+            <input type="number" id="sb-age" value="25" min="10" max="90" step="1" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
+            <span class="text-[10px] text-text-muted block mt-0.5">years</span>
+          </div>
+
+          <div>
+            <label for="sb-gender" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Gender
+            </label>
+            <select id="sb-gender" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong">
+              <option value="1" selected>Female</option>
+              <option value="2">Male</option>
+              <option value="0">Not Disclosed</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="sb-tenure" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Account Tenure
+            </label>
+            <input type="number" id="sb-tenure" value="750" min="0" max="4500" step="10" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
+            <span class="text-[10px] text-text-muted block mt-0.5">days registered</span>
+          </div>
+
+          <div>
+            <label for="sb-city" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              City / Jurisdiction
+            </label>
+            <select id="sb-city" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong">
+              <option value="1" selected>City 1: Taipei Metropolitan (Primary)</option>
+              <option value="13">City 13: New Taipei City</option>
+              <option value="4">City 4: Taichung</option>
+              <option value="5">City 5: Kaohsiung</option>
+              <option value="15">City 15: Tainan</option>
+              <option value="22">City 22: Taoyuan</option>
+              <option value="6">City 6: Hsinchu</option>
+              <option value="14">City 14: Changhua</option>
+              <option value="11">City 11: Pingtung</option>
+              <option value="12">City 12: Yunlin</option>
+              <option value="9">City 9: Chiayi</option>
+              <option value="3">City 3: Keelung</option>
+              <option value="18">City 18: Miaoli</option>
+              <option value="8">City 8: Nantou</option>
+              <option value="10">City 10: Yilan</option>
+              <option value="17">City 17: Hualien</option>
+              <option value="7">City 7: Taitung</option>
+              <option value="21">City 21: Penghu</option>
+              <option value="16">City 16: Kinmen</option>
+              <option value="20">City 20: Lienchiang</option>
+              <option value="19">City 19: Offshore Islands</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="sb-registered-via" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
+              Registration Channel
+            </label>
+            <select id="sb-registered-via" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong">
+              <option value="7" selected>Method 7: Direct Web Portal</option>
+              <option value="9">Method 9: Native Mobile App</option>
+              <option value="3">Method 3: Telecom Partner Bundle</option>
+              <option value="4">Method 4: Device Pre-Install</option>
+              <option value="13">Method 13: Promotional Campaign</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Pinned Bottom Action Bar: Always visible, never scrolls away -->
+    <div class="shrink-0 p-3 sm:px-5 bg-surface-card border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="text-[11px] text-text-muted">
+        <span>16 parameter controls | 33 model features | LightGBM runs in your browser</span>
+      </div>
+      <button type="button" id="sb-submit-btn" onclick="runPrediction()" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2 bg-text-primary text-page-bg font-bold text-xs rounded-none hover:opacity-90 transition-all shadow-xs cursor-pointer">
+        <span>Run Churn Prediction</span>
+      </button>
+    </div>
+
+  </form>
+</div>
+
+            </div>
+            <div class="lg:col-span-5 xl:col-span-5 h-full min-h-0 flex flex-col">
+              <div class="bg-surface-card border border-border-subtle rounded-xl shadow-xs h-full flex flex-col min-h-0 overflow-hidden">
+  
+  <!-- Scrollable Output Body: Only this box scrolls internally -->
+  <div class="flex-1 min-h-0 overflow-y-auto p-4 sm:p-5 space-y-4">
+
+    <!-- Empty / Standby State -->
+    <div id="res-empty-state" class="py-12 px-4 text-center space-y-4 flex flex-col items-center justify-center h-full min-h-[360px]">
+      <div class="w-12 h-12 rounded-full bg-surface-subtle flex items-center justify-center text-text-secondary border border-border-subtle">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+      </div>
+      <div>
+        <h3 class="text-sm font-bold text-text-primary">Inference Engine Standby</h3>
+        <p class="text-xs text-text-muted mt-1 max-w-xs mx-auto">
+          Choose an archetype preset above or customize subscriber parameters, then click <strong>Run Churn Prediction</strong>.
+        </p>
+      </div>
+      <button type="button" onclick="loadArchetype('loyal')" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-surface-subtle text-text-primary border border-border-subtle rounded-lg hover:bg-surface-card transition-colors cursor-pointer">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+        </svg>
+        <span>Evaluate Default Subscriber</span>
+      </button>
+    </div>
+
+    <!-- Active Inference Display -->
+    <div id="res-active-state" class="hidden space-y-4">
+      
+
+
+      <!-- Probability & Verdict Section with Vertical Divider -->
+      <div class="relative grid grid-cols-2 gap-4 items-center -mt-2 pb-2">
+        <!-- Left Side: Percent & Label -->
+        <div class="pr-3">
+          <span class="text-xs font-bold text-text-primary uppercase tracking-wider block mb-0.5">Predicted Churn Probability</span>
+          <span id="res-prob-display" class="text-4xl sm:text-5xl font-sans font-bold text-text-primary tracking-tight block">0.0%</span>
+        </div>
+
+        <!-- Vertical line from top to bottom just above horizontal bar -->
+        <div class="absolute left-1/2 top-0 bottom-0 w-px bg-border-subtle -translate-x-1/2"></div>
+
+        <!-- Right Side: Verdict (Two Lines, No Box, Right-Aligned) & 95% CI Below It -->
+        <div class="pl-3 text-right flex flex-col items-end justify-center">
+          <div id="res-verdict-badge" class="text-right font-black text-2xl sm:text-3xl tracking-wider leading-tight text-accent-success">
+            <div class="whitespace-nowrap">RENEWAL</div>
+            <div class="whitespace-nowrap">PREDICTED</div>
+          </div>
+          <span id="res-ci-readout" class="text-[10px] font-mono text-text-muted mt-1.5 block max-w-[16rem]"></span>
+        </div>
+      </div>
+
+      <!-- Progress bar with the decision threshold marker (set from PREDICTOR_META) -->
+      <div class="space-y-1.5 pt-1">
+        <div class="relative w-full py-1 flex items-center">
+          <div class="w-full bg-border-strong h-2.5 rounded-none overflow-hidden">
+            <div id="res-prob-bar" class="h-full rounded-none transition-all duration-500 ease-out" style="width: 0%; background-color: #1D4ED8;"></div>
+          </div>
+          <!-- Red Vertical Mark for Threshold at 30% -->
+          <div id="res-tau-mark" class="absolute left-[30%] -translate-x-1/2 w-[3px] h-5 bg-[#B91C1C] z-10 pointer-events-none shadow-xs" title="Decision threshold chosen on validation"></div>
+        </div>
+        <div class="relative flex justify-between items-center text-[10px] text-text-muted font-mono pt-0.5">
+          <span>0% Safe</span>
+          <span id="res-tau-label" class="absolute left-[30%] -translate-x-1/2 font-bold text-[#B91C1C] font-mono whitespace-nowrap">&tau; = 30%</span>
+          <span>100% Churn</span>
+        </div>
+      </div>
+
+      <!-- Risk Tier Banner -->
+      <div class="flex items-center justify-between p-2.5 bg-page-bg border border-border-subtle rounded-none text-xs">
+        <span class="font-semibold text-text-secondary">Assessed Risk Tier:</span>
+        <span id="res-tier-badge" class="font-bold font-mono">Evaluating...</span>
+      </div>
+
+      <!-- Line gap after Assessed Risk Tier -->
+      <div class="border-b border-border-subtle my-2"></div>
+
+      <!-- Dual Risk Driver & Protective Lists (NO DOTS, CLEAN PILLS) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+        <div class="p-3 bg-page-bg border border-border-subtle rounded-lg">
+          <h4 class="text-[10px] font-bold text-accent-danger uppercase tracking-wider mb-2">
+            Primary Risk Drivers
+          </h4>
+          <ul id="res-risk-list" class="space-y-1.5 text-xs">
+            <li class="text-text-muted text-xs">Awaiting evaluation...</li>
+          </ul>
+        </div>
+
+        <div class="p-3 bg-page-bg border border-border-subtle rounded-lg">
+          <h4 class="text-[10px] font-bold text-accent-success uppercase tracking-wider mb-2">
+            Protective Signals
+          </h4>
+          <ul id="res-protective-list" class="space-y-1.5 text-xs">
+            <li class="text-text-muted text-xs">Awaiting evaluation...</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Retention Strategy Box -->
+      <div class="p-3 bg-surface-subtle border border-border-subtle rounded-lg">
+        <h4 class="text-[10px] font-bold text-text-primary uppercase tracking-wider mb-1">Recommended Retention Action</h4>
+        <p id="res-recommendation-text" class="text-xs text-text-secondary leading-relaxed">
+          Awaiting prediction.
+        </p>
+      </div>
+
+
+
+    </div>
+
+  </div>
+
+</div>
+
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </main>
+
+    <footer id="app-footer" class="bg-surface-card border-t border-border-subtle py-10 text-xs text-text-secondary mt-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+
+      <div class="space-y-1 text-center sm:text-left">
+        <p class="font-bold text-text-primary text-sm">ES 335: Machine Learning &bull; Course Project</p>
+        <p class="text-text-muted">Early Prediction of Subscription Churn Using Listening Patterns and Temporal Engagement Features</p>
+        <p class="text-text-muted">
+          <a href="https://github.com/YOUR-USERNAME/YOUR-REPO" class="underline hover:text-text-primary">Code, notebooks &amp; results on GitHub</a>
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-right">
+        <div>
+          <p class="font-semibold text-text-primary inline-flex items-center gap-1.5 justify-center sm:justify-end w-full"><a href="https://github.com/destopianpirate" target="_blank" rel="noopener noreferrer" title="destopianpirate on GitHub" aria-label="destopianpirate on GitHub" class="member-ink hover:opacity-70 transition-opacity"><svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a><a href="https://destopianpirate.github.io" target="_blank" rel="noopener noreferrer" class="hover:underline">Ayush Singh</a> (25110068)</p>
+          <p class="font-semibold text-text-primary inline-flex items-center gap-1.5 justify-center sm:justify-end w-full"><a href="https://github.com/LostImmortal" target="_blank" rel="noopener noreferrer" title="LostImmortal on GitHub" aria-label="LostImmortal on GitHub" class="member-ink hover:opacity-70 transition-opacity"><svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>Avnish Yadav (25110067)</p>
+        </div>
+        <a href="#overview" class="p-2.5 rounded-xl border border-border-subtle bg-surface-subtle hover:bg-border-subtle text-text-primary transition-colors cursor-pointer" title="Back to top">
+          <span class="material-symbols-outlined text-sm">arrow_upward</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+
+  </div>
+
+  <!-- Generated by notebooks/07_website_export.ipynb -->
+  <script src="js/generated/site_data.js"></script>
+  <script src="js/generated/model_lgbm.js"></script>
+  <script src="js/generated/ds_extra.js"></script>
+
+  <!-- Shell -->
+  <script src="js/sidebar_nav.js"></script>
+
+  <!-- Pages -->
+  <script src="js/seg_tabs.js"></script>
+  <script src="js/site_common.js"></script>
+  <script src="js/overview.js"></script>
+  <script src="js/hero_motion.js"></script>
+  <script src="js/data_studio.js"></script>
+  <script src="js/sandbox_engine.js"></script>
+  <script src="js/sandbox_ui.js"></script>
+
+  <script src="js/section_rail.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

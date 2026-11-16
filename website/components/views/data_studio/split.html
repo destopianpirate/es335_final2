@@ -1,0 +1,24 @@
+    <section id="dsn-split" class="py-14 sm:py-16 bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 9 of 9: Train / val / test"><span class="chap-no" aria-hidden="true">09</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Train / val / test</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Train / validation / test</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div class="text-sm text-text-secondary leading-relaxed space-y-3">
+            <p>One random split, stratified on <code>is_churn</code>, with a fixed seed (42). Every subscriber lands in exactly one part; the
+              assignment is saved as <code>data/processed/split_assignments.csv</code> so it can be checked.</p>
+            <p><strong class="text-text-primary">Train</strong> fits every model and every preprocessing step (imputation medians, scaling).
+              <strong class="text-text-primary">Validation</strong> compares models, tunes LightGBM and picks the decision threshold.
+              <strong class="text-text-primary">Test</strong> is used once, for the final numbers.</p>
+            <p class="text-xs text-text-muted">All rows come from the same March 2017 snapshot, so this is not a test on a later time period (see Limitations).</p>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-hidden">
+            <table class="w-full text-xs">
+              <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+                <tr><th class="text-left px-4 py-3">Part</th><th class="text-right px-4 py-3">Share</th><th class="text-right px-4 py-3">Subscribers</th><th class="text-right px-4 py-3">Churn rate</th></tr>
+              </thead>
+              <tbody id="dsn-split-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>

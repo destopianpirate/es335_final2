@@ -1,0 +1,167 @@
+    <section id="ovn-results" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 5 of 9: Results (test split)"><span class="chap-no" aria-hidden="true">05</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Results (test split)</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">How well each model does on unseen subscribers</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8" id="ovn-results-lead"></p>
+
+        <!-- Champion headline metrics -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div class="p-5 rounded-2xl bg-surface-card border-2 border-text-primary">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">PR-AUC (main)</span>
+            <div class="text-3xl font-extrabold text-text-primary my-1 font-mono" id="ovn-m-pr"></div>
+            <p class="text-[10px] text-text-muted font-mono">95% CI [<span data-sd="champion.ci.pr_auc.low" data-fmt="f4"></span>, <span data-sd="champion.ci.pr_auc.high" data-fmt="f4"></span>]</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">ROC-AUC</span>
+            <div class="text-3xl font-extrabold text-text-primary my-1 font-mono" id="ovn-m-roc"></div>
+            <p class="text-[10px] text-text-muted font-mono">95% CI [<span data-sd="champion.ci.roc_auc.low" data-fmt="f4"></span>, <span data-sd="champion.ci.roc_auc.high" data-fmt="f4"></span>]</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Log loss</span>
+            <div class="text-3xl font-extrabold text-text-primary my-1 font-mono" id="ovn-m-ll"></div>
+            <p class="text-[10px] text-text-muted font-mono">95% CI [<span data-sd="champion.ci.log_loss.low" data-fmt="f4"></span>, <span data-sd="champion.ci.log_loss.high" data-fmt="f4"></span>]</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
+            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">F1 at &tau; = <span data-sd="champion.threshold" data-fmt="f2"></span></span>
+            <div class="text-3xl font-extrabold text-accent-success my-1 font-mono" id="ovn-m-f1"></div>
+            <p class="text-[10px] text-text-muted font-mono" id="ovn-m-pr-rec"></p>
+          </div>
+        </div>
+
+        <!-- Model comparison table + curves -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-10">
+          <div class="lg:col-span-3 bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+            <div class="px-5 pt-5 pb-2 flex items-center justify-between gap-2">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">All models, test split</h3>
+              <span class="text-[10px] text-text-muted">P / R / F1 at &tau; = <span data-sd="champion.threshold" data-fmt="f2"></span></span>
+            </div>
+            <table class="w-full text-xs">
+              <thead class="text-text-muted uppercase tracking-wider text-[10px] border-b border-border-subtle">
+                <tr><th class="text-left px-5 py-2">Model</th><th class="text-right px-2 py-2">PR-AUC</th><th class="text-right px-2 py-2">ROC-AUC</th>
+                  <th class="text-right px-2 py-2">Log loss</th><th class="text-right px-2 py-2">Brier</th><th class="text-right px-2 py-2">Accuracy</th><th class="text-right px-2 py-2">Precision</th><th class="text-right px-2 py-2">Recall</th><th class="text-right px-5 py-2">F1</th></tr>
+              </thead>
+              <tbody id="ovn-model-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+            </table>
+            <p class="text-[11px] text-text-muted px-5 py-3" id="ovn-model-note"></p>
+          </div>
+          <div class="lg:col-span-2 bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary" id="ovn-curve-title">Precision&ndash;recall curve</h3>
+              <div id="ovn-curve-seg"></div>
+            </div>
+            <div class="h-72 relative"><canvas id="ovn-curve-chart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Metric comparison -->
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mb-10">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+            <div>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Compare models on any metric</h3>
+              <p class="text-[11px] text-text-secondary mt-1" id="ovn-metric-note"></p>
+            </div>
+            <div id="ovn-metric-buttons"></div>
+          </div>
+          <div class="h-64 relative"><canvas id="ovn-metric-chart"></canvas></div>
+        </div>
+
+        <!-- INTERACTION: threshold explorer -->
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 sm:p-8 shadow-subtle-card mb-10">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-text-primary flex items-center gap-2"><span class="material-symbols-outlined">tune</span>Threshold explorer</h3>
+              <p class="text-xs text-text-secondary mt-1 max-w-2xl">The champion gives every test subscriber a churn probability. Move the threshold to see the trade-off between catching churners (recall) and raising false alarms. These are the real test-set counts.</p>
+            </div>
+            <div class="flex items-center gap-3 w-full md:w-96">
+              <span class="text-[10px] font-bold text-text-muted">0.01</span>
+              <input id="ovn-tau" aria-label="Decision threshold" type="range" min="0" max="97" step="1" class="flex-1 accent-[#1D4ED8]" oninput="ovnOnTau(this.value)"/>
+              <span class="text-[10px] font-bold text-text-muted">0.98</span>
+              <span class="px-2.5 py-1 rounded-lg bg-text-primary text-surface-card text-xs font-mono font-bold whitespace-nowrap">&tau; = <span id="ovn-tau-val"></span></span>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+            <div class="grid grid-cols-2 gap-2 text-center font-mono">
+              <div class="p-3 rounded-xl border border-border-subtle bg-[#DCFCE7]/40"><div class="text-[10px] font-sans font-bold text-text-muted uppercase">Caught churners (TP)</div><div class="text-xl font-extrabold text-accent-success" id="ovn-tp"></div></div>
+              <div class="p-3 rounded-xl border border-border-subtle"><div class="text-[10px] font-sans font-bold text-text-muted uppercase">False alarms (FP)</div><div class="text-xl font-extrabold text-accent-warning" id="ovn-fp"></div></div>
+              <div class="p-3 rounded-xl border border-border-subtle"><div class="text-[10px] font-sans font-bold text-text-muted uppercase">Missed churners (FN)</div><div class="text-xl font-extrabold text-accent-danger" id="ovn-fn"></div></div>
+              <div class="p-3 rounded-xl border border-border-subtle"><div class="text-[10px] font-sans font-bold text-text-muted uppercase">Correct renewals (TN)</div><div class="text-xl font-extrabold text-text-primary" id="ovn-tn"></div></div>
+            </div>
+            <div class="space-y-3 text-xs">
+              <div class="flex justify-between border-b border-border-subtle pb-2"><span class="text-text-secondary">Precision</span><span class="font-mono font-bold text-text-primary" id="ovn-prec"></span></div>
+              <div class="flex justify-between border-b border-border-subtle pb-2"><span class="text-text-secondary">Recall</span><span class="font-mono font-bold text-text-primary" id="ovn-rec"></span></div>
+              <div class="flex justify-between border-b border-border-subtle pb-2"><span class="text-text-secondary">F1</span><span class="font-mono font-bold text-text-primary" id="ovn-f1"></span></div>
+              <div class="flex justify-between"><span class="text-text-secondary">Subscribers flagged</span><span class="font-mono font-bold text-text-primary" id="ovn-flag"></span></div>
+            </div>
+            <div class="h-48 relative"><canvas id="ovn-tau-chart"></canvas></div>
+          </div>
+          <p class="text-[11px] text-text-muted mt-4" id="ovn-tau-note"></p>
+        </div>
+
+        <!-- What the mistakes cost -->
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 sm:p-8 shadow-subtle-card mb-10">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-text-primary flex items-center gap-2"><span class="material-symbols-outlined">balance</span>What the mistakes cost</h3>
+              <p class="text-xs text-text-secondary mt-1 max-w-2xl">The two errors are not equally expensive. A false alarm is one unnecessary retention offer. A missed churner is a lost subscriber, which usually costs more. Set how many times worse a miss is, and the best threshold moves.</p>
+            </div>
+            <div class="flex items-center gap-3 w-full md:w-96">
+              <span class="text-[10px] font-bold text-text-muted">1&times;</span>
+              <input id="ovn-cost-ratio" aria-label="Cost of a missed churner relative to a false alarm" type="range" min="1" max="50" step="1" value="10" class="flex-1 accent-[#1D4ED8]" oninput="ovnOnCost(this.value)"/>
+              <span class="text-[10px] font-bold text-text-muted">50&times;</span>
+              <span class="px-2.5 py-1 rounded-lg bg-text-primary text-surface-card text-xs font-mono font-bold whitespace-nowrap">miss = <span id="ovn-cost-val"></span>&times;</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 items-center">
+            <div class="lg:col-span-2 grid grid-cols-2 gap-3" id="ovn-cost-cards"></div>
+            <div class="lg:col-span-3 h-64 relative"><canvas id="ovn-cost-chart"></canvas></div>
+          </div>
+          <p class="text-[11px] text-text-muted mt-4" id="ovn-cost-note"></p>
+        </div>
+
+        <!-- Validation vs test -->
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mb-10">
+          <div class="px-6 pt-5">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Does it hold up? Validation vs test</h3>
+            <p class="text-[11px] text-text-secondary mt-1 max-w-3xl">Every model was chosen and tuned on the validation split, then scored once on the test split. A small gap means the tuning did not simply memorise the validation subscribers.</p>
+          </div>
+          <table class="w-full text-xs mt-3">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr><th class="text-left px-6 py-2">Model</th><th class="text-right px-3 py-2">PR-AUC val</th><th class="text-right px-3 py-2">PR-AUC test</th><th class="text-right px-3 py-2">Gap</th>
+                <th class="text-right px-3 py-2">Log loss val</th><th class="text-right px-6 py-2">Log loss test</th></tr>
+            </thead>
+            <tbody id="ovn-gap-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+          </table>
+          <p class="text-[11px] text-text-muted px-6 py-3" id="ovn-gap-note"></p>
+        </div>
+
+        <!-- Score distribution + gains -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Predicted probability by true class</h3>
+            <p class="text-[11px] text-text-secondary mb-4">Champion scores for test renewers and churners (log scale); red line = &tau;.</p>
+            <div class="h-64 relative"><canvas id="ovn-score-chart"></canvas></div>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Cumulative gains</h3>
+            <p class="text-[11px] text-text-secondary mb-4" id="ovn-gains-note"></p>
+            <div class="h-64 relative"><canvas id="ovn-gains-chart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Ablation + importance -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Does listening help? Feature-set ablation</h3>
+            <p class="text-[11px] text-text-secondary mb-4">Same tuned LightGBM, three feature sets. Test PR-AUC with 95% bootstrap interval.</p>
+            <div class="h-56 relative"><canvas id="ovn-ablation-chart"></canvas></div>
+            <p class="text-xs text-text-secondary mt-4 leading-relaxed" id="ovn-ablation-text"></p>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">What the champion relies on</h3>
+            <p class="text-[11px] text-text-secondary mb-4">Share of total split gain, top 12 features. <span style="color:#1D4ED8" class="font-bold">billing</span>, <span style="color:#15803D" class="font-bold">listening</span>, <span style="color:#B45309" class="font-bold">demographic</span>.</p>
+            <div class="h-72 relative"><canvas id="ovn-importance-chart"></canvas></div>
+            <p class="text-xs text-text-secondary mt-3" id="ovn-importance-text"></p>
+          </div>
+        </div>
+      </div>
+    </section>

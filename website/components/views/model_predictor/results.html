@@ -1,0 +1,113 @@
+<div class="bg-surface-card border border-border-subtle rounded-xl shadow-xs h-full flex flex-col min-h-0 overflow-hidden">
+  
+  <!-- Scrollable Output Body: Only this box scrolls internally -->
+  <div class="flex-1 min-h-0 overflow-y-auto p-4 sm:p-5 space-y-4">
+
+    <!-- Empty / Standby State -->
+    <div id="res-empty-state" class="py-12 px-4 text-center space-y-4 flex flex-col items-center justify-center h-full min-h-[360px]">
+      <div class="w-12 h-12 rounded-full bg-surface-subtle flex items-center justify-center text-text-secondary border border-border-subtle">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+      </div>
+      <div>
+        <h3 class="text-sm font-bold text-text-primary">Inference Engine Standby</h3>
+        <p class="text-xs text-text-muted mt-1 max-w-xs mx-auto">
+          Choose an archetype preset above or customize subscriber parameters, then click <strong>Run Churn Prediction</strong>.
+        </p>
+      </div>
+      <button type="button" onclick="loadArchetype('loyal')" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-surface-subtle text-text-primary border border-border-subtle rounded-lg hover:bg-surface-card transition-colors cursor-pointer">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+        </svg>
+        <span>Evaluate Default Subscriber</span>
+      </button>
+    </div>
+
+    <!-- Active Inference Display -->
+    <div id="res-active-state" class="hidden space-y-4">
+      
+
+
+      <!-- Probability & Verdict Section with Vertical Divider -->
+      <div class="relative grid grid-cols-2 gap-4 items-center -mt-2 pb-2">
+        <!-- Left Side: Percent & Label -->
+        <div class="pr-3">
+          <span class="text-xs font-bold text-text-primary uppercase tracking-wider block mb-0.5">Predicted Churn Probability</span>
+          <span id="res-prob-display" class="text-4xl sm:text-5xl font-sans font-bold text-text-primary tracking-tight block">0.0%</span>
+        </div>
+
+        <!-- Vertical line from top to bottom just above horizontal bar -->
+        <div class="absolute left-1/2 top-0 bottom-0 w-px bg-border-subtle -translate-x-1/2"></div>
+
+        <!-- Right Side: Verdict (Two Lines, No Box, Right-Aligned) & 95% CI Below It -->
+        <div class="pl-3 text-right flex flex-col items-end justify-center">
+          <div id="res-verdict-badge" class="text-right font-black text-2xl sm:text-3xl tracking-wider leading-tight text-accent-success">
+            <div class="whitespace-nowrap">RENEWAL</div>
+            <div class="whitespace-nowrap">PREDICTED</div>
+          </div>
+          <span id="res-ci-readout" class="text-[10px] font-mono text-text-muted mt-1.5 block max-w-[16rem]"></span>
+        </div>
+      </div>
+
+      <!-- Progress bar with the decision threshold marker (set from PREDICTOR_META) -->
+      <div class="space-y-1.5 pt-1">
+        <div class="relative w-full py-1 flex items-center">
+          <div class="w-full bg-border-strong h-2.5 rounded-none overflow-hidden">
+            <div id="res-prob-bar" class="h-full rounded-none transition-all duration-500 ease-out" style="width: 0%; background-color: #1D4ED8;"></div>
+          </div>
+          <!-- Red Vertical Mark for Threshold at 30% -->
+          <div id="res-tau-mark" class="absolute left-[30%] -translate-x-1/2 w-[3px] h-5 bg-[#B91C1C] z-10 pointer-events-none shadow-xs" title="Decision threshold chosen on validation"></div>
+        </div>
+        <div class="relative flex justify-between items-center text-[10px] text-text-muted font-mono pt-0.5">
+          <span>0% Safe</span>
+          <span id="res-tau-label" class="absolute left-[30%] -translate-x-1/2 font-bold text-[#B91C1C] font-mono whitespace-nowrap">&tau; = 30%</span>
+          <span>100% Churn</span>
+        </div>
+      </div>
+
+      <!-- Risk Tier Banner -->
+      <div class="flex items-center justify-between p-2.5 bg-page-bg border border-border-subtle rounded-none text-xs">
+        <span class="font-semibold text-text-secondary">Assessed Risk Tier:</span>
+        <span id="res-tier-badge" class="font-bold font-mono">Evaluating...</span>
+      </div>
+
+      <!-- Line gap after Assessed Risk Tier -->
+      <div class="border-b border-border-subtle my-2"></div>
+
+      <!-- Dual Risk Driver & Protective Lists (NO DOTS, CLEAN PILLS) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+        <div class="p-3 bg-page-bg border border-border-subtle rounded-lg">
+          <h4 class="text-[10px] font-bold text-accent-danger uppercase tracking-wider mb-2">
+            Primary Risk Drivers
+          </h4>
+          <ul id="res-risk-list" class="space-y-1.5 text-xs">
+            <li class="text-text-muted text-xs">Awaiting evaluation...</li>
+          </ul>
+        </div>
+
+        <div class="p-3 bg-page-bg border border-border-subtle rounded-lg">
+          <h4 class="text-[10px] font-bold text-accent-success uppercase tracking-wider mb-2">
+            Protective Signals
+          </h4>
+          <ul id="res-protective-list" class="space-y-1.5 text-xs">
+            <li class="text-text-muted text-xs">Awaiting evaluation...</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Retention Strategy Box -->
+      <div class="p-3 bg-surface-subtle border border-border-subtle rounded-lg">
+        <h4 class="text-[10px] font-bold text-text-primary uppercase tracking-wider mb-1">Recommended Retention Action</h4>
+        <p id="res-recommendation-text" class="text-xs text-text-secondary leading-relaxed">
+          Awaiting prediction.
+        </p>
+      </div>
+
+
+
+    </div>
+
+  </div>
+
+</div>
