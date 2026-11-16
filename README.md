@@ -2,7 +2,7 @@
 
 ES 335 Machine Learning course project. Ayush Singh (25110068), Avnish Yadav (25110067)
 
-**Website:** `https://<your-username>.github.io/<repo>/`
+**Website:** `https://destopianpirate.github.io/es335_final/`
 
 **Question.** Using only what is known on 31 March 2017, can we predict whether a KKBOX subscriber will churn (no new subscription within 30 days after their plan expires), and does listening behaviour add value beyond billing records? One row is one subscriber; the target is `is_churn`.
 
@@ -49,7 +49,7 @@ pip install -r requirements.txt
 cd notebooks
 jupyter nbconvert --to notebook --execute --inplace 01_raw_data_analysis.ipynb   # then 02 to 07 in order
 cd ..
-python website/build.py --repo https://github.com/<your-username>/<repo>
+python website/build.py --repo https://github.com/destopianpirate/es335_final
 node website/tests/check_model_parity.mjs   # optional: browser model matches Python
 ```
 
@@ -68,8 +68,7 @@ Kaggle, Customer Retention Datathon (Riyadh Edition): https://www.kaggle.com/com
 
 ## AI-use disclosure
 
-We used Claude (Anthropic) to help restructure the notebooks and write the website code.
-We ran and checked every notebook and result ourselves and are responsible for the analysis.
+We used AI Tools to help make the website. 
 
 ## Citations
 
