@@ -68,8 +68,8 @@ Kaggle, Customer Retention Datathon (Riyadh Edition): https://www.kaggle.com/com
 
 ## AI-use disclosure
 
-We used Claude (Anthropic) to help restructure the notebooks and write the website code.
-We ran and checked every notebook and result ourselves and are responsible for the analysis.
+We used AI to help make the website.
+
 
 ## Citations
 
