@@ -2,8 +2,9 @@
 
     python scripts/export_ds_extra.py
 
-Churn tables come from data/processed/features_train.parquet. The overlap table hashes the `msno` column
-of the five raw CSVs (data/raw/*.csv), so it needs the raw files and takes a couple of minutes.
+Churn tables use the training split only (data/processed/features_train.parquet + split_assignments.csv),
+so no validation or test label is looked at before the final evaluation. The overlap table hashes the `msno`
+column of the five raw CSVs (data/raw/*.csv); it uses no labels, needs the raw files and takes a couple of minutes.
 """
 import itertools
 import json
@@ -17,6 +18,9 @@ RAW = ROOT / "data" / "raw"
 OUT = ROOT / "website" / "js" / "generated" / "ds_extra.js"
 
 df = pd.read_parquet(ROOT / "data" / "processed" / "features_train.parquet")
+split = pd.read_csv(ROOT / "data" / "processed" / "split_assignments.csv")
+df = df.merge(split, on="msno")
+df = df[df["split"] == "train"].reset_index(drop=True)   # training split only
 y = df["is_churn"]
 overall = float(y.mean())
 
@@ -90,6 +94,11 @@ cross = []
 for (ar, ca), g in x.groupby(["last_auto_renew", "last_is_cancel"]):
     cross.append({"auto_renew": int(ar), "cancel": int(ca), "n": int(len(g)), "churn_rate": float(g["is_churn"].mean())})
 
+# --- churn by which tables a subscriber appears in (P profile, T transactions, L March logs) ---
+coverage = []
+for (p, t, l), g in df.groupby(["has_member", "has_tx", "has_logs"]):
+    coverage.append({"profile": bool(p), "transactions": bool(t), "logs": bool(l), "n": int(len(g)), "churn_rate": float(g["is_churn"].mean())})
+
 # --- overlap of the five files (subscriber ids) ---
 def hashes(path, chunk=None):
     parts = []
@@ -118,6 +127,6 @@ def core(split):
 overlap = {"size": size, "pair": pair, "union": union,
            "complete": {"train": core("train"), "test": core("test")}}
 
-extra = {"overall": overall, "n": int(len(df)), "dims": dims, "cross": cross, "overlap": overlap}
+extra = {"split": "train", "overall": overall, "n": int(len(df)), "dims": dims, "cross": cross, "coverage": coverage, "overlap": overlap}
 OUT.write_text("window.DS_EXTRA = " + json.dumps(extra, separators=(",", ":")) + ";\n", encoding="utf-8")
 print("wrote", OUT, f"({OUT.stat().st_size / 1e3:.1f} KB)")

@@ -33,7 +33,7 @@ function ovnRenderIntro() {
   const findings = [
     { title: 'On 31 March, churn is easy to rank', text: `The champion reaches PR-AUC ${f4(c.pr_auc)} on unseen subscribers; a constant guess scores ${f4(modelRow('Majority (prior)').pr_auc)}. Billing features take ${sdFormat(g.billing / 100, 'pct1')} of the split gain, because March billing often already records the renewal decision.` },
     { title: 'Earlier, it is much harder', text: `With billing cut at 1 March, before any labelled plan expires, the same model reaches PR-AUC ${f4(strictRow(STRICT_ALL).pr_auc)} (billing + demographics alone: ${f4(strictRow(STRICT_BILL).pr_auc)}). That is still ${(strictRow(STRICT_ALL).pr_auc / modelRow('Majority (prior)').pr_auc).toFixed(1)}&times; the no-skill level, but far from ${f4(c.pr_auc)}.` },
-    { title: 'Listening matters when billing is silent', text: `At 31 March, listening adds only ${sdFormat(d.mean, 'signed4')} PR-AUC (paired 95% CI ${sdFormat(d.low, 'signed4')} to ${sdFormat(d.high, 'signed4')}). Under the strict cutoff it adds ${sdFormat(strictGain().mean, 'signed4')} (CI ${sdFormat(strictGain().low, 'signed4')} to ${sdFormat(strictGain().high, 'signed4')}).` },
+    { title: 'Listening matters when billing is silent', text: `At 31 March, listening adds only ${sdFormat(d.mean, 'signed4')} PR-AUC (paired 95% CI ${sdFormat(d.low, 'signed4')} to ${sdFormat(d.high, 'signed4')}). Under the strict cutoff it adds ${sdFormat(strictGain().mean, 'signed4')} (CI ${sdFormat(strictGain().low, 'signed4')} to ${sdFormat(strictGain().high, 'signed4')}), though part of that may come from listening after a plan has lapsed.` },
   ];
   setText('ovn-findings', findings.map(f => `
     <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
@@ -63,7 +63,7 @@ function ovnRenderMetrics() {
   const lr = modelRow('Logistic regression'), rf = modelRow('Random forest'), def = modelRow('LightGBM (default)');
   setText('ovn-model-note', `Bold = best in column. Every learned model beats both baselines by a wide margin. Trees beat the linear model
     (PR-AUC ${f4(rf.pr_auc)} / ${f4(def.pr_auc)} vs ${f4(lr.pr_auc)}), because churn depends on thresholds and interactions (for example expiry date &times; auto-renew).
-    Tuning adds ${sdFormat(c_pr() - def.pr_auc, 'signed4')} PR-AUC over default LightGBM. Validation scores for the same models are in the repository.`);
+    Tuning adds ${sdFormat(c_pr() - def.pr_auc, 'signed4')} PR-AUC over default LightGBM, small but above zero in a paired bootstrap (<a href="#ovn-model-diff" class="underline">below</a>). Validation scores for the same models: <a href="#ovn-model-metrics" class="underline">Baseline and methods</a>.`);
   setText('ovn-results-lead', `All six models were scored once on the test split. The champion is the model with the best validation log loss; its test PR-AUC confirms the choice.`);
 }
 const c_pr = () => modelRow(CHAMP).pr_auc;
@@ -176,7 +176,7 @@ function ovnRenderImportance() {
       scales: { x: { title: { text: '% of total gain' } }, y: { grid: { display: false } } } },
   });
   const g = SITE.importance_by_group || {};
-  setText('ovn-importance-text', `By group: billing ${(g.billing || 0).toFixed(1)} %, listening ${(g.listening || 0).toFixed(1)} %, demographic ${(g.demographic || 0).toFixed(1)} % of total gain.`);
+  setText('ovn-importance-text', `By group: billing ${(g.billing || 0).toFixed(1)} %, listening ${(g.listening || 0).toFixed(1)} %, demographic ${(g.demographic || 0).toFixed(1)} % of total gain. Split gain shows what the model <em>uses</em>, not what <em>causes</em> churn; when features are correlated (for example the several expiry and plan-length features) the gain is shared between them somewhat arbitrarily, so read the groups, not the exact ranks.`);
 }
 
 function ovnRenderErrors() {
@@ -276,6 +276,7 @@ function ovnRenderConclusion() {
       <p class="text-xs text-text-secondary leading-relaxed">${t}</p></div>`).join(''));
   setText('ovn-conclusion-text', `In practice, a retention team could contact the ${pct1((SITE.champion.confusion.tp + SITE.champion.confusion.fp) / SITE.champion.n_test)} of subscribers
     flagged at &tau; = ${SITE.champion.threshold.toFixed(2)} and reach ${pct1(c.recall)} of churners, with ${pct1(c.precision)} of contacts being real churners.
+    With billing cut at 1 March (listening still through March; threshold ${(strictRow(STRICT_ALL).threshold || 0).toFixed(2)} chosen on validation) it would reach ${pct1(strictRow(STRICT_ALL).recall)} of churners with ${pct1(strictRow(STRICT_ALL).precision)} precision.
     Whether contacting them changes their decision is a separate question this project does not answer.`);
 }
 
@@ -359,7 +360,8 @@ function ovnRenderDataCharts() {
     options: { plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.raw.toLocaleString('en-US')} (${pct1(c.raw / tr.subscribers)})` } } },
       scales: { x: { grid: { display: false } } } },
   });
-  const cov = (SITE.raw || {}).coverage || [];
+  // training split only (scripts/export_ds_extra.py); falls back to the raw-file summary if that file is missing
+  const cov = ((window.DS_EXTRA || {}).coverage) || (SITE.raw || {}).coverage || [];
   makeChart('ovn-data-coverage', {
     type: 'bar',
     data: { labels: cov.map(r => `${r.profile ? 'P' : '-'}${r.transactions ? 'T' : '-'}${r.logs ? 'L' : '-'}`),
@@ -432,13 +434,6 @@ function ovnRenderCost() {
 function ovnRenderGap() {
   const val = SITE.val_metrics || [], test = SITE.test_metrics || [];
   const rows = test.map(t => ({ t, v: val.find(r => r.model === t.model) })).filter(r => r.v);
-  setText('ovn-gap-rows', rows.map(({ t, v }) => {
-    const champ = t.model === CHAMP, gap = t.pr_auc - v.pr_auc;
-    return `<tr class="${champ ? 'bg-surface-subtle' : ''}"><td class="px-6 py-2 font-sans ${champ ? 'font-bold text-text-primary' : 'text-text-secondary'}">${t.model}${champ ? ' &#9733;' : ''}</td>
-      <td class="px-3 py-2 text-right">${f4(v.pr_auc)}</td><td class="px-3 py-2 text-right">${f4(t.pr_auc)}</td>
-      <td class="px-3 py-2 text-right ${Math.abs(gap) > 0.01 ? 'text-accent-danger font-bold' : 'text-text-secondary'}">${sdFormat(gap, 'signed4')}</td>
-      <td class="px-3 py-2 text-right">${f4(v.log_loss)}</td><td class="px-6 py-2 text-right">${f4(t.log_loss)}</td></tr>`;
-  }).join(''));
   const c = rows.find(r => r.t.model === CHAMP);
   if (c) setText('ovn-gap-note', `The champion scores ${f4(c.v.pr_auc)} PR-AUC on validation and ${f4(c.t.pr_auc)} on test: a gap of ${sdFormat(c.t.pr_auc - c.v.pr_auc, 'signed4')}. The test split is slightly lower, as expected when the model and threshold were picked on validation (see Limitations).`);
 }

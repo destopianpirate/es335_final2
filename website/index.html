@@ -21,15 +21,20 @@
       <!-- VIEW 2: REPORT (full reasoning, data to conclusion) -->
       <div id="view-report" class="view-panel hidden">
         <load ="components/views/overview/report_intro.html" />
+        <load ="components/views/overview/why.html" />
         <load ="components/views/overview/data.html" />
         <load ="components/views/overview/method.html" />
+        <load ="components/views/overview/leakage.html" />
         <load ="components/views/overview/results.html" />
         <load ="components/views/overview/errors.html" />
+        <load ="components/views/overview/failures.html" />
+        <load ="components/views/overview/runtime.html" />
         <load ="components/views/overview/limitations.html" />
       </div>
 
       <!-- VIEW 3: DATA STUDIO (main data points only) -->
       <div id="view-data-studio" class="view-panel hidden">
+        <load ="components/views/data_studio/hero.html" />
         <load ="components/views/data_studio/tables.html" />
         <load ="components/views/data_studio/raw.html" />
         <load ="components/views/data_studio/overlap.html" />
@@ -85,6 +90,9 @@
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
   <script src="js/diagrams.js"></script>
 
+  <script src="js/accent_picker.js"></script>
+  <script src="js/copy_cmd.js"></script>
+  <script src="js/report_hero.js"></script>
   <script src="js/section_rail.js"></script>
   <script src="js/app.js"></script>
 </body>

@@ -1,6 +1,6 @@
     <section id="ovn-data" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 1 of 9: Data"><span class="chap-no" aria-hidden="true">01</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Data</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <div class="chap" aria-label="Section 2 of 16: Data"><span class="chap-no" aria-hidden="true">02</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Data</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Source, size and key variables</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8">
           <strong class="text-text-primary">Source:</strong> the public <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer">Customer Retention Datathon (Riyadh Edition) dataset</a> on Kaggle,
@@ -10,13 +10,13 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Size</h3>
-            <ul class="text-xs text-text-secondary space-y-2 font-mono">
-              <li class="flex justify-between"><span>train_data</span><span><span data-sd="data.train.subscribers" data-fmt="int"></span> rows</span></li>
-              <li class="flex justify-between"><span>kaggle_test_data</span><span><span data-sd="data.kaggle_test.subscribers" data-fmt="int"></span> rows</span></li>
-              <li class="flex justify-between"><span>members</span><span><span data-sd="data.members.rows" data-fmt="int"></span> rows</span></li>
-              <li class="flex justify-between"><span>transactions</span><span><span data-sd="data.transactions.rows" data-fmt="int"></span> rows</span></li>
-              <li class="flex justify-between"><span>user_logs</span><span><span data-sd="data.user_logs.rows" data-fmt="int"></span> rows</span></li>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Size and row meaning</h3>
+            <ul class="text-xs text-text-secondary space-y-2.5 font-mono">
+              <li><div class="flex justify-between"><span>train_data</span><span><span data-sd="data.train.subscribers" data-fmt="int"></span> rows</span></div><div class="font-sans text-[10.5px] text-text-muted">one row = a labelled subscriber</div></li>
+              <li><div class="flex justify-between"><span>kaggle_test_data</span><span><span data-sd="data.kaggle_test.subscribers" data-fmt="int"></span> rows</span></div><div class="font-sans text-[10.5px] text-text-muted">one row = an unlabelled subscriber</div></li>
+              <li><div class="flex justify-between"><span>members</span><span><span data-sd="data.members.rows" data-fmt="int"></span> rows</span></div><div class="font-sans text-[10.5px] text-text-muted">one row = a member profile</div></li>
+              <li><div class="flex justify-between"><span>transactions</span><span><span data-sd="data.transactions.rows" data-fmt="int"></span> rows</span></div><div class="font-sans text-[10.5px] text-text-muted">one row = a payment or plan change</div></li>
+              <li><div class="flex justify-between"><span>user_logs</span><span><span data-sd="data.user_logs.rows" data-fmt="int"></span> rows</span></div><div class="font-sans text-[10.5px] text-text-muted">one row = one subscriber-day of listening</div></li>
             </ul>
             <p class="text-[11px] text-text-muted mt-4">After joining: <span data-sd="data.train.subscribers" data-fmt="int"></span> labelled subscribers &times; <span data-sd="data.features.n_features"></span> features, <span data-sd="data.train.churn_rate" data-fmt="pct2"></span> churn.
               <a href="#data-studio" class="underline">Table-by-table view &rarr;</a></p>
@@ -28,6 +28,7 @@
               <div>
                 <span class="font-bold block mb-1" style="color:#1D4ED8">Billing &bull; 15</span>
                 <p class="text-text-secondary leading-relaxed">From the full transaction history: auto-renew flag and cancel flag of the last transaction, days until the plan expires, plan length, amount paid, payment method, number of transactions, cancellations, discounts.</p>
+                <p class="text-[11px] text-text-muted mt-2">Key raw columns: <code>membership_expire_date</code>, <code>is_auto_renew</code>, <code>is_cancel</code>, <code>transaction_date</code>; they drive the strongest features.</p>
               </div>
               <div>
                 <span class="font-bold block mb-1" style="color:#15803D">Listening &bull; 12</span>
@@ -41,6 +42,74 @@
           </div>
         </div>
 
+        <!-- every model input, by group -->
+        <div id="ovn-data-features" class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mb-8">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">All 33 features, by group</h3>
+          <p class="text-[11px] text-text-secondary mb-5 max-w-3xl">One row per subscriber; every value is computed from data available on 31 March 2017. <code>city</code>, <code>registered_via</code> and <code>last_payment_method</code> are treated as categories. These are the same groups used in the ablation in <a href="#ovn-results" class="underline">Results</a>.</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              <div>
+                <div class="flex items-baseline justify-between gap-3 pb-2 border-b-2" style="border-color:#1D4ED8">
+                  <span class="text-xs font-bold" style="color:#1D4ED8">Billing</span>
+                  <span class="text-[10px] font-mono text-text-muted">15 features</span>
+                </div>
+                <p class="text-[10px] text-text-muted mt-2">From <code>transactions.csv</code>, the full history (1 Jan 2015 to 31 Mar 2017).</p>
+                <ul class="divide-y divide-border-subtle mt-1">
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">has_tx</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">1 = subscriber has any transaction</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">tx_count</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Number of transactions</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">total_paid</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Sum of actual_amount_paid</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">avg_plan_days</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Mean plan length (days)</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">auto_renew_ratio</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Share of transactions with auto-renew on</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">cancel_count</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Number of cancellation transactions</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">discount_count</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Transactions where amount paid is below list price</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">n_payment_methods</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Distinct payment methods used</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">last_payment_method</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Payment method of the last transaction (categorical)</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">last_plan_days</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Plan length of the last transaction</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">last_amount_paid</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Amount paid in the last transaction</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">last_auto_renew</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Auto-renew flag of the last transaction</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">last_is_cancel</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">1 = last transaction is a cancellation</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">days_since_last_tx</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Days from last transaction to cutoff</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">days_until_expiration</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Days from cutoff to expiry (negative = already expired)</span></li>
+                </ul>
+              </div>
+              <div>
+                <div class="flex items-baseline justify-between gap-3 pb-2 border-b-2" style="border-color:#15803D">
+                  <span class="text-xs font-bold" style="color:#15803D">Listening</span>
+                  <span class="text-[10px] font-mono text-text-muted">12 features</span>
+                </div>
+                <p class="text-[10px] text-text-muted mt-2">From <code>user_logs.csv</code>, daily logs for March 2017.</p>
+                <ul class="divide-y divide-border-subtle mt-1">
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">has_logs</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">1 = subscriber has March 2017 logs</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">active_days</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Days with any listening in March</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">total_hours</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Total hours listened in March</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">secs_per_day</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Seconds listened per active day</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">songs_per_day</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Songs played per active day</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">unique_song_ratio</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Unique songs / songs played</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">skip_ratio</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Songs played under 25 % / songs played</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">complete_ratio</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Songs played over 98.5 % / songs played</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">last7_share</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Share of March seconds in the last 7 days</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">active_days_7d</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Active days in the last 7 days of March</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">days_since_last_active</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Days from last listening day to cutoff</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">daily_secs_cv</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Coefficient of variation of daily seconds</span></li>
+                </ul>
+              </div>
+              <div>
+                <div class="flex items-baseline justify-between gap-3 pb-2 border-b-2" style="border-color:#B45309">
+                  <span class="text-xs font-bold" style="color:#B45309">Demographic</span>
+                  <span class="text-[10px] font-mono text-text-muted">6 features</span>
+                </div>
+                <p class="text-[10px] text-text-muted mt-2">From <code>members.csv</code>, the member profile.</p>
+                <ul class="divide-y divide-border-subtle mt-1">
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">city</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">City code (categorical)</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">registered_via</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Registration channel (categorical)</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">gender</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">0 = not given, 1 = female, 2 = male</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">age</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Age from bd, kept only if 10-90, else missing</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">tenure_days</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Days from registration to the 2017-03-31 cutoff</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">has_member</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">1 = subscriber appears in members.csv</span></li>
+                </ul>
+              </div>
+          </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div class="bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
             <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Class balance</h3>
@@ -49,7 +118,7 @@
           </div>
           <div class="bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
             <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Churn by table presence</h3>
-            <p class="text-[11px] text-text-secondary mb-3">P profile, T transactions, L March logs. Missing transactions means very high churn.</p>
+            <p class="text-[11px] text-text-secondary mb-3">Training split. P profile, T transactions, L March logs. Missing transactions means very high churn.</p>
             <div class="h-52 relative"><canvas id="ovn-data-coverage"></canvas></div>
           </div>
           <div class="bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
@@ -68,6 +137,7 @@
             <li><span data-sd="data.user_logs.bad_secs_rows" data-fmt="int"></span> log rows have impossible listening time (&lt; 0 or &gt; 24 h).</li>
             <li>Money and volume columns are heavily right-skewed.</li>
             <li>Listening logs cover one month only (March 2017).</li>
+            <li class="md:col-span-2"><strong class="text-text-primary">Checks that came back clean:</strong> no duplicate IDs in <code>train_data</code>, <code>kaggle_test_data</code> or <code>members</code>; no exact duplicate rows in <code>transactions</code>; no duplicate subscriber-day in <code>user_logs</code>; labels are only 0 and 1; no subscriber is in both the labelled and the Kaggle test list; dates are in range (transactions 1 Jan 2015 &ndash; 31 Mar 2017, logs 1&ndash;31 Mar 2017).</li>
           </ul>
           <p class="text-[11px] text-text-muted mt-4"><strong class="text-text-primary">Access limits.</strong> The data is downloaded from <a href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer" class="underline">its Kaggle page</a> after accepting the competition rules, so the raw CSVs are not in our repository; the README explains how to get them. Subscriber IDs are anonymised hashes and there are no names or contact details. All plots and summaries: <a href="#data-studio" class="underline">Data Studio</a>.</p>
         </div>

@@ -1,0 +1,14 @@
+    <section id="ovn-runtime" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 10 of 16: Runtime model"><span class="chap-no" aria-hidden="true">10</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Runtime model</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">The real model, running in your browser</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">The <a href="#model-predictor" class="underline">Model Predictor</a> page does not call a server and does not use a simplified copy. It runs the exact tuned LightGBM from <code>models/lgbm_champion.txt</code> in JavaScript.</p>
+        <dl class="led">
+          <div class="led-row"><dt><span class="led-big">861</span><span class="led-cap">Trees exported</span></dt>
+            <dd>Notebook 07 writes every tree (split features, thresholds, categorical sets, leaf values) to <code>js/generated/model_lgbm.js</code> (2.9 MB). <code>js/sandbox_engine.js</code> walks each tree the same way LightGBM does, including its rules for missing values and categories, sums the leaves and applies the sigmoid.</dd></div>
+          <div class="led-row"><dt><span class="led-big">16</span><span class="led-cap">Inputs asked</span></dt>
+            <dd><p>The form asks for 16 of the 33 features: the ones a person can actually know about a subscriber, such as plan length, last payment, auto-renew, days to expiry, March listening and age. Asking for all of them would mean typing in a full payment history (number of payments, past cancellations, share of auto-renew payments, discounts, payment methods), which nobody has to hand.</p>
+            <p class="mt-2">The other 17 are handled like this: 3 presence flags are always 1; 6 are worked out from the inputs (for example, days since the last payment = plan length &minus; days to expiry); about 8 history features are filled with the training median of subscribers with the same auto-renew and cancel status. Those 8 carry about 5% of the model's split gain, so the prediction is close to the real model's answer, but it illustrates the model rather than scoring a real subscriber. The page also shows how much each feature pushed the prediction up or down: along each tree's path, the change in node value at every split is credited to that split's feature, so the contributions plus a base value add up exactly to the log-odds (checked in <code>website/tests/check_model_parity.mjs</code>).</p></dd></div>
+        </dl>
+      </div>
+    </section>

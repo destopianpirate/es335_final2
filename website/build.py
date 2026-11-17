@@ -7,6 +7,7 @@ Inlines the HTML partials (<load ="..."/>), copies js/ css/ and the result figur
 import argparse
 import re
 import shutil
+import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -25,10 +26,17 @@ def main():
     ap.add_argument("--repo", default="https://github.com/destopianpirate/es335_final2", help="GitHub repository URL linked from the site")
     args = ap.parse_args()
 
-    if DOCS.exists():
-        shutil.rmtree(DOCS)
-    DOCS.mkdir()
+    # empty docs/ instead of deleting it, so a local server serving the folder can stay running
+    DOCS.mkdir(exist_ok=True)
+    for item in DOCS.iterdir():
+        if item.is_dir():
+            shutil.rmtree(item)
+        else:
+            item.unlink()
     html = inline(HERE / "index.html").replace("{{REPO_URL}}", args.repo.rstrip("/"))
+    # version the local scripts and styles so browsers fetch the new copy after every build
+    ver = str(int(time.time()))
+    html = re.sub(r'((?:src|href)="(?:js|css)/[^"?]+\.(?:js|css))"', rf'\1?v={ver}"', html)
     (DOCS / "index.html").write_text(html, encoding="utf-8")
     for d in ["js", "css"]:
         shutil.copytree(HERE / d, DOCS / d)

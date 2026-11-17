@@ -25,9 +25,9 @@
         </div>
 
         <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mt-8">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">How the five files become one feature matrix</h2>
-          <p class="text-[11px] text-text-secondary mb-4">Each table is cleaned and aggregated to one row per subscriber (<code>msno</code>), then left-joined onto the labels and split. Notebooks 02 and 03.</p>
-          <div class="overflow-x-auto"><div data-mermaid="data-flow" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="Data flow: four raw files aggregated per subscriber, left-joined into a 946,686 by 33 feature matrix, then split into train, validation and test">Loading diagram&hellip;</div></div>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">How the five files become the feature matrices</h2>
+          <p class="text-[11px] text-text-secondary mb-4">Each table is cleaned and aggregated to one row per subscriber (<code>msno</code>), then left-joined onto the two ID lists. The labelled subscribers are split into train, validation and test (notebooks 02 and 03). The Kaggle test subscribers get the same 33 features but have no label; the tuned model predicts them into <code>submission.csv</code> (notebook 07). Dashed boxes: the Kaggle test path.</p>
+          <div class="overflow-x-auto"><div data-mermaid="data-flow" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="Data flow: five raw files; members, transactions and user logs are aggregated per subscriber and left-joined onto the labelled IDs and the Kaggle test IDs. The labelled 946,686 by 33 matrix is split into train, validation and test; the unlabelled 24,274 by 33 Kaggle test matrix is predicted into submission.csv.">Loading diagram&hellip;</div></div>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
@@ -59,6 +59,52 @@
           Data types are what pandas infers from the CSV; dates are stored as YYYYMMDD integers and parsed during feature engineering.
         </p>
         <div id="dsn-raw-schema" class="space-y-3"></div>
+
+        <h2 class="text-xl sm:text-2xl font-extrabold text-text-primary tracking-tight mt-12 mb-2">How we joined them</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-5">
+          The files have different shapes: one row per subscriber, per payment, or per day of listening. Each file is first reduced to
+          <strong class="text-text-primary">one row per subscriber</strong>, then all three are <strong class="text-text-primary">left-joined on <span class="font-mono">msno</span></strong>
+          onto the ID list, in the order members &rarr; transactions &rarr; user_logs. A left join keeps every subscriber in the list, even one missing from a file,
+          so the matrix keeps exactly 946,686 labelled rows (and 24,274 Kaggle test rows, built the same way). Notebook 02.
+        </p>
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+          <table class="w-full text-xs min-w-[880px]">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr><th class="text-left px-4 py-2">File</th><th class="text-left px-4 py-2">Rows per subscriber</th><th class="text-left px-4 py-2 w-[34%]">Reduced to one row by</th><th class="text-left px-4 py-2">Gives</th><th class="text-left px-4 py-2">If the subscriber is not in the file</th></tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle text-text-secondary leading-relaxed">
+                <tr>
+                  <td class="px-4 py-3 align-top font-mono font-semibold text-text-primary whitespace-nowrap">train_data.csv<br/>kaggle_test_data.csv</td>
+                  <td class="px-4 py-3 align-top whitespace-nowrap">1</td>
+                  <td class="px-4 py-3 align-top">The base of each matrix: the list of IDs. Duplicate <code>msno</code> rows are dropped. Only rows for these IDs are kept from the other three files.</td>
+                  <td class="px-4 py-3 align-top"><code>msno</code>, and <code>is_churn</code> for the labelled list</td>
+                  <td class="px-4 py-3 align-top">&ndash;</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 align-top font-mono font-semibold text-text-primary whitespace-nowrap">members.csv</td>
+                  <td class="px-4 py-3 align-top whitespace-nowrap">0 or 1</td>
+                  <td class="px-4 py-3 align-top">Duplicate profiles dropped (last kept). Gender coded 0 / 1 / 2; ages outside 10&ndash;90 set to missing; account age measured to 31 March 2017.</td>
+                  <td class="px-4 py-3 align-top">6 demographic: city, registered_via, gender, age, tenure_days, has_member</td>
+                  <td class="px-4 py-3 align-top"><code>has_member</code> = 0; the profile fields stay missing</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 align-top font-mono font-semibold text-text-primary whitespace-nowrap">transactions.csv</td>
+                  <td class="px-4 py-3 align-top whitespace-nowrap">0 to many</td>
+                  <td class="px-4 py-3 align-top">Sorted by transaction date. Over the whole history: count, total paid, mean plan length, share with auto-renew, cancels, discounts, payment methods. From the <strong>latest</strong> transaction: payment method, plan length, amount, auto-renew, cancel flag, days since it, days until its plan expires.</td>
+                  <td class="px-4 py-3 align-top">15 billing</td>
+                  <td class="px-4 py-3 align-top"><code>has_tx</code> = 0; counts and sums = 0; the latest-transaction fields stay missing</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 align-top font-mono font-semibold text-text-primary whitespace-nowrap">user_logs.csv</td>
+                  <td class="px-4 py-3 align-top whitespace-nowrap">0 to 31<br/><span class="text-text-muted">(one per day)</span></td>
+                  <td class="px-4 py-3 align-top">Read in chunks; daily seconds clipped to [0, 24 h]. Summed over March: active days, hours, songs, unique songs, skips, full plays. The last 7 days (25&ndash;31 March) are counted separately, plus the last active day and day-to-day variation.</td>
+                  <td class="px-4 py-3 align-top">12 listening</td>
+                  <td class="px-4 py-3 align-top"><code>has_logs</code> = 0; totals and ratios = 0; days since last listen = 31</td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-[11px] text-text-muted mt-3 max-w-4xl">After the join, every feature is stored as <span class="font-mono">float32</span>; the gaps that remain (age, city, the latest-transaction fields) are filled inside each model on the training split only, or handled natively by LightGBM. The &ldquo;latest transaction&rdquo; fields are where March renewals enter the features: see <a href="#ovn-leakage" class="underline">Leakage</a> in the Report.</p>
 
         <h2 class="text-xl sm:text-2xl font-extrabold text-text-primary tracking-tight mt-12 mb-2">The feature matrix</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-5">

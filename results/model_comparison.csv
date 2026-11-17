@@ -1,0 +1,5 @@
+comparison,point,low,high,share_above_zero
+LightGBM (tuned) - LightGBM (default),0.0025,0.0016,0.0038,1.0
+LightGBM (tuned) - Random forest,0.0049,0.0041,0.0056,1.0
+LightGBM (tuned) - Logistic regression,0.0698,0.0666,0.0732,1.0
+LightGBM (tuned) - Rule: auto-renew off,0.648,0.6419,0.6536,1.0

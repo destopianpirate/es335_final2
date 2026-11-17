@@ -70,19 +70,6 @@
         </div>
       </div>
 
-      <!-- NAV SECTION 2: MODEL PREDICTOR (single <a>, perfectly centered in collapsed mode) -->
-      <div class="sidebar-accordion">
-        <div id="row-model-predictor" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
-          <a href="#model-predictor" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Model Predictor">
-            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-slate-500 group-hover:text-slate-900 shrink-0">model_training</span>
-            <span class="sidebar-text font-bold text-xs text-slate-800 group-hover:text-slate-900 truncate tracking-tight">Model Predictor</span>
-          </a>
-          <span class="sidebar-arrow p-1 text-slate-400 group-hover:text-slate-700 shrink-0 pointer-events-none" aria-hidden="true">
-            <span class="material-symbols-outlined text-[16px] inline-block">chevron_right</span>
-          </span>
-        </div>
-      </div>
-
       <!-- NAV SECTION 3: DATA STUDIO -->
       <div class="sidebar-accordion">
         <div id="row-data-studio" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
@@ -144,17 +131,23 @@
         <!-- Subheadings under Report (NO grey dot, NO numbers, collapsed by default) -->
         <div id="subheadings-model-portal" class="hidden pl-4 pr-1 py-1.5 space-y-0.5 text-[11px] font-medium bg-transparent">
           <div class="space-y-0.5">
+            <a href="#ovn-why" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Why</span>
+            </a>
             <a href="#ovn-data" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Data</span>
             </a>
             <a href="#ovn-preprocessing" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Preprocessing</span>
             </a>
-            <a href="#ovn-models" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Baseline &amp; Methods</span>
-            </a>
             <a href="#ovn-evaluation" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Evaluation</span>
+            </a>
+            <a href="#ovn-models" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Baseline &amp; methods</span>
+            </a>
+            <a href="#ovn-leakage" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Leakage</span>
             </a>
             <a href="#ovn-results" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Results</span>
@@ -162,16 +155,44 @@
             <a href="#ovn-errors" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Errors</span>
             </a>
+            <a href="#ovn-failures" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Failure modes</span>
+            </a>
+            <a href="#ovn-runtime" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Runtime model</span>
+            </a>
             <a href="#ovn-limitations" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Limitations</span>
             </a>
             <a href="#ovn-conclusion" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Conclusion</span>
             </a>
+            <a href="#ovn-next" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">What next</span>
+            </a>
             <a href="#ovn-repro" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Reproduction Steps</span>
+              <span class="truncate">Reproduction steps</span>
+            </a>
+            <a href="#ovn-ai" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">AI assistance</span>
+            </a>
+            <a href="#ovn-libs" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Libraries &amp; data</span>
             </a>
           </div>
+        </div>
+      </div>
+
+      <!-- NAV SECTION 2: MODEL PREDICTOR (single <a>, perfectly centered in collapsed mode) -->
+      <div class="sidebar-accordion">
+        <div id="row-model-predictor" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
+          <a href="#model-predictor" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Model Predictor">
+            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-slate-500 group-hover:text-slate-900 shrink-0">model_training</span>
+            <span class="sidebar-text font-bold text-xs text-slate-800 group-hover:text-slate-900 truncate tracking-tight">Model Predictor</span>
+          </a>
+          <span class="sidebar-arrow p-1 text-slate-400 group-hover:text-slate-700 shrink-0 pointer-events-none" aria-hidden="true">
+            <span class="material-symbols-outlined text-[16px] inline-block">chevron_right</span>
+          </span>
         </div>
       </div>
 

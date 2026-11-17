@@ -1,21 +1,65 @@
-    <section id="rpt-top" class="pt-12 pb-10 sm:pt-14 border-b border-border-subtle bg-gradient-to-b from-page-bg to-surface-subtle">
+    <section id="rpt-top" class="rh border-b border-border-subtle">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p class="text-[11px] font-bold uppercase tracking-wider text-text-muted mb-2">Report</p>
-        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-text-primary leading-tight mb-4">From the question to the conclusion</h1>
-        <p class="text-sm sm:text-base text-text-secondary leading-relaxed max-w-4xl">
-          <strong class="text-text-primary">Question.</strong> Using only what is known on 31 March 2017, can we predict whether a KKBOX subscriber will churn
-          (no new subscription within 30 days of plan expiry), and does listening behaviour add predictive value beyond billing records?
-          One row is one subscriber; the target is <code>is_churn</code>.
-        </p>
-        <p class="text-xs text-text-secondary leading-relaxed max-w-4xl mt-3">
-          The nine sections below give the full reasoning: data, preprocessing, baseline and methods, evaluation, results, errors, limitations, conclusion and how to reproduce every number.
-          A short summary is on the <a href="#home" class="underline">Home</a> page; the raw data in detail is in the <a href="#data-studio" class="underline">Data Studio</a>.
-        </p>
 
-        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mt-8">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">How this report is built</h2>
-          <p class="text-[11px] text-text-secondary mb-4">The nine sections in reading order. Every model choice uses the validation split; the test split is scored once, in Results. Click a box to jump to that section.</p>
-          <div class="overflow-x-auto"><div data-mermaid="report-pipeline" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="Report structure: question, 01 data, 02 preprocessing, 03 baseline and methods, 04 evaluation, 05 results, 06 errors, 07 limitations, 08 conclusion, 09 reproduction">Loading diagram&hellip;</div></div>
+
+        <h1 class="rh-title">
+          <span class="rh-line"><span>From the question to the conclusion<i class="rh-dot" aria-hidden="true">.</i></span></span>
+        </h1>
+
+        <div class="rh-lede">
+          <p class="rh-q">Using only what is known on <em>31&nbsp;March&nbsp;2017</em>, can we predict which KKBOX subscribers <em>whose plan expires in March&nbsp;2017</em> will leave &mdash; and does what they <em>listen</em> to say more than what they <em>pay</em>?</p>
+          <p class="rh-def"><strong>Target</strong> <code>is_churn</code>: no new valid subscription within 30 days of that plan's expiry. <strong>Unit</strong>: one subscriber, 946,686 of them; 9% churn. The test split was scored once.</p>
         </div>
+
+        <!-- What the model may use, and the limits of the claim -->
+        <div class="rh-use" aria-label="What the model may use at prediction time">
+          <div><h3>Main setting &middot; cutoff 31&nbsp;March</h3><p>Profile, billing up to 31 March, March listening. An <strong>upper bound</strong>: most labelled plans have already expired, so the billing record often already shows the renewal.</p></div>
+          <div><h3>Stricter setting &middot; billing cut at 1&nbsp;March</h3><p>Profile, billing from before 1 March (before any labelled plan expires), March listening. Closer to an early warning, but listening still runs to 31 March.</p></div>
+          <div><h3>Never used</h3><p>Anything dated after 31 March 2017, and the label itself. Every choice is made on validation; test is scored once.</p></div>
+        </div>
+        <p class="rh-scope"><strong>Scope of the claim.</strong> One cohort of one service (KKBOX plans expiring in March 2017), a random split within that month, and association, not cause: the scores say who is likely to leave, not why, and not how a later month would look.</p>
+
+        <!-- Figure: every headline score on one scale -->
+        <figure class="rh-fig" aria-label="Test PR-AUC on a 0 to 1 scale: guessing 0.0899, auto-renew rule 0.3164, LightGBM with billing cut at 1 March 0.5682, final LightGBM at 31 March 0.9644">
+          <div class="rh-scale">
+            <div class="rh-track" aria-hidden="true"></div>
+            <div class="rh-mk" style="--x:.0899; --i:0"><b data-to="0.0899">0.0899</b><span>Guessing</span></div>
+            <div class="rh-mk" style="--x:.3164; --i:1"><b data-to="0.3164">0.3164</b><span>Rule: auto-renew off</span></div>
+            <div class="rh-mk" style="--x:.5682; --i:2"><b data-to="0.5682">0.5682</b><span>Billing cut at 1&nbsp;March</span></div>
+            <div class="rh-mk rh-key" style="--x:.9644; --i:3"><b data-to="0.9644">0.9644</b><span>Final model, 31&nbsp;March</span></div>
+          </div>
+        </figure>
+
+        <!-- The answer in short -->
+        <div class="rh-answers">
+          <h2 class="rh-label">The answer in short</h2>
+          <ol>
+            <li>
+              <span class="rh-n">01</span>
+              <strong>Very predictable on 31 March, but that is an upper bound.</strong>
+              <p>The tuned LightGBM reaches PR-AUC 0.9644 [0.9624, 0.9664], against 0.3164 for a one-line rule. March billing often already records the renewal; with billing cut at 1 March (listening still through March) it reaches 0.5682.</p>
+              <a href="#ovn-results">Results</a>
+            </li>
+            <li>
+              <span class="rh-n">02</span>
+              <strong>Billing does almost all the work.</strong>
+              <p>Billing alone reaches 0.9562. Listening adds only +0.0083 [0.0073, 0.0093].</p>
+              <a href="#ovn-results">Ablation</a>
+            </li>
+            <li>
+              <span class="rh-n">03</span>
+              <strong>Listening matters more when billing is hidden, partly.</strong>
+              <p>Cut billing at 1 March and listening is worth +0.1474 [0.1426, 0.1524], eighteen times more, though part of it may come from listening after a plan has lapsed.</p>
+              <a href="#ovn-strict">Strict check</a>
+            </li>
+          </ol>
+        </div>
+
+        <!-- Contents -->
+        <nav class="rh-contents" aria-label="On this page">
+          <h2 class="rh-label">Contents</h2>
+          <ol class="toc-list rh-toc"><li><a href="#ovn-why"><span>01</span>Why</a></li><li><a href="#ovn-data"><span>02</span>Data</a></li><li><a href="#ovn-preprocessing"><span>03</span>Preprocessing</a></li><li><a href="#ovn-evaluation"><span>04</span>Evaluation</a></li><li><a href="#ovn-models"><span>05</span>Baseline and methods</a></li><li><a href="#ovn-leakage"><span>06</span>Leakage</a></li><li><a href="#ovn-results"><span>07</span>Results</a></li><li><a href="#ovn-errors"><span>08</span>Errors</a></li><li><a href="#ovn-failures"><span>09</span>Failure modes</a></li><li><a href="#ovn-runtime"><span>10</span>Runtime model</a></li><li><a href="#ovn-limitations"><span>11</span>Limitations</a></li><li><a href="#ovn-conclusion"><span>12</span>Conclusion</a></li><li><a href="#ovn-next"><span>13</span>What next</a></li><li><a href="#ovn-repro"><span>14</span>Reproduction steps</a></li><li><a href="#ovn-ai"><span>15</span>AI assistance</a></li><li><a href="#ovn-libs"><span>16</span>Libraries and data</a></li></ol>
+        </nav>
+
       </div>
     </section>

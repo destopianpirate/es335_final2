@@ -1,6 +1,6 @@
     <section id="ovn-limitations" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 7 of 9: Limitations"><span class="chap-no" aria-hidden="true">07</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Limitations</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <div class="chap" aria-label="Section 11 of 16: Limitations"><span class="chap-no" aria-hidden="true">11</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Limitations</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">What these results do not show</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
@@ -9,7 +9,7 @@
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">One snapshot, random split</h3>
-            <p class="text-text-secondary leading-relaxed">Train and test subscribers come from the same month. We do not show that the model keeps working for a later month, when prices, promotions or user mix may change.</p>
+            <p class="text-text-secondary leading-relaxed">Train and test subscribers come from the same month. We do not show that the model keeps working for a later month, when prices, promotions or user mix may change. A split by time was not possible: the dataset labels only one cohort (plans expiring in March 2017), and the listening logs cover that month only. So we used a stratified random split by subscriber, which keeps each subscriber in one split and the churn rate equal across splits, and we state that the scores hold for this month&rsquo;s population, not for future months.</p>
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">Hard cases stay hard</h3>
@@ -45,43 +45,164 @@
 
     <section id="ovn-conclusion" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-card">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 8 of 9: Conclusion"><span class="chap-no" aria-hidden="true">08</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Conclusion</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <div class="chap" aria-label="Section 12 of 16: Conclusion"><span class="chap-no" aria-hidden="true">12</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Conclusion</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Answer to the question</h2>
+        <div class="callout mb-6 max-w-5xl">
+          <h3>Which number to quote</h3>
+          <p><strong>0.9644</strong> is an upper bound: at 31 March the billing record often already shows whether the subscriber renewed, so it measures how well the model reads that record, not how early it can warn. <strong>0.5682</strong> [0.5610, 0.5757] is the closer-to-early-warning score: billing from before 1 March, before any labelled plan expires, plus March listening (6.3&times; the no-skill level). It is still not a pure 1 March prediction, because the listening features run to 31 March; a true one would cut listening too (see What next).</p>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm" id="ovn-conclusion-cards"></div>
         <p class="text-xs text-text-secondary mt-6 max-w-4xl leading-relaxed" id="ovn-conclusion-text"></p>
       </div>
     </section>
 
+    <section id="ovn-next" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 13 of 16: What next"><span class="chap-no" aria-hidden="true">13</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">What next</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">What we would do next</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Split by time, not at random</h3><p class="text-text-secondary leading-relaxed">Train on earlier months and test on a later one, to see how the model holds up as behaviour and prices drift.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Cut listening at each subscriber's expiry</h3><p class="text-text-secondary leading-relaxed">So the strict check has no post-expiry signal at all, and the listening gain at 1 March can be read cleanly.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Choose the threshold by cost</h3><p class="text-text-secondary leading-relaxed">Set &tau; from the real cost of a lost subscriber versus a wasted offer, instead of F1, which weighs them equally.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">A model for soon-expiring plans</h3><p class="text-text-secondary leading-relaxed">Plans expiring within 30 days of the cutoff are where recall drops to 0.595; a model trained only on them could use listening trends more.</p></div>
+        </div>
+      </div>
+    </section>
+
     <section id="ovn-repro" class="py-14 sm:py-16 bg-surface-subtle">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 9 of 9: Reproduction steps"><span class="chap-no" aria-hidden="true">09</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Reproduction steps</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Everything on this page comes from seven notebooks</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
-            <ol class="text-xs text-text-secondary space-y-2 list-decimal pl-4">
-              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/01_raw_data_analysis.ipynb">01_raw_data_analysis</a>: detailed analysis of the 5 raw tables.</li>
-              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/02_feature_engineering.ipynb">02_feature_engineering</a>: one row per subscriber, 33 features.</li>
-              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/03_feature_analysis_and_split.ipynb">03_feature_analysis_and_split</a>: the 70/10/20 split, then feature plots on the training split.</li>
-              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/04_baselines.ipynb">04_baselines</a>: majority and rule baselines, tuned logistic regression.</li>
-              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/05_tree_models_and_tuning.ipynb">05_tree_models_and_tuning</a>: random forest grid, LightGBM with Optuna, threshold, ablation.</li>
-              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/06_test_evaluation.ipynb">06_test_evaluation</a>: test metrics, all curves, bootstrap, error analysis.</li>
-              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/07_website_export.ipynb">07_website_export</a>: numbers and the browser model for this site.</li>
-              <li><a class="underline font-mono text-text-primary" href="{{REPO_URL}}/blob/main/notebooks/08_strict_cutoff.ipynb">08_strict_cutoff</a>: sensitivity check with billing cut at 1 March (run before 07).</li>
-            </ol>
-            <p class="text-[11px] text-text-muted mt-4">Full metric tables: <a class="underline" href="{{REPO_URL}}/blob/main/results/test_metrics.csv">results/test_metrics.csv</a>, <a class="underline" href="{{REPO_URL}}/blob/main/results/validation_metrics.csv">results/validation_metrics.csv</a>, <a class="underline" href="{{REPO_URL}}/blob/main/results/strict_cutoff_metrics.csv">results/strict_cutoff_metrics.csv</a>. Setup, data download, AI-use disclosure and citations: <a class="underline" href="{{REPO_URL}}#readme">README</a>.</p>
-          </div>
-          <div class="bg-[#121212] text-[#E2E8F0] rounded-2xl p-6 font-mono text-[11px] leading-relaxed overflow-x-auto">
-<pre># 1. put the 5 Kaggle CSVs in data/raw/
-pip install -r requirements.txt
-cd notebooks
-for nb in 01 02 03 04 05 06 08 07; do   # 08 before 07
+        <div class="chap" aria-label="Section 14 of 16: Reproduction steps"><span class="chap-no" aria-hidden="true">14</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Reproduction steps</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-2">Everything on this page comes from eight notebooks and two scripts</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-3xl mb-8">Six steps from the raw Kaggle files to this website. Run them from the repository root.</p>
+        <ol class="rp-steps">
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">01</span>
+              <div class="rp-body">
+                <h3>Get the data</h3>
+                <p>Download the five CSVs from <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer">Kaggle</a> (accept the competition rules first) and put them in <code>data/raw/</code>. The README lists which Kaggle file becomes which name.</p>
+                
+                
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">02</span>
+              <div class="rp-body">
+                <h3>Install</h3>
+                <p>Python 3.11 or newer. Exact versions are pinned in <code>requirements.txt</code>.</p>
+                <div class="rp-cmd"><pre><code>pip install -r requirements.txt</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">03</span>
+              <div class="rp-body">
+                <h3>Run the notebooks</h3>
+                <p>In this order; 08 runs before 07 because 07 exports its results. About 30 minutes and 8 GB of RAM in total.</p>
+                <div class="rp-cmd"><pre><code>cd notebooks
+for nb in 01 02 03 04 05 06 08 07; do
   jupyter nbconvert --to notebook --execute --inplace ${nb}_*.ipynb
 done
-# 2. rebuild this website into docs/
-cd .. &amp;&amp; python scripts/export_ds_extra.py
-python website/build.py
-node website/tests/check_model_parity.mjs   # browser model == Python</pre>
+cd ..</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                <ol class="rp-nbs">
+                  <li><a href="{{REPO_URL}}/blob/main/notebooks/01_raw_data_analysis.ipynb"><span>01</span>raw_data_analysis</a><em>the 5 raw tables</em></li>
+                  <li><a href="{{REPO_URL}}/blob/main/notebooks/02_feature_engineering.ipynb"><span>02</span>feature_engineering</a><em>one row per subscriber, 33 features</em></li>
+                  <li><a href="{{REPO_URL}}/blob/main/notebooks/03_feature_analysis_and_split.ipynb"><span>03</span>feature_analysis_and_split</a><em>70 / 10 / 20 split, feature plots</em></li>
+                  <li><a href="{{REPO_URL}}/blob/main/notebooks/04_baselines.ipynb"><span>04</span>baselines</a><em>majority, rule, logistic regression</em></li>
+                  <li><a href="{{REPO_URL}}/blob/main/notebooks/05_tree_models_and_tuning.ipynb"><span>05</span>tree_models_and_tuning</a><em>random forest, LightGBM + Optuna, threshold, ablation</em></li>
+                  <li><a href="{{REPO_URL}}/blob/main/notebooks/06_test_evaluation.ipynb"><span>06</span>test_evaluation</a><em>test metrics, curves, bootstrap, errors</em></li>
+                  <li><a href="{{REPO_URL}}/blob/main/notebooks/08_strict_cutoff.ipynb"><span>08</span>strict_cutoff</a><em>billing cut at 1 March (run before 07)</em></li>
+                  <li><a href="{{REPO_URL}}/blob/main/notebooks/07_website_export.ipynb"><span>07</span>website_export</a><em>numbers and the browser model for this site</em></li>
+                </ol>
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">04</span>
+              <div class="rp-body">
+                <h3>Export the extra tables</h3>
+                <p>Data Studio tables that need the raw files, and every model scored on validation and test.</p>
+                <div class="rp-cmd"><pre><code>python scripts/export_ds_extra.py
+python scripts/export_val_test_metrics.py</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">05</span>
+              <div class="rp-body">
+                <h3>Build and open the site</h3>
+                <p>Writes the site to <code>docs/</code> and serves it locally.</p>
+                <div class="rp-cmd"><pre><code>python website/build.py
+python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">06</span>
+              <div class="rp-body">
+                <h3>Check (optional)</h3>
+                <p>The browser model should match Python, and <a class="underline" href="{{REPO_URL}}/blob/main/results/test_metrics.csv">results/test_metrics.csv</a> should show the tuned LightGBM at PR-AUC 0.9644.</p>
+                <div class="rp-cmd"><pre><code>node website/tests/check_model_parity.mjs</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                
+              </div>
+            </li>
+        </ol>
+        <p class="rp-files">Metric tables: <a class="underline" href="{{REPO_URL}}/blob/main/results/test_metrics.csv">test_metrics.csv</a> &middot; <a class="underline" href="{{REPO_URL}}/blob/main/results/validation_metrics.csv">validation_metrics.csv</a> &middot; <a class="underline" href="{{REPO_URL}}/blob/main/results/val_test_metrics.csv">val_test_metrics.csv</a> &middot; <a class="underline" href="{{REPO_URL}}/blob/main/results/model_comparison.csv">model_comparison.csv</a> &middot; <a class="underline" href="{{REPO_URL}}/blob/main/results/strict_cutoff_metrics.csv">strict_cutoff_metrics.csv</a>. Setup details, data access and citations: <a class="underline" href="{{REPO_URL}}#readme">README</a>.</p>
+      </div>
+    </section>
+
+    <section id="ovn-ai" class="py-14 sm:py-16 border-t border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 15 of 16: AI assistance"><span class="chap-no" aria-hidden="true">15</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">AI assistance</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">How we used AI tools</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-sm text-text-secondary leading-relaxed">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">What AI helped with</h3>
+            <ul class="list-disc pl-5 space-y-2">
+              <li>Building this website: layout, styling, charts, the Data Studio and the in-browser predictor.</li>
+              <li>Drafting and checking explanatory text on this page and in the README.</li>
+            </ul>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">What we did</h3>
+            <ul class="list-disc pl-5 space-y-2">
+              <li>Formulated the research question and chose the dataset.</li>
+              <li>Ran every notebook, checked the numbers, and reviewed every change to the site and repository.</li>
+            </ul>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section id="ovn-libs" class="py-14 sm:py-16 border-t border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 16 of 16: Libraries and data"><span class="chap-no" aria-hidden="true">16</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Libraries and data</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">What this project is built on</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs text-text-secondary leading-relaxed">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Libraries</h3>
+            <ul class="space-y-1.5">
+              <li><strong class="text-text-primary">LightGBM</strong> (Ke et al., 2017): gradient-boosted trees, and the model exported to this page.</li>
+              <li><strong class="text-text-primary">Optuna</strong> (Akiba et al., 2019): hyperparameter search.</li>
+              <li><strong class="text-text-primary">scikit-learn</strong> (Pedregosa et al., 2011): logistic regression, random forest, split and metrics.</li>
+              <li><strong class="text-text-primary">pandas, NumPy, PyArrow</strong>: tables, features and bootstrap resampling.</li>
+              <li><strong class="text-text-primary">Matplotlib</strong>: the notebook figures; <strong class="text-text-primary">joblib</strong>: saved models.</li>
+              <li><strong class="text-text-primary">Chart.js, Tailwind CSS, Mermaid</strong>: charts, styling and diagrams on this site.</li>
+            </ul>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Data and references</h3>
+            <ul class="space-y-1.5">
+              <li><strong class="text-text-primary">Data:</strong> <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data">Kaggle, Customer Retention Datathon (Riyadh Edition)</a>, from KKBOX's WSDM 2017 churn challenge.</li>
+              <li>Ke, G. et al. LightGBM: A Highly Efficient Gradient Boosting Decision Tree. NeurIPS 2017.</li>
+              <li>Akiba, T. et al. Optuna: A Next-generation Hyperparameter Optimization Framework. KDD 2019.</li>
+              <li>Pedregosa, F. et al. Scikit-learn: Machine Learning in Python. JMLR 12, 2011.</li>
+              <li>Saito, T. and Rehmsmeier, M. The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets. PLoS ONE 10(3), 2015.</li>
+            </ul>
+            <p class="mt-3">Full setup and citations: <a class="underline" href="{{REPO_URL}}#readme">README</a>.</p>
+          </div>
+        </div>
+        <a href="#model-predictor" class="next-cta">
+          <span><small>Next</small><b>Go to the Model Predictor</b><em>Score a subscriber yourself with the real model</em></span>
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+        </a>
       </div>
     </section>

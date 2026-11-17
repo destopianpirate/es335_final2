@@ -30,44 +30,79 @@ const DIAGRAMS = {
   'report-pipeline': `flowchart TB
     subgraph R1[" "]
       direction LR
-      Q["Question<br/>churn within 30 days<br/>of a March 2017 expiry"] --> D["01 Data<br/>5 Kaggle tables<br/>946,686 subscribers"] --> P["02 Preprocessing<br/>1 row per subscriber<br/>33 features, cutoff 31 Mar"] --> M["03 Baseline and methods<br/>majority, auto-renew rule,<br/>logistic regression, RF, LightGBM"] --> E["04 Evaluation<br/>70 / 10 / 20 split, tuning<br/>and threshold on validation"]
+      W["01 Why<br/>act before<br/>plans run out"] --> D["02 Data<br/>5 Kaggle tables<br/>946,686 subscribers"] --> P["03 Preprocessing<br/>1 row per subscriber<br/>33 features, cutoff 31 Mar"] --> E["04 Evaluation<br/>70 / 10 / 20 split,<br/>PR-AUC, bootstrap"] --> M["05 Baseline and methods<br/>majority, rule, LR,<br/>RF, LightGBM"] --> LK["06 Leakage<br/>cutoff, March overlap,<br/>strict 1 Mar check"]
     end
     subgraph R2[" "]
       direction LR
-      RS["05 Results<br/>test scored once,<br/>bootstrap CIs, strict 1 Mar check"] --> ER["06 Errors<br/>segments, missed<br/>churners, examples"] --> L["07 Limitations<br/>label overlap, one month,<br/>association not cause"] --> C["08 Conclusion<br/>what billing and<br/>listening add"] --> RP["09 Reproduction<br/>notebooks 01 to 08"]
+      RS["07 Results<br/>test scored once"] --> ER["08 Errors<br/>segments, examples"] --> F["09 Failure modes<br/>4 groups"] --> RT["10 Runtime model<br/>LightGBM in the browser"] --> L["11 Limitations"]
     end
-    R1 --> R2
+    subgraph R3[" "]
+      direction LR
+      C["12 Conclusion"] --> NX["13 What next"] --> RP["14 Reproduction<br/>notebooks 01 to 08"] --> AI["15 AI assistance"] --> LB["16 Libraries<br/>and data"]
+    end
+    R1 --> R2 --> R3
     classDef key stroke-width:2px
     class RS,C key
     style R1 fill:none,stroke:none
-    style R2 fill:none,stroke:none`,
+    style R2 fill:none,stroke:none
+    style R3 fill:none,stroke:none`,
+
+  // Report, Leakage: what each cutoff can see on the timeline, and what it scores
+  'leakage-timeline': () => {
+    const S = window.SITE_DATA || {};
+    const st = S.strict || {};
+    const ov = st.overlap || [];
+    const withM = ov.find(o => o.march_tx) || {}, without = ov.find(o => !o.march_tx) || {};
+    const pct = v => (typeof v === 'number' ? (v * 100).toFixed(1) + '%' : '?');
+    const sm = n => ((st.metrics || []).find(m => m.model === n) || {}).pr_auc;
+    const champ = ((S.test_metrics || []).find(m => m.model === 'LightGBM (tuned)') || {}).pr_auc;
+    const g = st.listening_gain || {};
+    return `flowchart LR
+    H["Jan 2015 to Feb 2017<br/>billing history<br/>plans, payments, auto-renew"] --- C1(["1 March 2017<br/>strict cutoff"])
+    C1 --- MAR["March 2017<br/>labelled plans expire, renewals paid,<br/>listening logs recorded<br/>${pct(withM.share)} pay in March: churn ${pct(withM.churn_rate)}<br/>no March payment: churn ${pct(without.churn_rate)}"]
+    MAR --- C2(["31 March 2017<br/>main cutoff"])
+    C2 --- LAB["April 2017<br/>30 days after each expiry<br/>is_churn decided"]
+    C1 ==> B["Model at 1 March<br/>billing before March only<br/>PR-AUC ${dgF4(sm('Strict billing + demographics + listening'))}<br/>listening adds ${dgSgn(g.mean)}"]
+    C2 ==> A["Model at 31 March<br/>sees March renewals<br/>PR-AUC ${dgF4(champ)}"]
+    classDef cut stroke-width:2px
+    classDef key stroke-width:2px
+    class C1,C2 cut
+    class A,B key`;
+  },
 
   'data-flow': `flowchart LR
-    subgraph RAW["Raw Kaggle files"]
+    subgraph RAW["Five raw Kaggle files"]
       direction TB
-      L["train_data.csv<br/>labels is_churn"]
+      L["train_data.csv<br/>946,686 msno + is_churn"]
+      K["kaggle_test_data.csv<br/>24,274 msno, no label"]
       M["members.csv<br/>city, age, gender, registration"]
       T["transactions.csv<br/>plans, payments, auto-renew, cancels"]
       U["user_logs.csv<br/>daily listening, March 2017"]
     end
-    M --> AM["Clean profile<br/>invalid ages to missing"]
+    M --> AM["Clean profile<br/>invalid ages to missing<br/>6 demographic features"]
     T --> AT["Aggregate per subscriber<br/>15 billing features"]
     U --> AU["Aggregate per subscriber<br/>12 listening features<br/>daily secs clipped to 24 h"]
     L --> J
+    K --> J
     AM --> J
     AT --> J
     AU --> J
-    J["Left join on msno<br/>nobody dropped<br/>has_member / has_tx / has_logs"] --> FM["Feature matrix<br/>946,686 x 33"]
+    J["Left join on msno<br/>both ID lists, nobody dropped<br/>has_member / has_tx / has_logs"] --> FM["Labelled matrix<br/>946,686 x 33"]
+    J --> KM["Kaggle test matrix<br/>24,274 x 33, no label"]
     FM --> TR["Train 70%<br/>fit"]
     FM --> VA["Validation 10%<br/>tuning, threshold"]
-    FM --> TE["Test 20%<br/>scored once"]`,
+    FM --> TE["Test 20%<br/>scored once"]
+    KM --> SUB["submission.csv<br/>churn probability from<br/>the tuned LightGBM<br/>scored by Kaggle, not here"]
+    classDef side stroke-dasharray:4 3
+    class K,KM,SUB side`,
 };
 
 // Boxes that jump to a page section when clicked (diagram key -> node id -> element id)
 const DIAGRAM_LINKS = {
-  'report-pipeline': { D: 'ovn-data', P: 'ovn-preprocessing', M: 'ovn-models', E: 'ovn-evaluation', RS: 'ovn-results',
-                       ER: 'ovn-errors', L: 'ovn-limitations', C: 'ovn-conclusion', RP: 'ovn-repro' },
+  'report-pipeline': { W: 'ovn-why', D: 'ovn-data', P: 'ovn-preprocessing', M: 'ovn-models', E: 'ovn-evaluation', LK: 'ovn-leakage', RS: 'ovn-results',
+                       ER: 'ovn-errors', F: 'ovn-failures', RT: 'ovn-runtime', L: 'ovn-limitations', C: 'ovn-conclusion', NX: 'ovn-next', RP: 'ovn-repro', AI: 'ovn-ai', LB: 'ovn-libs' },
   'home-answer': { A2: 'ovn-results', B1: 'ovn-strict', B2: 'ovn-strict' },
+  'leakage-timeline': { A: 'ovn-results', B: 'ovn-strict' },
 };
 
 (function () {

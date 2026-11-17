@@ -141,10 +141,18 @@ function dsnRenderSchema() {
       pane.classList.remove('fs-in'); void pane.offsetWidth; pane.classList.add('fs-in');
     };
     raw.className = 'fs';
+    // one icon per kind of file: labels, unlabelled IDs, profiles, payments, listening
+    const ICON = { 'train_data.csv': 'label', 'kaggle_test_data.csv': 'label_off', 'members.csv': 'person',
+                   'transactions.csv': 'payments', 'user_logs.csv': 'headphones' };
+    const rowsOf = f => { const ti = TABLE_INFO.find(t => t.file === f); const v = ti ? sdGet('data.' + ti.rows) : null; return typeof v === 'number' ? sdFormat(v, 'int') + ' rows' : ''; };
     raw.innerHTML = `<div class="fs-list" role="tablist" aria-label="Raw files">${RAW_SCHEMA.map(t => `
       <button type="button" role="tab" class="fs-item" data-file="${t.file}">
-        <span class="fs-name">${t.file}</span>
-        <span class="fs-count">${t.cols.length} column${t.cols.length > 1 ? 's' : ''}</span>
+        <span class="fs-ic material-symbols-outlined" aria-hidden="true">${ICON[t.file] || 'description'}</span>
+        <span class="fs-text">
+          <span class="fs-name">${t.file}</span>
+          <span class="fs-sub">${rowsOf(t.file)}</span>
+        </span>
+        <span class="fs-count"><b>${t.cols.length}</b>col${t.cols.length > 1 ? 's' : ''}</span>
       </button>`).join('')}</div><div class="fs-pane" role="tabpanel"></div>`;
     raw.querySelector('.fs-list').addEventListener('click', e => { const b = e.target.closest('.fs-item'); if (b) show(b.dataset.file); });
     show(RAW_SCHEMA[0].file);

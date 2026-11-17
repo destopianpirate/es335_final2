@@ -150,47 +150,80 @@
     if (!toast) {
       toast = document.createElement('div');
       toast.id = 'day-gradients-toast';
-      toast.className = 'fixed bottom-6 right-6 z-[9999] pointer-events-none transition-all duration-300';
+      toast.className = 'fixed right-6 z-[9999] transition-all duration-300';
+      toast.style.bottom = '76px';   // above the palette button
       document.body.appendChild(toast);
+      // stays open while the pointer is on it, so a colour can be picked
+      toast.addEventListener('mouseenter', function () { toast._hover = true; holdToast(); });
+      toast.addEventListener('mouseleave', function () { toast._hover = false; hideToastLater(1200); });
+      toast.addEventListener('click', function (e) {
+        const b = e.target.closest('[data-accent]');
+        if (!b || !window.setAccent) return;
+        window.setAccent(b.dataset.accent);
+        toast.querySelectorAll('[data-accent]').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      });
     }
+    toast.style.pointerEvents = 'auto';
 
     const stateText = isActive ? 'Activated' : 'Deactivated';
     const badgeClass = isActive
       ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
       : 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/30';
 
+    const colors = window.accentColors || [];
+    const cur = window.currentAccent ? window.currentAccent() : '';
+    const swatches = colors.map(function (c) {
+      return `<button type="button" class="dg-swatch" data-accent="${c.hex}" title="${c.name}" aria-label="${c.name}" aria-pressed="${c.hex === cur ? 'true' : 'false'}" style="--c:${c.hex}"></button>`;
+    }).join('');
+
     toast.innerHTML = `
-      <div class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-white/95 dark:bg-[#1C1C1E]/95 backdrop-blur-md border border-slate-200 dark:border-zinc-700 shadow-xl text-xs font-semibold text-slate-800 dark:text-zinc-100">
-        <span class="material-symbols-outlined text-[18px] text-blue-600 dark:text-blue-400">palette</span>
-        <span>Day Section Gradients:</span>
-        <span class="px-2 py-0.5 rounded-lg border text-[11px] font-bold ${badgeClass}">${stateText}</span>
-        <span class="text-[10px] text-slate-400 font-mono ml-1">Ctrl + /</span>
+      <div class="inline-flex flex-col gap-2.5 px-4 py-3 rounded-2xl bg-white/95 dark:bg-[#1C1C1E]/95 backdrop-blur-md border border-slate-200 dark:border-zinc-700 shadow-xl text-xs font-semibold text-slate-800 dark:text-zinc-100">
+        <div class="inline-flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[18px] text-blue-600 dark:text-blue-400">palette</span>
+          <span>Day Section Gradients:</span>
+          <span class="px-2 py-0.5 rounded-lg border text-[11px] font-bold ${badgeClass}">${stateText}</span>
+          <span class="text-[10px] text-slate-400 font-mono ml-1">Ctrl + /</span>
+        </div>
+        ${swatches ? `<div class="inline-flex items-center justify-between gap-3 pt-2.5 border-t border-slate-200 dark:border-zinc-700">
+          <span class="text-[11px] text-slate-500 dark:text-zinc-400">Accent colour</span>
+          <span class="dg-row">${swatches}</span>
+        </div>` : ''}
       </div>
     `;
 
+    toast._hover = false;
     if (window.gsap) {
       gsap.killTweensOf(toast);
       gsap.fromTo(toast, { opacity: 0, y: 12, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.22, ease: 'power2.out' });
-      gsap.to(toast, {
-        opacity: 0,
-        y: 8,
-        scale: 0.96,
-        duration: 0.28,
-        delay: 2.2,
-        ease: 'power2.in',
-        onComplete: function () {
-          if (toast) toast.innerHTML = '';
-        }
-      });
     } else {
       toast.style.opacity = '1';
       toast.style.transform = 'translateY(0)';
-      clearTimeout(toast._timer);
-      toast._timer = setTimeout(function () {
+    }
+    hideToastLater(3500);
+  }
+
+  // keep the toast up (pointer on it) / fade it out after a pause
+  function holdToast() {
+    const toast = document.getElementById('day-gradients-toast');
+    if (!toast) return;
+    clearTimeout(toast._timer);
+    if (window.gsap) { gsap.killTweensOf(toast); gsap.to(toast, { opacity: 1, y: 0, scale: 1, duration: 0.15 }); }
+    else { toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; }
+  }
+  function hideToastLater(ms) {
+    const toast = document.getElementById('day-gradients-toast');
+    if (!toast) return;
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(function () {
+      if (toast._hover) return;
+      toast.style.pointerEvents = 'none';
+      if (window.gsap) {
+        gsap.to(toast, { opacity: 0, y: 8, scale: 0.96, duration: 0.28, ease: 'power2.in', onComplete: function () { if (!toast._hover) toast.innerHTML = ''; } });
+      } else {
         toast.style.opacity = '0';
         toast.style.transform = 'translateY(8px)';
-      }, 2200);
-    }
+      }
+    }, ms);
   }
 
   function toggleDayGradients() {

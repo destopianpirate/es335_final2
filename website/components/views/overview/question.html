@@ -23,24 +23,24 @@
             <div class="lg:col-span-3 hero-rise" style="--d:500ms">
             <nav class="hero-index" aria-label="Where to go next">
               <p class="hi-kicker">Where to start</p>
-              <a class="hi-row" href="#model-predictor">
-                <span class="hi-no">01</span>
-                <span class="hi-body"><b>Model</b><small>Score a subscriber yourself</small></span>
-                <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-              </a>
               <a class="hi-row" href="#data-studio">
-                <span class="hi-no">02</span>
+                <span class="hi-no">01</span>
                 <span class="hi-body"><b>Data Studio</b><small>Five tables, 33 features, every plot</small></span>
                 <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
               <a class="hi-row" href="#report">
-                <span class="hi-no">03</span>
+                <span class="hi-no">02</span>
                 <span class="hi-body"><b>Report</b><small>Full reasoning, question to conclusion</small></span>
                 <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
               <a class="hi-row" href="#ovn-results">
-                <span class="hi-no">04</span>
+                <span class="hi-no">03</span>
                 <span class="hi-body"><b>Results</b><small>Six models, one untouched test split</small></span>
+                <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </a>
+              <a class="hi-row" href="#model-predictor">
+                <span class="hi-no">04</span>
+                <span class="hi-body"><b>Model</b><small>Score a subscriber yourself</small></span>
                 <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
               <a class="hi-repo" href="{{REPO_URL}}" target="_blank" rel="noopener noreferrer" aria-label="Open the repository on GitHub">
@@ -57,7 +57,7 @@
           <div class="flex flex-col sm:flex-row items-start justify-between gap-4">
             <div class="space-y-2">
               <p class="text-xl sm:text-2xl lg:text-[1.75rem] font-extrabold tracking-tight text-text-primary leading-snug max-w-5xl">
-                Using only what is known on 31 March 2017, can we predict whether a KKBOX subscriber will churn (not renew within 30 days of plan expiry)?
+                Using only what is known on 31 March 2017, can we predict whether a KKBOX subscriber whose plan expires in March 2017 will churn (no new valid subscription within 30 days of that expiry)?
                 And does their listening behaviour add predictive value beyond their billing records?
               </p>
             </div>
@@ -90,6 +90,53 @@
           <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">The answer at a glance</h2>
           <p class="text-[11px] text-text-secondary mb-4">Same tuned LightGBM, same test subscribers, two cutoffs. Test PR-AUC with and without listening features. Click a highlighted box for the evidence in the Report.</p>
           <div class="overflow-x-auto"><div data-mermaid="home-answer" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="At the 31 March cutoff billing alone reaches a very high PR-AUC and listening adds little; at a strict 1 March cutoff PR-AUC is much lower and listening adds a large gain">Loading diagram&hellip;</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ovn-home-more" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mb-2">What is inside</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8">The site has two long pages. Start with the Data Studio to see the data, then read the Report for the full reasoning.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <nav class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card" aria-label="Data Studio contents">
+            <a href="#data-studio" class="flex items-center justify-between gap-3 mb-3 group"><h3 class="text-sm font-bold text-text-primary">Data Studio</h3><span class="material-symbols-outlined text-[18px] text-text-muted group-hover:text-text-primary">arrow_forward</span></a>
+            <ol class="toc-list toc-1"><li><a href="#dsn-tables"><span>01</span>The five tables</a></li><li><a href="#dsn-raw"><span>02</span>Raw data</a></li><li><a href="#dsn-overlap"><span>03</span>File overlap</a></li><li><a href="#dsn-quality"><span>04</span>Data quality</a></li><li><a href="#dsn-signals"><span>05</span>Churn signal explorer</a></li><li><a href="#dsn-explorer"><span>06</span>Churn by group</a></li><li><a href="#dsn-features"><span>07</span>Feature analysis</a></li><li><a href="#dsn-training"><span>08</span>Data for training</a></li><li><a href="#dsn-split"><span>09</span>Train / validation / test</a></li></ol>
+          </nav>
+          <nav class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card" aria-label="Report contents">
+            <a href="#report" class="flex items-center justify-between gap-3 mb-3 group"><h3 class="text-sm font-bold text-text-primary">Report</h3><span class="material-symbols-outlined text-[18px] text-text-muted group-hover:text-text-primary">arrow_forward</span></a>
+            <ol class="toc-list toc-2"><li><a href="#ovn-why"><span>01</span>Why</a></li><li><a href="#ovn-data"><span>02</span>Data</a></li><li><a href="#ovn-preprocessing"><span>03</span>Preprocessing</a></li><li><a href="#ovn-evaluation"><span>04</span>Evaluation</a></li><li><a href="#ovn-models"><span>05</span>Baseline and methods</a></li><li><a href="#ovn-leakage"><span>06</span>Leakage</a></li><li><a href="#ovn-results"><span>07</span>Results</a></li><li><a href="#ovn-errors"><span>08</span>Errors</a></li><li><a href="#ovn-failures"><span>09</span>Failure modes</a></li><li><a href="#ovn-runtime"><span>10</span>Runtime model</a></li><li><a href="#ovn-limitations"><span>11</span>Limitations</a></li><li><a href="#ovn-conclusion"><span>12</span>Conclusion</a></li><li><a href="#ovn-next"><span>13</span>What next</a></li><li><a href="#ovn-repro"><span>14</span>Reproduction steps</a></li><li><a href="#ovn-ai"><span>15</span>AI assistance</a></li><li><a href="#ovn-libs"><span>16</span>Libraries and data</a></li></ol>
+          </nav>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-16 mb-2">Setup and run</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">Python 3.11+ (tested on 3.14), about 8 GB RAM and about 30 minutes for all notebooks. First download the five CSVs from <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer">Kaggle</a> (you need to accept the competition rules) and put them in <code>data/raw/</code>.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <div class="lg:col-span-3 bg-[#121212] text-[#E2E8F0] border border-border-subtle rounded-2xl p-6 font-mono text-[11px] leading-relaxed overflow-x-auto">
+<pre>git clone {{REPO_URL}}.git
+cd es335_final2
+pip install -r requirements.txt
+# put the five CSVs in data/raw/
+cd notebooks
+for nb in 01 02 03 04 05 06 08 07; do   # 08 before 07
+  jupyter nbconvert --to notebook --execute --inplace ${nb}_*.ipynb
+done
+cd ..
+python scripts/export_ds_extra.py          # extra Data Studio tables
+python scripts/export_val_test_metrics.py  # every model, validation and test
+python website/build.py                    # builds the site into docs/
+node website/tests/check_model_parity.mjs  # optional: browser model == Python
+python -m http.server 8000 -d docs         # open http://localhost:8000</pre>
+          </div>
+          <div class="lg:col-span-2 bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card text-xs text-text-secondary leading-relaxed">
+            <h3 class="text-sm font-bold text-text-primary mb-2">Check the numbers</h3>
+            <ul class="list-disc pl-4 space-y-1.5">
+              <li>After notebook 06, <code>results/test_metrics.csv</code>: tuned LightGBM PR-AUC 0.9644, ROC-AUC 0.9958, log loss 0.0452 on 189,338 test subscribers.</li>
+              <li><code>results/validation_metrics.csv</code>: PR-AUC 0.9686 on validation.</li>
+              <li>After notebook 08, <code>results/strict_cutoff_metrics.csv</code>: 0.4208 (billing + demographics) and 0.5682 (with listening).</li>
+            </ul>
+            <p class="mt-3">Full details: <a class="underline" href="{{REPO_URL}}#readme" target="_blank" rel="noopener noreferrer">README</a>.</p>
+          </div>
         </div>
       </div>
     </section>

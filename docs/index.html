@@ -25,7 +25,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
   <!-- Dual-Theme Engine (Day / Night) -->
-  <script src="js/theme.js"></script>
+  <script src="js/theme.js?v=1794924353"></script>
 
   <!-- Tailwind Configuration with Project Tokens -->
   <script>
@@ -61,7 +61,7 @@
     };
   </script>
 
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=1794924353">
 </head>
 
 
@@ -142,19 +142,6 @@
         </div>
       </div>
 
-      <!-- NAV SECTION 2: MODEL PREDICTOR (single <a>, perfectly centered in collapsed mode) -->
-      <div class="sidebar-accordion">
-        <div id="row-model-predictor" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
-          <a href="#model-predictor" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Model Predictor">
-            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-slate-500 group-hover:text-slate-900 shrink-0">model_training</span>
-            <span class="sidebar-text font-bold text-xs text-slate-800 group-hover:text-slate-900 truncate tracking-tight">Model Predictor</span>
-          </a>
-          <span class="sidebar-arrow p-1 text-slate-400 group-hover:text-slate-700 shrink-0 pointer-events-none" aria-hidden="true">
-            <span class="material-symbols-outlined text-[16px] inline-block">chevron_right</span>
-          </span>
-        </div>
-      </div>
-
       <!-- NAV SECTION 3: DATA STUDIO -->
       <div class="sidebar-accordion">
         <div id="row-data-studio" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
@@ -216,17 +203,23 @@
         <!-- Subheadings under Report (NO grey dot, NO numbers, collapsed by default) -->
         <div id="subheadings-model-portal" class="hidden pl-4 pr-1 py-1.5 space-y-0.5 text-[11px] font-medium bg-transparent">
           <div class="space-y-0.5">
+            <a href="#ovn-why" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Why</span>
+            </a>
             <a href="#ovn-data" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Data</span>
             </a>
             <a href="#ovn-preprocessing" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Preprocessing</span>
             </a>
-            <a href="#ovn-models" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Baseline &amp; Methods</span>
-            </a>
             <a href="#ovn-evaluation" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Evaluation</span>
+            </a>
+            <a href="#ovn-models" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Baseline &amp; methods</span>
+            </a>
+            <a href="#ovn-leakage" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Leakage</span>
             </a>
             <a href="#ovn-results" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Results</span>
@@ -234,16 +227,44 @@
             <a href="#ovn-errors" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Errors</span>
             </a>
+            <a href="#ovn-failures" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Failure modes</span>
+            </a>
+            <a href="#ovn-runtime" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Runtime model</span>
+            </a>
             <a href="#ovn-limitations" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Limitations</span>
             </a>
             <a href="#ovn-conclusion" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
               <span class="truncate">Conclusion</span>
             </a>
+            <a href="#ovn-next" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">What next</span>
+            </a>
             <a href="#ovn-repro" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
-              <span class="truncate">Reproduction Steps</span>
+              <span class="truncate">Reproduction steps</span>
+            </a>
+            <a href="#ovn-ai" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">AI assistance</span>
+            </a>
+            <a href="#ovn-libs" class="group flex items-center py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors truncate">
+              <span class="truncate">Libraries &amp; data</span>
             </a>
           </div>
+        </div>
+      </div>
+
+      <!-- NAV SECTION 2: MODEL PREDICTOR (single <a>, perfectly centered in collapsed mode) -->
+      <div class="sidebar-accordion">
+        <div id="row-model-predictor" class="sidebar-nav-row w-full flex items-center justify-between text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-full px-3 py-2 transition-colors group">
+          <a href="#model-predictor" class="flex-1 flex items-center gap-2.5 min-w-0 cursor-pointer" title="Go to Model Predictor">
+            <span class="sidebar-nav-icon material-symbols-outlined text-[18px] text-slate-500 group-hover:text-slate-900 shrink-0">model_training</span>
+            <span class="sidebar-text font-bold text-xs text-slate-800 group-hover:text-slate-900 truncate tracking-tight">Model Predictor</span>
+          </a>
+          <span class="sidebar-arrow p-1 text-slate-400 group-hover:text-slate-700 shrink-0 pointer-events-none" aria-hidden="true">
+            <span class="material-symbols-outlined text-[16px] inline-block">chevron_right</span>
+          </span>
         </div>
       </div>
 
@@ -448,24 +469,24 @@
             <div class="lg:col-span-3 hero-rise" style="--d:500ms">
             <nav class="hero-index" aria-label="Where to go next">
               <p class="hi-kicker">Where to start</p>
-              <a class="hi-row" href="#model-predictor">
-                <span class="hi-no">01</span>
-                <span class="hi-body"><b>Model</b><small>Score a subscriber yourself</small></span>
-                <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-              </a>
               <a class="hi-row" href="#data-studio">
-                <span class="hi-no">02</span>
+                <span class="hi-no">01</span>
                 <span class="hi-body"><b>Data Studio</b><small>Five tables, 33 features, every plot</small></span>
                 <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
               <a class="hi-row" href="#report">
-                <span class="hi-no">03</span>
+                <span class="hi-no">02</span>
                 <span class="hi-body"><b>Report</b><small>Full reasoning, question to conclusion</small></span>
                 <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
               <a class="hi-row" href="#ovn-results">
-                <span class="hi-no">04</span>
+                <span class="hi-no">03</span>
                 <span class="hi-body"><b>Results</b><small>Six models, one untouched test split</small></span>
+                <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </a>
+              <a class="hi-row" href="#model-predictor">
+                <span class="hi-no">04</span>
+                <span class="hi-body"><b>Model</b><small>Score a subscriber yourself</small></span>
                 <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
               <a class="hi-repo" href="https://github.com/destopianpirate/es335_final2" target="_blank" rel="noopener noreferrer" aria-label="Open the repository on GitHub">
@@ -482,7 +503,7 @@
           <div class="flex flex-col sm:flex-row items-start justify-between gap-4">
             <div class="space-y-2">
               <p class="text-xl sm:text-2xl lg:text-[1.75rem] font-extrabold tracking-tight text-text-primary leading-snug max-w-5xl">
-                Using only what is known on 31 March 2017, can we predict whether a KKBOX subscriber will churn (not renew within 30 days of plan expiry)?
+                Using only what is known on 31 March 2017, can we predict whether a KKBOX subscriber whose plan expires in March 2017 will churn (no new valid subscription within 30 days of that expiry)?
                 And does their listening behaviour add predictive value beyond their billing records?
               </p>
             </div>
@@ -519,35 +540,139 @@
       </div>
     </section>
 
+    <section id="ovn-home-more" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mb-2">What is inside</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8">The site has two long pages. Start with the Data Studio to see the data, then read the Report for the full reasoning.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <nav class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card" aria-label="Data Studio contents">
+            <a href="#data-studio" class="flex items-center justify-between gap-3 mb-3 group"><h3 class="text-sm font-bold text-text-primary">Data Studio</h3><span class="material-symbols-outlined text-[18px] text-text-muted group-hover:text-text-primary">arrow_forward</span></a>
+            <ol class="toc-list toc-1"><li><a href="#dsn-tables"><span>01</span>The five tables</a></li><li><a href="#dsn-raw"><span>02</span>Raw data</a></li><li><a href="#dsn-overlap"><span>03</span>File overlap</a></li><li><a href="#dsn-quality"><span>04</span>Data quality</a></li><li><a href="#dsn-signals"><span>05</span>Churn signal explorer</a></li><li><a href="#dsn-explorer"><span>06</span>Churn by group</a></li><li><a href="#dsn-features"><span>07</span>Feature analysis</a></li><li><a href="#dsn-training"><span>08</span>Data for training</a></li><li><a href="#dsn-split"><span>09</span>Train / validation / test</a></li></ol>
+          </nav>
+          <nav class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card" aria-label="Report contents">
+            <a href="#report" class="flex items-center justify-between gap-3 mb-3 group"><h3 class="text-sm font-bold text-text-primary">Report</h3><span class="material-symbols-outlined text-[18px] text-text-muted group-hover:text-text-primary">arrow_forward</span></a>
+            <ol class="toc-list toc-2"><li><a href="#ovn-why"><span>01</span>Why</a></li><li><a href="#ovn-data"><span>02</span>Data</a></li><li><a href="#ovn-preprocessing"><span>03</span>Preprocessing</a></li><li><a href="#ovn-evaluation"><span>04</span>Evaluation</a></li><li><a href="#ovn-models"><span>05</span>Baseline and methods</a></li><li><a href="#ovn-leakage"><span>06</span>Leakage</a></li><li><a href="#ovn-results"><span>07</span>Results</a></li><li><a href="#ovn-errors"><span>08</span>Errors</a></li><li><a href="#ovn-failures"><span>09</span>Failure modes</a></li><li><a href="#ovn-runtime"><span>10</span>Runtime model</a></li><li><a href="#ovn-limitations"><span>11</span>Limitations</a></li><li><a href="#ovn-conclusion"><span>12</span>Conclusion</a></li><li><a href="#ovn-next"><span>13</span>What next</a></li><li><a href="#ovn-repro"><span>14</span>Reproduction steps</a></li><li><a href="#ovn-ai"><span>15</span>AI assistance</a></li><li><a href="#ovn-libs"><span>16</span>Libraries and data</a></li></ol>
+          </nav>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-16 mb-2">Setup and run</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">Python 3.11+ (tested on 3.14), about 8 GB RAM and about 30 minutes for all notebooks. First download the five CSVs from <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer">Kaggle</a> (you need to accept the competition rules) and put them in <code>data/raw/</code>.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <div class="lg:col-span-3 bg-[#121212] text-[#E2E8F0] border border-border-subtle rounded-2xl p-6 font-mono text-[11px] leading-relaxed overflow-x-auto">
+<pre>git clone https://github.com/destopianpirate/es335_final2.git
+cd es335_final2
+pip install -r requirements.txt
+# put the five CSVs in data/raw/
+cd notebooks
+for nb in 01 02 03 04 05 06 08 07; do   # 08 before 07
+  jupyter nbconvert --to notebook --execute --inplace ${nb}_*.ipynb
+done
+cd ..
+python scripts/export_ds_extra.py          # extra Data Studio tables
+python scripts/export_val_test_metrics.py  # every model, validation and test
+python website/build.py                    # builds the site into docs/
+node website/tests/check_model_parity.mjs  # optional: browser model == Python
+python -m http.server 8000 -d docs         # open http://localhost:8000</pre>
+          </div>
+          <div class="lg:col-span-2 bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card text-xs text-text-secondary leading-relaxed">
+            <h3 class="text-sm font-bold text-text-primary mb-2">Check the numbers</h3>
+            <ul class="list-disc pl-4 space-y-1.5">
+              <li>After notebook 06, <code>results/test_metrics.csv</code>: tuned LightGBM PR-AUC 0.9644, ROC-AUC 0.9958, log loss 0.0452 on 189,338 test subscribers.</li>
+              <li><code>results/validation_metrics.csv</code>: PR-AUC 0.9686 on validation.</li>
+              <li>After notebook 08, <code>results/strict_cutoff_metrics.csv</code>: 0.4208 (billing + demographics) and 0.5682 (with listening).</li>
+            </ul>
+            <p class="mt-3">Full details: <a class="underline" href="https://github.com/destopianpirate/es335_final2#readme" target="_blank" rel="noopener noreferrer">README</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
       </div>
 
       <!-- VIEW 2: REPORT (full reasoning, data to conclusion) -->
       <div id="view-report" class="view-panel hidden">
-            <section id="rpt-top" class="pt-12 pb-10 sm:pt-14 border-b border-border-subtle bg-gradient-to-b from-page-bg to-surface-subtle">
+            <section id="rpt-top" class="rh border-b border-border-subtle">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p class="text-[11px] font-bold uppercase tracking-wider text-text-muted mb-2">Report</p>
-        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-text-primary leading-tight mb-4">From the question to the conclusion</h1>
-        <p class="text-sm sm:text-base text-text-secondary leading-relaxed max-w-4xl">
-          <strong class="text-text-primary">Question.</strong> Using only what is known on 31 March 2017, can we predict whether a KKBOX subscriber will churn
-          (no new subscription within 30 days of plan expiry), and does listening behaviour add predictive value beyond billing records?
-          One row is one subscriber; the target is <code>is_churn</code>.
-        </p>
-        <p class="text-xs text-text-secondary leading-relaxed max-w-4xl mt-3">
-          The nine sections below give the full reasoning: data, preprocessing, baseline and methods, evaluation, results, errors, limitations, conclusion and how to reproduce every number.
-          A short summary is on the <a href="#home" class="underline">Home</a> page; the raw data in detail is in the <a href="#data-studio" class="underline">Data Studio</a>.
-        </p>
 
-        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mt-8">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">How this report is built</h2>
-          <p class="text-[11px] text-text-secondary mb-4">The nine sections in reading order. Every model choice uses the validation split; the test split is scored once, in Results. Click a box to jump to that section.</p>
-          <div class="overflow-x-auto"><div data-mermaid="report-pipeline" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="Report structure: question, 01 data, 02 preprocessing, 03 baseline and methods, 04 evaluation, 05 results, 06 errors, 07 limitations, 08 conclusion, 09 reproduction">Loading diagram&hellip;</div></div>
+
+        <h1 class="rh-title">
+          <span class="rh-line"><span>From the question to the conclusion<i class="rh-dot" aria-hidden="true">.</i></span></span>
+        </h1>
+
+        <div class="rh-lede">
+          <p class="rh-q">Using only what is known on <em>31&nbsp;March&nbsp;2017</em>, can we predict which KKBOX subscribers <em>whose plan expires in March&nbsp;2017</em> will leave &mdash; and does what they <em>listen</em> to say more than what they <em>pay</em>?</p>
+          <p class="rh-def"><strong>Target</strong> <code>is_churn</code>: no new valid subscription within 30 days of that plan's expiry. <strong>Unit</strong>: one subscriber, 946,686 of them; 9% churn. The test split was scored once.</p>
+        </div>
+
+        <!-- What the model may use, and the limits of the claim -->
+        <div class="rh-use" aria-label="What the model may use at prediction time">
+          <div><h3>Main setting &middot; cutoff 31&nbsp;March</h3><p>Profile, billing up to 31 March, March listening. An <strong>upper bound</strong>: most labelled plans have already expired, so the billing record often already shows the renewal.</p></div>
+          <div><h3>Stricter setting &middot; billing cut at 1&nbsp;March</h3><p>Profile, billing from before 1 March (before any labelled plan expires), March listening. Closer to an early warning, but listening still runs to 31 March.</p></div>
+          <div><h3>Never used</h3><p>Anything dated after 31 March 2017, and the label itself. Every choice is made on validation; test is scored once.</p></div>
+        </div>
+        <p class="rh-scope"><strong>Scope of the claim.</strong> One cohort of one service (KKBOX plans expiring in March 2017), a random split within that month, and association, not cause: the scores say who is likely to leave, not why, and not how a later month would look.</p>
+
+        <!-- Figure: every headline score on one scale -->
+        <figure class="rh-fig" aria-label="Test PR-AUC on a 0 to 1 scale: guessing 0.0899, auto-renew rule 0.3164, LightGBM with billing cut at 1 March 0.5682, final LightGBM at 31 March 0.9644">
+          <div class="rh-scale">
+            <div class="rh-track" aria-hidden="true"></div>
+            <div class="rh-mk" style="--x:.0899; --i:0"><b data-to="0.0899">0.0899</b><span>Guessing</span></div>
+            <div class="rh-mk" style="--x:.3164; --i:1"><b data-to="0.3164">0.3164</b><span>Rule: auto-renew off</span></div>
+            <div class="rh-mk" style="--x:.5682; --i:2"><b data-to="0.5682">0.5682</b><span>Billing cut at 1&nbsp;March</span></div>
+            <div class="rh-mk rh-key" style="--x:.9644; --i:3"><b data-to="0.9644">0.9644</b><span>Final model, 31&nbsp;March</span></div>
+          </div>
+        </figure>
+
+        <!-- The answer in short -->
+        <div class="rh-answers">
+          <h2 class="rh-label">The answer in short</h2>
+          <ol>
+            <li>
+              <span class="rh-n">01</span>
+              <strong>Very predictable on 31 March, but that is an upper bound.</strong>
+              <p>The tuned LightGBM reaches PR-AUC 0.9644 [0.9624, 0.9664], against 0.3164 for a one-line rule. March billing often already records the renewal; with billing cut at 1 March (listening still through March) it reaches 0.5682.</p>
+              <a href="#ovn-results">Results</a>
+            </li>
+            <li>
+              <span class="rh-n">02</span>
+              <strong>Billing does almost all the work.</strong>
+              <p>Billing alone reaches 0.9562. Listening adds only +0.0083 [0.0073, 0.0093].</p>
+              <a href="#ovn-results">Ablation</a>
+            </li>
+            <li>
+              <span class="rh-n">03</span>
+              <strong>Listening matters more when billing is hidden, partly.</strong>
+              <p>Cut billing at 1 March and listening is worth +0.1474 [0.1426, 0.1524], eighteen times more, though part of it may come from listening after a plan has lapsed.</p>
+              <a href="#ovn-strict">Strict check</a>
+            </li>
+          </ol>
+        </div>
+
+        <!-- Contents -->
+        <nav class="rh-contents" aria-label="On this page">
+          <h2 class="rh-label">Contents</h2>
+          <ol class="toc-list rh-toc"><li><a href="#ovn-why"><span>01</span>Why</a></li><li><a href="#ovn-data"><span>02</span>Data</a></li><li><a href="#ovn-preprocessing"><span>03</span>Preprocessing</a></li><li><a href="#ovn-evaluation"><span>04</span>Evaluation</a></li><li><a href="#ovn-models"><span>05</span>Baseline and methods</a></li><li><a href="#ovn-leakage"><span>06</span>Leakage</a></li><li><a href="#ovn-results"><span>07</span>Results</a></li><li><a href="#ovn-errors"><span>08</span>Errors</a></li><li><a href="#ovn-failures"><span>09</span>Failure modes</a></li><li><a href="#ovn-runtime"><span>10</span>Runtime model</a></li><li><a href="#ovn-limitations"><span>11</span>Limitations</a></li><li><a href="#ovn-conclusion"><span>12</span>Conclusion</a></li><li><a href="#ovn-next"><span>13</span>What next</a></li><li><a href="#ovn-repro"><span>14</span>Reproduction steps</a></li><li><a href="#ovn-ai"><span>15</span>AI assistance</a></li><li><a href="#ovn-libs"><span>16</span>Libraries and data</a></li></ol>
+        </nav>
+
+      </div>
+    </section>
+
+            <section id="ovn-why" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 1 of 16: Why"><span class="chap-no" aria-hidden="true">01</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Why</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Why predict churn, and why this question</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">A music subscription earns money only while people keep renewing. If a service can tell <em>before</em> a plan runs out who is likely to leave, it can spend its retention budget (reminders, discounts, offers) on those subscribers instead of on everyone.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm">
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Why early</h3><p class="text-text-secondary leading-relaxed">A warning is only useful while there is still time to act. That is why every feature is built from data up to a fixed cutoff. Our main cutoff, 31 March, comes after most labelled plans have expired, so its score is an upper bound; we therefore also cut billing at 1 March, before any labelled plan expires (listening still covers March).</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Why listening, not just billing</h3><p class="text-text-secondary leading-relaxed">Billing records (auto-renew, cancellations, expiry) are what a business already watches. Listening shows engagement: someone who stops playing music may leave even while auto-renew is on. The question is whether that behaviour adds a signal billing does not already have.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Why it is hard</h3><p class="text-text-secondary leading-relaxed">Only 9% of subscribers churn, so a model can look accurate while catching nobody. Many profiles are incomplete (60% of ages missing), and the billing window overlaps the label window, which can make the task look easier than it is.</p></div>
         </div>
       </div>
     </section>
 
             <section id="ovn-data" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 1 of 9: Data"><span class="chap-no" aria-hidden="true">01</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Data</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <div class="chap" aria-label="Section 2 of 16: Data"><span class="chap-no" aria-hidden="true">02</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Data</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Source, size and key variables</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8">
           <strong class="text-text-primary">Source:</strong> the public <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer">Customer Retention Datathon (Riyadh Edition) dataset</a> on Kaggle,
@@ -557,13 +682,13 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Size</h3>
-            <ul class="text-xs text-text-secondary space-y-2 font-mono">
-              <li class="flex justify-between"><span>train_data</span><span><span data-sd="data.train.subscribers" data-fmt="int"></span> rows</span></li>
-              <li class="flex justify-between"><span>kaggle_test_data</span><span><span data-sd="data.kaggle_test.subscribers" data-fmt="int"></span> rows</span></li>
-              <li class="flex justify-between"><span>members</span><span><span data-sd="data.members.rows" data-fmt="int"></span> rows</span></li>
-              <li class="flex justify-between"><span>transactions</span><span><span data-sd="data.transactions.rows" data-fmt="int"></span> rows</span></li>
-              <li class="flex justify-between"><span>user_logs</span><span><span data-sd="data.user_logs.rows" data-fmt="int"></span> rows</span></li>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Size and row meaning</h3>
+            <ul class="text-xs text-text-secondary space-y-2.5 font-mono">
+              <li><div class="flex justify-between"><span>train_data</span><span><span data-sd="data.train.subscribers" data-fmt="int"></span> rows</span></div><div class="font-sans text-[10.5px] text-text-muted">one row = a labelled subscriber</div></li>
+              <li><div class="flex justify-between"><span>kaggle_test_data</span><span><span data-sd="data.kaggle_test.subscribers" data-fmt="int"></span> rows</span></div><div class="font-sans text-[10.5px] text-text-muted">one row = an unlabelled subscriber</div></li>
+              <li><div class="flex justify-between"><span>members</span><span><span data-sd="data.members.rows" data-fmt="int"></span> rows</span></div><div class="font-sans text-[10.5px] text-text-muted">one row = a member profile</div></li>
+              <li><div class="flex justify-between"><span>transactions</span><span><span data-sd="data.transactions.rows" data-fmt="int"></span> rows</span></div><div class="font-sans text-[10.5px] text-text-muted">one row = a payment or plan change</div></li>
+              <li><div class="flex justify-between"><span>user_logs</span><span><span data-sd="data.user_logs.rows" data-fmt="int"></span> rows</span></div><div class="font-sans text-[10.5px] text-text-muted">one row = one subscriber-day of listening</div></li>
             </ul>
             <p class="text-[11px] text-text-muted mt-4">After joining: <span data-sd="data.train.subscribers" data-fmt="int"></span> labelled subscribers &times; <span data-sd="data.features.n_features"></span> features, <span data-sd="data.train.churn_rate" data-fmt="pct2"></span> churn.
               <a href="#data-studio" class="underline">Table-by-table view &rarr;</a></p>
@@ -575,6 +700,7 @@
               <div>
                 <span class="font-bold block mb-1" style="color:#1D4ED8">Billing &bull; 15</span>
                 <p class="text-text-secondary leading-relaxed">From the full transaction history: auto-renew flag and cancel flag of the last transaction, days until the plan expires, plan length, amount paid, payment method, number of transactions, cancellations, discounts.</p>
+                <p class="text-[11px] text-text-muted mt-2">Key raw columns: <code>membership_expire_date</code>, <code>is_auto_renew</code>, <code>is_cancel</code>, <code>transaction_date</code>; they drive the strongest features.</p>
               </div>
               <div>
                 <span class="font-bold block mb-1" style="color:#15803D">Listening &bull; 12</span>
@@ -588,6 +714,74 @@
           </div>
         </div>
 
+        <!-- every model input, by group -->
+        <div id="ovn-data-features" class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mb-8">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">All 33 features, by group</h3>
+          <p class="text-[11px] text-text-secondary mb-5 max-w-3xl">One row per subscriber; every value is computed from data available on 31 March 2017. <code>city</code>, <code>registered_via</code> and <code>last_payment_method</code> are treated as categories. These are the same groups used in the ablation in <a href="#ovn-results" class="underline">Results</a>.</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              <div>
+                <div class="flex items-baseline justify-between gap-3 pb-2 border-b-2" style="border-color:#1D4ED8">
+                  <span class="text-xs font-bold" style="color:#1D4ED8">Billing</span>
+                  <span class="text-[10px] font-mono text-text-muted">15 features</span>
+                </div>
+                <p class="text-[10px] text-text-muted mt-2">From <code>transactions.csv</code>, the full history (1 Jan 2015 to 31 Mar 2017).</p>
+                <ul class="divide-y divide-border-subtle mt-1">
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">has_tx</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">1 = subscriber has any transaction</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">tx_count</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Number of transactions</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">total_paid</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Sum of actual_amount_paid</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">avg_plan_days</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Mean plan length (days)</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">auto_renew_ratio</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Share of transactions with auto-renew on</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">cancel_count</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Number of cancellation transactions</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">discount_count</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Transactions where amount paid is below list price</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">n_payment_methods</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Distinct payment methods used</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">last_payment_method</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Payment method of the last transaction (categorical)</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">last_plan_days</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Plan length of the last transaction</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">last_amount_paid</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Amount paid in the last transaction</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">last_auto_renew</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Auto-renew flag of the last transaction</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">last_is_cancel</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">1 = last transaction is a cancellation</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">days_since_last_tx</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Days from last transaction to cutoff</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">days_until_expiration</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Days from cutoff to expiry (negative = already expired)</span></li>
+                </ul>
+              </div>
+              <div>
+                <div class="flex items-baseline justify-between gap-3 pb-2 border-b-2" style="border-color:#15803D">
+                  <span class="text-xs font-bold" style="color:#15803D">Listening</span>
+                  <span class="text-[10px] font-mono text-text-muted">12 features</span>
+                </div>
+                <p class="text-[10px] text-text-muted mt-2">From <code>user_logs.csv</code>, daily logs for March 2017.</p>
+                <ul class="divide-y divide-border-subtle mt-1">
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">has_logs</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">1 = subscriber has March 2017 logs</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">active_days</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Days with any listening in March</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">total_hours</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Total hours listened in March</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">secs_per_day</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Seconds listened per active day</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">songs_per_day</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Songs played per active day</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">unique_song_ratio</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Unique songs / songs played</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">skip_ratio</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Songs played under 25 % / songs played</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">complete_ratio</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Songs played over 98.5 % / songs played</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">last7_share</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Share of March seconds in the last 7 days</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">active_days_7d</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Active days in the last 7 days of March</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">days_since_last_active</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Days from last listening day to cutoff</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">daily_secs_cv</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Coefficient of variation of daily seconds</span></li>
+                </ul>
+              </div>
+              <div>
+                <div class="flex items-baseline justify-between gap-3 pb-2 border-b-2" style="border-color:#B45309">
+                  <span class="text-xs font-bold" style="color:#B45309">Demographic</span>
+                  <span class="text-[10px] font-mono text-text-muted">6 features</span>
+                </div>
+                <p class="text-[10px] text-text-muted mt-2">From <code>members.csv</code>, the member profile.</p>
+                <ul class="divide-y divide-border-subtle mt-1">
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">city</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">City code (categorical)</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">registered_via</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Registration channel (categorical)</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">gender</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">0 = not given, 1 = female, 2 = male</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">age</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Age from bd, kept only if 10-90, else missing</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">tenure_days</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">Days from registration to the 2017-03-31 cutoff</span></li>
+                  <li class="py-2"><code class="text-[11px] font-semibold text-text-primary">has_member</code><span class="block text-[11px] text-text-secondary leading-snug mt-0.5">1 = subscriber appears in members.csv</span></li>
+                </ul>
+              </div>
+          </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div class="bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
             <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Class balance</h3>
@@ -596,7 +790,7 @@
           </div>
           <div class="bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
             <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Churn by table presence</h3>
-            <p class="text-[11px] text-text-secondary mb-3">P profile, T transactions, L March logs. Missing transactions means very high churn.</p>
+            <p class="text-[11px] text-text-secondary mb-3">Training split. P profile, T transactions, L March logs. Missing transactions means very high churn.</p>
             <div class="h-52 relative"><canvas id="ovn-data-coverage"></canvas></div>
           </div>
           <div class="bg-surface-card border border-border-subtle rounded-2xl p-5 shadow-subtle-card">
@@ -615,6 +809,7 @@
             <li><span data-sd="data.user_logs.bad_secs_rows" data-fmt="int"></span> log rows have impossible listening time (&lt; 0 or &gt; 24 h).</li>
             <li>Money and volume columns are heavily right-skewed.</li>
             <li>Listening logs cover one month only (March 2017).</li>
+            <li class="md:col-span-2"><strong class="text-text-primary">Checks that came back clean:</strong> no duplicate IDs in <code>train_data</code>, <code>kaggle_test_data</code> or <code>members</code>; no exact duplicate rows in <code>transactions</code>; no duplicate subscriber-day in <code>user_logs</code>; labels are only 0 and 1; no subscriber is in both the labelled and the Kaggle test list; dates are in range (transactions 1 Jan 2015 &ndash; 31 Mar 2017, logs 1&ndash;31 Mar 2017).</li>
           </ul>
           <p class="text-[11px] text-text-muted mt-4"><strong class="text-text-primary">Access limits.</strong> The data is downloaded from <a href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer" class="underline">its Kaggle page</a> after accepting the competition rules, so the raw CSVs are not in our repository; the README explains how to get them. Subscriber IDs are anonymised hashes and there are no names or contact details. All plots and summaries: <a href="#data-studio" class="underline">Data Studio</a>.</p>
         </div>
@@ -623,7 +818,7 @@
 
             <section id="ovn-preprocessing" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 2 of 9: Preprocessing"><span class="chap-no" aria-hidden="true">02</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Preprocessing</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <div class="chap" aria-label="Section 3 of 16: Preprocessing"><span class="chap-no" aria-hidden="true">03</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Preprocessing</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Choices and why</h2>
         <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
           <table class="w-full text-xs">
@@ -634,7 +829,7 @@
               <tr><td class="px-4 py-3 font-semibold text-text-primary">Aggregate every table to one row per subscriber, using only data up to 31 March 2017</td>
                   <td class="px-4 py-3">The unit of prediction is the subscriber. Nothing dated after the cutoff is used. However, the labelled plans expire during March, so a March renewal transaction can already be in the features; this is not leakage from the future, but it makes the task easier. A <a href="#ovn-strict" class="underline">strict check</a> rebuilds billing features from transactions before 1 March (notebook 08).</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-text-primary">Left joins, nobody dropped, plus <code>has_member</code> / <code>has_tx</code> / <code>has_logs</code> flags</td>
-                  <td class="px-4 py-3">Dropping subscribers missing from any table would remove 25 % of them (65 % if invalid ages also count). Absence is informative: subscribers with no transactions churn at <span data-ds-break="has_tx|0.0"></span>.</td></tr>
+                  <td class="px-4 py-3">Dropping subscribers missing from any table would remove 25 % of them (65 % if invalid ages also count). Absence is informative: subscribers with no transactions churn at <span data-ds-break="has_tx|0.0"></span> (training split).</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-text-primary">No listening logs &rarr; zeros and "31 days since last listen"</td>
                   <td class="px-4 py-3">A subscriber with no March plays did listen zero hours; this is the true value, not a missing one.</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-text-primary">Ages outside 10&ndash;90 &rarr; missing; daily listening clipped to [0, 24 h]</td>
@@ -642,18 +837,88 @@
               <tr><td class="px-4 py-3 font-semibold text-text-primary">Remaining gaps imputed inside each model pipeline (median, fitted on train only); LightGBM uses its native missing-value handling</td>
                   <td class="px-4 py-3">Learning fill values from the training split only keeps validation and test unseen. No feature selection was done: every model uses all 33 features, so no choice depends on held-out data.</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-text-primary"><code>log1p</code> + standardisation + one-hot codes, for logistic regression only</td>
-                  <td class="px-4 py-3">A linear model needs comparable scales and suffers from heavy skew. Tree models are invariant to monotone transforms, so they get the raw values.</td></tr>
+                  <td class="px-4 py-3">A linear model needs comparable scales and suffers from heavy skew: on the training split the skewness is <span data-sd="eda.skew.tx_count" data-fmt="raw1"></span> for <code>tx_count</code>, <span data-sd="eda.skew.total_paid" data-fmt="raw1"></span> for <code>total_paid</code>, <span data-sd="eda.skew.songs_per_day" data-fmt="raw1"></span> for <code>songs_per_day</code> and <span data-sd="eda.skew.total_hours" data-fmt="raw1"></span> for <code>total_hours</code> (0 = symmetric). Tree models are invariant to monotone transforms, so they get the raw values.</td></tr>
               <tr><td class="px-4 py-3 font-semibold text-text-primary">City, registration channel, payment method treated as categories</td>
                   <td class="px-4 py-3">They are ID codes, not quantities.</td></tr>
             </tbody>
           </table>
         </div>
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mt-6">
+          <div class="px-4 pt-4 pb-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Learned from data, or fixed by rule?</h3>
+            <p class="text-[11px] text-text-secondary max-w-3xl">Anything learned from data is fitted on the training split only, inside the model pipeline, so validation and test values never shape it. Fixed rules use no statistics of the data, so they cannot leak.</p>
+          </div>
+          <table class="w-full text-xs">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr><th class="text-left px-4 py-2">Step</th><th class="text-left px-4 py-2">Learned?</th><th class="text-left px-4 py-2">Fitted on</th><th class="text-left px-4 py-2">Where</th></tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle text-text-secondary leading-relaxed">
+              <tr><td class="px-4 py-2">Median imputation (logistic regression, random forest)</td><td class="px-4 py-2 font-semibold text-text-primary">Yes</td><td class="px-4 py-2">Training split</td><td class="px-4 py-2"><code>SimpleImputer</code> inside each sklearn pipeline, notebooks 04, 05</td></tr>
+              <tr><td class="px-4 py-2"><code>log1p</code> + standardisation</td><td class="px-4 py-2 font-semibold text-text-primary">Yes (mean, sd)</td><td class="px-4 py-2">Training split</td><td class="px-4 py-2"><code>StandardScaler</code> in the logistic-regression pipeline, notebook 04</td></tr>
+              <tr><td class="px-4 py-2">One-hot codes for city, channel, payment method</td><td class="px-4 py-2 font-semibold text-text-primary">Yes (categories)</td><td class="px-4 py-2">Training split</td><td class="px-4 py-2"><code>OneHotEncoder(min_frequency=100)</code>, notebook 04</td></tr>
+              <tr><td class="px-4 py-2">LightGBM missing-value and category splits</td><td class="px-4 py-2 font-semibold text-text-primary">Yes</td><td class="px-4 py-2">Training split</td><td class="px-4 py-2">Inside the booster; validation used only for early stopping and tuning, notebook 05</td></tr>
+              <tr><td class="px-4 py-2">Rule baseline churn rates</td><td class="px-4 py-2 font-semibold text-text-primary">Yes</td><td class="px-4 py-2">Training split</td><td class="px-4 py-2">Churn rate per auto-renew group from <code>y_train</code>, notebook 04</td></tr>
+              <tr><td class="px-4 py-2">Ages outside 10&ndash;90 &rarr; missing; daily seconds clipped to [0, 24 h]</td><td class="px-4 py-2">No (fixed rule)</td><td class="px-4 py-2">&ndash;</td><td class="px-4 py-2">Notebook 02</td></tr>
+              <tr><td class="px-4 py-2">No logs &rarr; zeros and 31 days since last listen; <code>has_*</code> flags</td><td class="px-4 py-2">No (fixed rule)</td><td class="px-4 py-2">&ndash;</td><td class="px-4 py-2">Notebook 02</td></tr>
+              <tr><td class="px-4 py-2">Summaries behind these choices (skewness, churn when missing, single-feature AUC)</td><td class="px-4 py-2">&ndash;</td><td class="px-4 py-2">Training split</td><td class="px-4 py-2">Notebook 03 and <code>scripts/export_ds_extra.py</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="how-grid"><details class="how"><summary>Why one row per subscriber, and why a cutoff date</summary><div><p>The business question is <em>who</em> to contact, so the unit is a subscriber, not a transaction or a day. Each table is aggregated up to <strong>31 March 2017</strong>. Anything dated later is information the business does not have when it must decide, so using it would make the scores look better than they are in practice.</p><p>The cutoff alone is not enough here: plans expire <em>during</em> March, so some renewals are already in March billing. That is why notebook 08 repeats everything with a 1 March cutoff.</p></div></details><details class="how"><summary>Why missing values are kept, not dropped</summary><div><p>Missing data is not random in this dataset. A subscriber with no transactions churns at <span data-ds-break="has_tx|0.0"></span>, against 9% overall (training split). Dropping them would remove the easiest and most important cases and bias every score.</p><p>So we keep everyone and add three flags (<code>has_member</code>, <code>has_tx</code>, <code>has_logs</code>). Logistic regression fills gaps with the training median; LightGBM learns which branch missing values should follow.</p></div></details><details class="how"><summary>Why log-scaling only for logistic regression</summary><div><p>Hours listened and amount paid are heavily right-skewed: a few subscribers have huge values. A linear model would let those dominate, so we apply <code>log1p</code> and standardise.</p><p>Trees only ask "is x above some split point?", and a log does not change the order of values, so trees get the raw values.</p></div></details></div>
       </div>
     </section>
 
-    <section id="ovn-models" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+    <section id="ovn-evaluation" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 3 of 9: Baseline and methods"><span class="chap-no" aria-hidden="true">03</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Baseline and methods</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <div class="chap" aria-label="Section 4 of 16: Evaluation"><span class="chap-no" aria-hidden="true">04</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Evaluation</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Split and metrics</h2>
+        <dl class="led">
+          <div class="led-row">
+            <dt><span class="led-big">70 / 10 / 20</span><span class="led-cap">Split</span></dt>
+            <dd>Stratified random split, seed 42: <strong>70 % train</strong> (fit), <strong>10 % validation</strong> (model choice, tuning, threshold) and <strong>20 % test</strong> (used once).
+              Churn rate is <span data-sd="eda.split.test.churn_rate" data-fmt="pct2"></span> in every part. <a href="#dsn-split" class="underline">Split table &rarr;</a></dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">PSI &lt; 0.001</span><span class="led-cap">Distribution shift</span></dt>
+            <dd>To check that the splits really come from the same population, each numeric feature in validation, test and the Kaggle test set is compared with the training split using the <strong>population stability index</strong> (PSI; above 0.1 usually means a shift worth investigating).
+              The largest value over 30 features is 0.0007 (<span class="font-mono">complete_ratio</span>, Kaggle test), so validation and test scores carry over to the Kaggle test subscribers. <a href="#dsn-training" class="underline">Shift chart &rarr;</a></dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">PR-AUC</span><span class="led-cap">Main metric</span></dt>
+            <dd>Churners are only 9&nbsp;% of subscribers, so PR-AUC is the main metric; its no-skill level is 0.09. ROC-AUC, log loss and Brier are reported alongside, and log loss is also the tuning objective.
+              Precision, recall, F1 and accuracy are taken at the decision threshold; accuracy is read against the 0.91 of the majority baseline.</dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">&tau; = <span data-sd="champion.threshold" data-fmt="f2"></span></span><span class="led-cap">Threshold</span></dt>
+            <dd>To flag subscribers we need a cut-off on the probability. We pick the one that maximises F1 on <em>validation</em>, then apply it unchanged to test.
+              F1 weighs a missed churner and a false alarm equally. A business that values a lost subscriber more than a wasted offer should lower &tau; to raise recall; the <a href="#ovn-results" class="underline">cost explorer</a> shows how the best &tau; moves with that ratio. Any such choice should be made on validation, not test.</dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">1 Mar</span><span class="led-cap">Strict check</span></dt>
+            <dd>Because March transactions overlap the label window, the tuned LightGBM is retrained with billing features from before <strong>1 March 2017</strong> only, on the same split, and scored once on the same test subscribers. It keeps the hyperparameters tuned for 31 March (only the number of trees and the threshold are re-chosen on validation), so if anything its score is slightly pessimistic. <a href="#ovn-strict" class="underline">Results &rarr;</a></dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">1&thinsp;000</span><span class="led-cap">Bootstrap resamples</span></dt>
+            <dd>The champion's test metrics get 95&nbsp;% intervals from <strong>1&nbsp;000</strong> bootstrap resamples of the test set. Differences between models use a <em>paired</em> bootstrap (both models scored on the same resample): 1&nbsp;000 resamples for the tuned LightGBM against each other model, <strong>500</strong> for the feature-group ablation and the strict check.
+              This shows how much a number could move with another sample of test subscribers. It does not cover training variance (each model is trained once, with one seed), how the model would do in a later month, or why subscribers churn.</dd>
+          </div>
+          <div class="led-row">
+            <dt><span class="led-big">1 split</span><span class="led-cap">Reused validation</span></dt>
+            <dd>The same validation split is used for early stopping, the 30 Optuna trials, the model choice and the threshold. Picking the best of many tries on one split makes its score slightly optimistic, which is why every learned model scores a little lower on test (see <a href="#ovn-results" class="underline">Does it hold up?</a>). The test split, used once, is the score to quote.</dd>
+          </div>
+        </dl>
+        <div class="callout mt-8 max-w-5xl">
+          <h3>How to read the intervals</h3>
+          <p>A bracket like <strong>0.9644 [0.9624, 0.9664]</strong> is a 95% bootstrap interval: if we drew another test set of the same size from the same population, the score would land in this range about 95% of the time.
+          For a <strong>difference</strong> between two models (for example "+0.0083 [0.0073, 0.0093]"), the rule is simple: if the whole interval is above zero, the second model is reliably better; if it crosses zero, one test set cannot tell them apart.</p>
+        </div>
+        <div class="how-grid"><details class="how"><summary>PR-AUC instead of accuracy</summary><div><p>With 9% churners, predicting "nobody churns" is 91% accurate and completely useless. Accuracy rewards that.</p><p>PR-AUC looks only at how well the model ranks churners: at each cut-off, what share of flagged subscribers really churn (precision) and what share of churners are caught (recall). Its no-skill level equals the churn rate, 0.09, so the scale is honest for imbalanced data (Saito and Rehmsmeier, 2015).</p></div></details><details class="how"><summary>Bootstrap and paired bootstrap</summary><div><p><strong>Bootstrap:</strong> draw 189,338 test subscribers <em>with replacement</em> from the test set, recompute the score, repeat 1,000 times, and take the 2.5th and 97.5th percentiles.</p><p><strong>Paired:</strong> to compare two models, both are scored on the <em>same</em> resample and we keep the difference. Subscribers that are hard for one model are usually hard for the other, so pairing cancels that shared noise and gives a much tighter interval for the difference than comparing two separate intervals.</p></div></details><details class="how"><summary>Choosing the threshold on validation</summary><div><p>The model gives probabilities; contacting someone needs a yes or no. We tried thresholds from 0.01 to 0.97 on the <strong>validation</strong> split and kept the one with the highest F1 (0.45).</p><p>Picking it on test would make the test F1 optimistic, because the threshold would be fitted to those exact subscribers.</p></div></details><details class="how"><summary>Test split used once</summary><div><p>Every decision (features, models, hyperparameters, threshold, feature sets) was made on training and validation data. The test split was scored once, at the end, in notebook 06. That is what makes its numbers an estimate for new subscribers, not a record of our tuning.</p></div></details></div>
+      </div>
+    </section>
+
+    <section id="ovn-models" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 5 of 16: Baseline and methods"><span class="chap-no" aria-hidden="true">05</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Baseline and methods</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">From a constant guess to tuned boosting</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">Every model outputs a churn probability and, apart from the baselines, is trained by minimising log loss on the training split. Every hyperparameter was chosen on the validation split; the test split played no part.</p>
         <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mb-8">
@@ -669,11 +934,11 @@
               <tr><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-text-muted">Linear</span><div class="font-semibold text-text-primary">Logistic regression</div></td>
                 <td class="px-4 py-3 align-top">L2-penalised log loss on log-scaled, standardised and one-hot features.</td><td class="px-4 py-3 align-top">Log-odds of churn are linear in the (log-scaled) features; no interactions.</td><td class="px-4 py-3 align-top">Simple, fast, interpretable; tests whether a linear boundary is enough.</td><td class="px-4 py-3 align-top">Penalty strength C &isin; {0.01, 0.1, 1, 10}.</td></tr>
               <tr><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-text-muted">Bagging</span><div class="font-semibold text-text-primary">Random forest</div></td>
-                <td class="px-4 py-3 align-top">150 trees, log loss on validation for model choice.</td><td class="px-4 py-3 align-top">Few: handles thresholds and interactions, needs no scaling.</td><td class="px-4 py-3 align-top">Churn depends on thresholds (expiry, plan length) and interactions; averaging reduces variance.</td><td class="px-4 py-3 align-top">Leaf size &isin; {5, 20, 50}, features per split &isin; {&radic;p, 0.5p}.</td></tr>
+                <td class="px-4 py-3 align-top">150 trees, each grown on a bootstrap sample with splits that minimise Gini impurity; probabilities are averaged over the trees.</td><td class="px-4 py-3 align-top">Few: handles thresholds and interactions, needs no scaling.</td><td class="px-4 py-3 align-top">Churn depends on thresholds (expiry, plan length) and interactions; averaging reduces variance.</td><td class="px-4 py-3 align-top">4 settings, chosen by validation log loss: min. leaf size 5, 20 or 50 with &radic;p features per split, and leaf 20 with 0.5p.</td></tr>
               <tr><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-text-muted">Boosting</span><div class="font-semibold text-text-primary">LightGBM (default)</div></td>
-                <td class="px-4 py-3 align-top">Log loss, learning rate 0.05, native categorical and missing-value handling.</td><td class="px-4 py-3 align-top">Same as random forest; learns missing-value branches natively.</td><td class="px-4 py-3 align-top">Reference point before tuning.</td><td class="px-4 py-3 align-top">Number of trees by early stopping on validation.</td></tr>
+                <td class="px-4 py-3 align-top">Log loss (binary cross-entropy), learning rate 0.05, other settings at LightGBM defaults (31 leaves); native categorical and missing-value handling.</td><td class="px-4 py-3 align-top">Same as random forest; learns missing-value branches natively.</td><td class="px-4 py-3 align-top">Reference point before tuning.</td><td class="px-4 py-3 align-top">Number of trees by early stopping on validation (up to 2,000; stop after 50 rounds without improvement).</td></tr>
               <tr class="bg-surface-subtle"><td class="px-4 py-3 align-top"><span class="text-[10px] font-bold uppercase tracking-wider text-accent-success">Champion</span><div class="font-semibold text-text-primary">LightGBM (tuned)</div></td>
-                <td class="px-4 py-3 align-top">Log loss, hyperparameters from 30 Optuna (TPE) trials.</td><td class="px-4 py-3 align-top">As above.</td><td class="px-4 py-3 align-top">Best validation log loss of all candidates.</td><td class="px-4 py-3 align-top">Learning rate, leaves, min. leaf size, row/column sampling, L2; <span data-sd="champion.n_trees"></span> trees.</td></tr>
+                <td class="px-4 py-3 align-top">Log loss, hyperparameters from 30 Optuna (TPE) trials.</td><td class="px-4 py-3 align-top">As above.</td><td class="px-4 py-3 align-top">Best validation log loss of all candidates.</td><td class="px-4 py-3 align-top">Search space: learning rate 0.05&ndash;0.2 (log), leaves 15&ndash;63, min. leaf size 20&ndash;400 (log), row sampling 0.6&ndash;1.0, column sampling 0.5&ndash;1.0, L2 0.001&ndash;10 (log). Best: rate 0.067, 50 leaves, min. leaf 20; <span data-sd="champion.n_trees"></span> trees by early stopping.</td></tr>
             </tbody>
           </table>
         </div>
@@ -693,46 +958,63 @@
             <div class="h-44 relative"><canvas id="ovn-optuna-chart"></canvas></div>
           </div>
         </div>
+
+        <!-- every model on the validation split (test scores are in Results) -->
+        <div id="ovn-model-metrics" class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mt-8">
+          <div class="px-5 pt-5 pb-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Every model on the validation split</h3>
+            <p class="text-[11px] text-text-secondary max-w-4xl">The six models above, scored on the validation split (94,669 subscribers), which is the split every choice was made on. Accuracy, precision, recall and F1 use &tau; = 0.45, chosen on validation. &darr; = lower is better; bold = best in its column. Test scores come once, in <a href="#ovn-results" class="underline">Results</a>.</p>
+          </div>
+          <table class="w-full text-xs font-mono">
+            <thead class="text-text-muted uppercase tracking-wider text-[10px] border-y border-border-subtle bg-surface-subtle">
+              <tr><th class="text-left px-5 py-2">Model</th><th class="text-right px-2 py-2">PR-AUC</th><th class="text-right px-2 py-2">ROC-AUC</th><th class="text-right px-2 py-2">Log loss &darr;</th><th class="text-right px-2 py-2">Brier &darr;</th><th class="text-right px-2 py-2">Accuracy</th><th class="text-right px-2 py-2">Precision</th><th class="text-right px-2 py-2">Recall</th><th class="text-right px-2 py-2">F1</th></tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle">
+                <tr class=""><td class="px-5 py-2 font-sans text-text-secondary">Majority (prior)</td><td class="px-2 py-2 text-right text-text-secondary">0.0899</td><td class="px-2 py-2 text-right text-text-secondary">0.5000</td><td class="px-2 py-2 text-right text-text-secondary">0.3024</td><td class="px-2 py-2 text-right text-text-secondary">0.0819</td><td class="px-2 py-2 text-right text-text-secondary">0.9101</td><td class="px-2 py-2 text-right text-text-secondary">0.0000</td><td class="px-2 py-2 text-right text-text-secondary">0.0000</td><td class="px-2 py-2 text-right text-text-secondary">0.0000</td></tr>
+                <tr class=""><td class="px-5 py-2 font-sans text-text-secondary">Rule: auto-renew off</td><td class="px-2 py-2 text-right text-text-secondary">0.3162</td><td class="px-2 py-2 text-right text-text-secondary">0.7744</td><td class="px-2 py-2 text-right text-text-secondary">0.2287</td><td class="px-2 py-2 text-right text-text-secondary">0.0632</td><td class="px-2 py-2 text-right text-text-secondary">0.8984</td><td class="px-2 py-2 text-right text-text-secondary">0.4531</td><td class="px-2 py-2 text-right text-text-secondary">0.6231</td><td class="px-2 py-2 text-right text-text-secondary">0.5247</td></tr>
+                <tr class=""><td class="px-5 py-2 font-sans text-text-secondary">Logistic regression</td><td class="px-2 py-2 text-right text-text-secondary">0.8991</td><td class="px-2 py-2 text-right text-text-secondary">0.9760</td><td class="px-2 py-2 text-right text-text-secondary">0.0854</td><td class="px-2 py-2 text-right text-text-secondary">0.0209</td><td class="px-2 py-2 text-right text-text-secondary">0.9739</td><td class="px-2 py-2 text-right text-text-secondary">0.8652</td><td class="px-2 py-2 text-right text-text-secondary">0.8409</td><td class="px-2 py-2 text-right text-text-secondary">0.8528</td></tr>
+                <tr class=""><td class="px-5 py-2 font-sans text-text-secondary">Random forest</td><td class="px-2 py-2 text-right text-text-secondary">0.9641</td><td class="px-2 py-2 text-right text-text-secondary">0.9951</td><td class="px-2 py-2 text-right text-text-secondary">0.0461</td><td class="px-2 py-2 text-right text-text-secondary">0.0129</td><td class="px-2 py-2 text-right text-text-secondary">0.9820</td><td class="px-2 py-2 text-right text-text-secondary">0.8950</td><td class="px-2 py-2 text-right text-text-secondary">0.9065</td><td class="px-2 py-2 text-right text-text-secondary">0.9007</td></tr>
+                <tr class=""><td class="px-5 py-2 font-sans text-text-secondary">LightGBM (default)</td><td class="px-2 py-2 text-right text-text-secondary">0.9670</td><td class="px-2 py-2 text-right text-text-secondary">0.9957</td><td class="px-2 py-2 text-right text-text-secondary">0.0439</td><td class="px-2 py-2 text-right text-text-secondary">0.0125</td><td class="px-2 py-2 text-right text-text-secondary">0.9826</td><td class="px-2 py-2 text-right font-bold text-text-primary">0.8955</td><td class="px-2 py-2 text-right text-text-secondary">0.9127</td><td class="px-2 py-2 text-right text-text-secondary">0.9040</td></tr>
+                <tr class="bg-surface-subtle"><td class="px-5 py-2 font-sans font-bold text-text-primary">LightGBM (tuned) &#9733;</td><td class="px-2 py-2 text-right font-bold text-text-primary">0.9686</td><td class="px-2 py-2 text-right font-bold text-text-primary">0.9962</td><td class="px-2 py-2 text-right font-bold text-text-primary">0.0423</td><td class="px-2 py-2 text-right font-bold text-text-primary">0.0121</td><td class="px-2 py-2 text-right font-bold text-text-primary">0.9832</td><td class="px-2 py-2 text-right text-text-secondary">0.8942</td><td class="px-2 py-2 text-right font-bold text-text-primary">0.9224</td><td class="px-2 py-2 text-right font-bold text-text-primary">0.9081</td></tr>
+            </tbody>
+          </table>
+          <p class="text-[11px] text-text-muted px-5 py-3">The tuned LightGBM has the best validation log loss, the selection criterion, and leads on every column except precision. Source: <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/val_test_metrics.csv">results/val_test_metrics.csv</a> (<code>scripts/export_val_test_metrics.py</code>).</p>
+        </div>
         <p class="text-xs text-text-secondary mt-6 max-w-4xl"><strong class="text-text-primary">Ablation.</strong> To answer the second half of the question, the tuned LightGBM is retrained on three feature sets: billing + demographics, listening + demographics, and all features.</p>
+        <div class="how-grid"><details class="how"><summary>Why baselines first</summary><div><p>A score like PR-AUC 0.96 means nothing on its own. The <strong>majority</strong> baseline shows the no-skill level (0.0899, the churn rate). The <strong>auto-renew rule</strong> shows what a business gets from one flag and no model (0.3164).</p><p>Every model in the ladder has to beat the one below it. If a complex model lost to the rule, that would point to a bug, not a finding.</p></div></details><details class="how"><summary>Gradient-boosted trees (LightGBM)</summary><div><p>Boosting builds trees one after another. Each new tree is fitted to the errors (the gradient of log loss) of all the trees before it, and its output is added with a small weight, the learning rate.</p><ul><li><strong>num_leaves = 50</strong>: how complex each tree can be.</li><li><strong>learning rate 0.067, 861 trees</strong>: small steps, many trees.</li><li><strong>row / column sampling and L2 penalty</strong>: add randomness and shrinkage so trees do not memorise the training set.</li></ul><p>This suits churn because the signal is in thresholds (days until expiry) and interactions (auto-renew off <em>and</em> plan about to expire).</p></div></details><details class="how"><summary>Optuna hyperparameter search</summary><div><p>Instead of a fixed grid, Optuna's TPE sampler looks at the trials so far and proposes new settings near the ones that did well. We ran 30 trials (seeded, so the search is repeatable), each scored by <strong>validation</strong> log loss, and kept the best (trial 14, log loss 0.0423). The six searched settings and their ranges are in the table above; each trial also used early stopping on validation.</p><p>The test split was never used, so it stays a fair, unseen check.</p></div></details><details class="how"><summary>Why models are chosen by log loss, not PR-AUC</summary><div><p>PR-AUC is how we <em>report</em> ranking quality, but we <em>select</em> and tune by validation log loss. Log loss is a proper scoring rule: it is lowest only when the predicted probabilities are honest, and a business needs honest probabilities to set a threshold or weigh costs. It is also smooth, which suits Optuna and early stopping, while PR-AUC depends only on the order of the scores.</p><p>The two agree here: the model with the best validation log loss also has the best validation PR-AUC (0.9686).</p></div></details><details class="how"><summary>Considered, but not used</summary><div><ul><li><strong>Survival (time-to-event) models</strong>: they need a time axis per subscriber; here the outcome is one fixed 30-day window after one expiry.</li><li><strong>Feature selection</strong>: skipped on purpose, so no choice depends on held-out data; trees ignore unhelpful features anyway.</li></ul></div></details><details class="how"><summary>Why we did not reweight the classes</summary><div><p>Only 9% of subscribers churn. Reweighting churners would raise recall but distort the probabilities: a predicted 30% would no longer mean that 30% of such subscribers churn.</p><p>We want honest probabilities (checked in the calibration plot), and we handle the imbalance where it belongs: in the metric (PR-AUC) and in the decision threshold.</p></div></details></div>
       </div>
     </section>
 
-    <section id="ovn-evaluation" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+
+            <section id="ovn-leakage" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 4 of 9: Evaluation"><span class="chap-no" aria-hidden="true">04</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Evaluation</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Split and metrics</h2>
-        <dl class="led">
-          <div class="led-row">
-            <dt><span class="led-big">70 / 10 / 20</span><span class="led-cap">Split</span></dt>
-            <dd>Stratified random split, seed 42: <strong>70 % train</strong> (fit), <strong>10 % validation</strong> (model choice, tuning, threshold) and <strong>20 % test</strong> (used once).
-              Churn rate is <span data-sd="eda.split.test.churn_rate" data-fmt="pct2"></span> in every part. <a href="#dsn-split" class="underline">Split table &rarr;</a></dd>
-          </div>
-          <div class="led-row">
-            <dt><span class="led-big">PR-AUC</span><span class="led-cap">Main metric</span></dt>
-            <dd>Churners are only 9&nbsp;% of subscribers, so PR-AUC is the main metric; its no-skill level is 0.09. ROC-AUC, log loss and Brier are reported alongside, and log loss is also the tuning objective.
-              Precision, recall, F1 and accuracy are taken at the decision threshold; accuracy is read against the 0.91 of the majority baseline.</dd>
-          </div>
-          <div class="led-row">
-            <dt><span class="led-big">&tau; = <span data-sd="champion.threshold" data-fmt="f2"></span></span><span class="led-cap">Threshold</span></dt>
-            <dd>To flag subscribers we need a cut-off on the probability. We pick the one that maximises F1 on <em>validation</em>, then apply it unchanged to test.
-              F1 weighs a missed churner and a false alarm equally. A business that values a lost subscriber more than a wasted offer should lower &tau; to raise recall; the <a href="#ovn-results" class="underline">cost explorer</a> shows how the best &tau; moves with that ratio. Any such choice should be made on validation, not test.</dd>
-          </div>
-          <div class="led-row">
-            <dt><span class="led-big">1 Mar</span><span class="led-cap">Strict check</span></dt>
-            <dd>Because March transactions overlap the label window, the tuned LightGBM is retrained with billing features from before <strong>1 March 2017</strong> only, on the same split, and scored once on the same test subscribers. <a href="#ovn-strict" class="underline">Results &rarr;</a></dd>
-          </div>
-          <div class="led-row">
-            <dt><span class="led-big">1&thinsp;000</span><span class="led-cap">Bootstrap resamples</span></dt>
-            <dd>Test metrics get 95&nbsp;% intervals from 1&nbsp;000 bootstrap resamples of the test set; the ablation uses a <em>paired</em> bootstrap (both models scored on the same resample).
-              This shows how much a number could move with another sample of subscribers from the same population. It cannot tell how the model would do in a later month, or why subscribers churn.</dd>
-          </div>
-        </dl>
+        <div class="chap" aria-label="Section 6 of 16: Leakage"><span class="chap-no" aria-hidden="true">06</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Leakage</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Could the model be seeing the answer?</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">Leakage is when a feature carries information the model would not have at prediction time, or carries the label itself. It makes scores look better than they will be in use. We checked each way it could enter this project.</p>
+        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mb-6">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">What each cutoff can see</h3>
+          <p class="text-[11px] text-text-secondary mb-4 max-w-3xl">The labelled plans expire during March, so a model frozen on 31 March already sees most renewal payments. Cutting billing at 1 March removes them. Same tuned LightGBM, same test subscribers. Click a model box for the evidence.</p>
+          <div class="overflow-x-auto"><div data-mermaid="leakage-timeline" class="min-w-[860px] flex justify-center text-text-muted text-xs" role="img" aria-label="Timeline: billing history to February 2017, strict cutoff 1 March, plans expire and renewals are paid in March, main cutoff 31 March, churn label decided in April. A model at 31 March sees March billing and scores PR-AUC 0.9644; a model at 1 March scores 0.5682.">Loading diagram&hellip;</div></div>
+        </div>
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+          <table class="w-full text-xs">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]"><tr><th class="text-left px-4 py-3 w-1/4">Possible leak</th><th class="text-left px-4 py-3">What we did</th><th class="text-left px-4 py-3">Status</th></tr></thead>
+            <tbody class="divide-y divide-border-subtle text-text-secondary leading-relaxed">
+              <tr><td class="px-4 py-3 font-semibold text-text-primary align-top">Data from after the cutoff</td><td class="px-4 py-3 align-top">Nothing dated after 31 March 2017 exists in the inputs: the transactions file ends on 31 Mar 2017 (it starts on 1 Jan 2015) and the listening logs cover March 2017 only, so no date filter is needed. All day counts are measured to 31 March 2017.</td><td class="px-4 py-3 align-top"><span class="verdict verdict-yes">Handled</span></td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary align-top">Billing already shows the renewal</td><td class="px-4 py-3 align-top">All labelled plans expire during March, and 95.4% of subscribers have a March transaction (churn 5.5% vs 80.9% for the rest). Notebook 08 rebuilds billing from before 1 March: PR-AUC falls from 0.9644 to 0.5682.</td><td class="px-4 py-3 align-top"><span class="verdict verdict-part">Measured</span></td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary align-top">Listening after a subscriber's expiry</td><td class="px-4 py-3 align-top">March listening can fall after an individual plan's expiry date, so part of listening's +0.1474 at 1 March may still reflect the outcome. Not fixed: it would need listening cut at each subscriber's own expiry.</td><td class="px-4 py-3 align-top"><span class="verdict verdict-no">Open</span></td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary align-top">Fitting preprocessing on held-out data</td><td class="px-4 py-3 align-top">Medians, scalers and one-hot codes are fitted inside each model pipeline on the training split only. No feature selection was done, so no choice depends on validation or test.</td><td class="px-4 py-3 align-top"><span class="verdict verdict-yes">Handled</span></td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary align-top">Tuning on the test split</td><td class="px-4 py-3 align-top">Hyperparameters, the threshold (0.45) and the feature sets were all chosen on validation. The test split was scored once, in notebook 06.</td><td class="px-4 py-3 align-top"><span class="verdict verdict-yes">Handled</span></td></tr>
+              <tr><td class="px-4 py-3 font-semibold text-text-primary align-top">Same subscriber in two splits</td><td class="px-4 py-3 align-top">One row per subscriber (<code>msno</code>), and the split assigns whole rows, so no subscriber is in both training and test.</td><td class="px-4 py-3 align-top"><span class="verdict verdict-yes">Handled</span></td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
             <section id="ovn-results" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 5 of 9: Results (test split)"><span class="chap-no" aria-hidden="true">05</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Results (test split)</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <div class="chap" aria-label="Section 7 of 16: Results (test split)"><span class="chap-no" aria-hidden="true">07</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Results (test split)</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">How well each model does on unseen subscribers</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8" id="ovn-results-lead"></p>
 
@@ -758,6 +1040,26 @@
             <div class="text-3xl font-extrabold text-accent-success my-1 font-mono" id="ovn-m-f1"></div>
             <p class="text-[10px] text-text-muted font-mono" id="ovn-m-pr-rec"></p>
           </div>
+        </div>
+
+        <!-- Questions and verdicts -->
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mb-10">
+          <div class="px-6 pt-5">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">The questions we set out to answer</h3>
+            <p class="text-[11px] text-text-secondary mt-1 max-w-3xl">Each verdict is read from the test split, with 95% bootstrap intervals. The evidence for each is further down this section.</p>
+          </div>
+          <table class="w-full text-xs mt-3">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr><th class="text-left px-6 py-2 w-2/5">Question</th><th class="text-left px-3 py-2">Verdict</th><th class="text-left px-6 py-2">Why</th></tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle text-text-secondary leading-relaxed">
+              <tr><td class="px-6 py-3 text-text-primary font-semibold">1. Does a model beat the one-line rule "auto-renew is off"?</td><td class="px-3 py-3"><span class="verdict verdict-yes">Yes</span></td><td class="px-6 py-3">Tuned LightGBM PR-AUC 0.9644 [0.9624, 0.9664] vs 0.3164 for the rule. Even logistic regression reaches 0.8946.</td></tr>
+              <tr><td class="px-6 py-3 text-text-primary font-semibold">2. Does listening add value beyond billing at 31 March?</td><td class="px-3 py-3"><span class="verdict verdict-part">Yes, but small</span></td><td class="px-6 py-3">+0.0083 PR-AUC [0.0073, 0.0093]: the interval is above zero, but billing + demographics alone already reach 0.9562.</td></tr>
+              <tr><td class="px-6 py-3 text-text-primary font-semibold">3. Does the result hold with billing cut at 1 March?</td><td class="px-3 py-3"><span class="verdict verdict-no">Only partly</span></td><td class="px-6 py-3">PR-AUC drops to 0.5682 [0.5610, 0.5757]. Much of the 31 March score comes from March billing that already shows the renewal.</td></tr>
+              <tr><td class="px-6 py-3 text-text-primary font-semibold">4. Does listening matter more when billing is hidden?</td><td class="px-3 py-3"><span class="verdict verdict-part">Yes, partly</span></td><td class="px-6 py-3">With billing cut at 1 March, listening adds +0.1474 [0.1426, 0.1524], about 18 times its gain at 31 March. But part of this may be the outcome itself: the strict model still sees listening up to 31 March, after many plans have lapsed, and a subscriber who has left stops listening (Leakage: open). A clean test would cut listening at each expiry.</td></tr>
+              <tr><td class="px-6 py-3 text-text-primary font-semibold">5. Are the probabilities honest (calibrated)?</td><td class="px-3 py-3"><span class="verdict verdict-yes">Yes, where it predicts</span></td><td class="px-6 py-3">Across 10 equal-size bins of test subscribers, predicted and observed churn differ by at most 0.007 (riskiest tenth: 85.4% predicted, 85.1% observed). Brier score 0.0131, against 0.0819 for the majority baseline. Caveat: almost all predictions are near 0 or near 0.85, so the middle range (about 0.1&ndash;0.8) is rare and barely tested.</td></tr>
+            </tbody>
+          </table>
         </div>
 
         <!-- Model comparison table + curves -->
@@ -850,18 +1152,56 @@
           <p class="text-[11px] text-text-muted mt-4" id="ovn-cost-note"></p>
         </div>
 
+        <!-- Paired bootstrap: is the champion really better? -->
+        <div id="ovn-model-diff" class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mb-10">
+          <div class="px-5 pt-5 pb-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Is the tuned LightGBM really better?</h3>
+            <p class="text-[11px] text-text-secondary max-w-3xl">Difference in test PR-AUC, tuned LightGBM minus each other model, with a 95% paired bootstrap interval (1,000 resamples; both models scored on the same resample). If the whole interval is above zero, the difference is not an accident of which test subscribers were drawn.</p>
+          </div>
+          <table class="w-full text-xs font-mono">
+            <thead class="text-text-muted uppercase tracking-wider text-[10px] border-y border-border-subtle bg-surface-subtle">
+              <tr><th class="text-left px-5 py-2">Tuned LightGBM</th><th class="text-right px-3 py-2">PR-AUC difference</th><th class="text-right px-3 py-2">95% interval</th><th class="text-right px-5 py-2">Resamples above 0</th></tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle">
+                <tr><td class="px-5 py-2 font-sans text-text-secondary">vs LightGBM (default)</td><td class="px-3 py-2 text-right font-bold text-text-primary">+0.0025</td><td class="px-3 py-2 text-right text-text-secondary">[+0.0016, +0.0038]</td><td class="px-5 py-2 text-right text-text-secondary">100%</td></tr>
+                <tr><td class="px-5 py-2 font-sans text-text-secondary">vs Random forest</td><td class="px-3 py-2 text-right font-bold text-text-primary">+0.0049</td><td class="px-3 py-2 text-right text-text-secondary">[+0.0041, +0.0056]</td><td class="px-5 py-2 text-right text-text-secondary">100%</td></tr>
+                <tr><td class="px-5 py-2 font-sans text-text-secondary">vs Logistic regression</td><td class="px-3 py-2 text-right font-bold text-text-primary">+0.0698</td><td class="px-3 py-2 text-right text-text-secondary">[+0.0666, +0.0732]</td><td class="px-5 py-2 text-right text-text-secondary">100%</td></tr>
+                <tr><td class="px-5 py-2 font-sans text-text-secondary">vs Rule: auto-renew off</td><td class="px-3 py-2 text-right font-bold text-text-primary">+0.6480</td><td class="px-3 py-2 text-right text-text-secondary">[+0.6419, +0.6536]</td><td class="px-5 py-2 text-right text-text-secondary">100%</td></tr>
+            </tbody>
+          </table>
+          <p class="text-[11px] text-text-muted px-5 py-3">Every interval is above zero, so each step up the ladder is a real gain on this test set. Tuning adds little over default LightGBM (+0.0025) but reliably so. These intervals cover test sampling only, not training variance. Source: <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/model_comparison.csv">results/model_comparison.csv</a> (<code>scripts/export_val_test_metrics.py</code>).</p>
+        </div>
+
         <!-- Validation vs test -->
         <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mb-10">
           <div class="px-6 pt-5">
             <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Does it hold up? Validation vs test</h3>
-            <p class="text-[11px] text-text-secondary mt-1 max-w-3xl">Every model was chosen and tuned on the validation split, then scored once on the test split. A small gap means the tuning did not simply memorise the validation subscribers.</p>
+            <p class="text-[11px] text-text-secondary mt-1 max-w-3xl">Every model was chosen and tuned on the validation split, then scored once on the test split. All eight metrics on both splits; accuracy, precision, recall and F1 at &tau; = 0.45. Gap = test &minus; validation; red marks a drop of more than 0.01. &darr; = lower is better. A small gap means the tuning did not simply memorise the validation subscribers.</p>
           </div>
-          <table class="w-full text-xs mt-3">
+          <table id="ovn-gap-table" class="w-full text-xs mt-3 font-mono min-w-[900px]">
             <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
-              <tr><th class="text-left px-6 py-2">Model</th><th class="text-right px-3 py-2">PR-AUC val</th><th class="text-right px-3 py-2">PR-AUC test</th><th class="text-right px-3 py-2">Gap</th>
-                <th class="text-right px-3 py-2">Log loss val</th><th class="text-right px-6 py-2">Log loss test</th></tr>
+              <tr><th class="text-left px-6 py-2">Model</th><th class="text-left px-2 py-2">Split</th><th class="text-right px-2 py-2">PR-AUC</th><th class="text-right px-2 py-2">ROC-AUC</th><th class="text-right px-2 py-2">Log loss &darr;</th><th class="text-right px-2 py-2">Brier &darr;</th><th class="text-right px-2 py-2">Accuracy</th><th class="text-right px-2 py-2">Precision</th><th class="text-right px-2 py-2">Recall</th><th class="text-right px-2 py-2">F1</th></tr>
             </thead>
-            <tbody id="ovn-gap-rows" class="divide-y divide-border-subtle font-mono"></tbody>
+            <tbody>
+              <tr class="vt-val"><td rowspan="3" class="px-6 py-2 align-middle font-sans text-text-secondary">Majority (prior)</td><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Validation</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0899</td><td class="px-2 py-1.5 text-right text-text-secondary">0.5000</td><td class="px-2 py-1.5 text-right text-text-secondary">0.3024</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0819</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9101</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0000</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0000</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0000</td></tr>
+              <tr class="vt-mid"><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Test</td><td class="px-2 py-1.5 text-right text-text-primary">0.0899</td><td class="px-2 py-1.5 text-right text-text-primary">0.5000</td><td class="px-2 py-1.5 text-right text-text-primary">0.3024</td><td class="px-2 py-1.5 text-right text-text-primary">0.0819</td><td class="px-2 py-1.5 text-right text-text-primary">0.9101</td><td class="px-2 py-1.5 text-right text-text-primary">0.0000</td><td class="px-2 py-1.5 text-right text-text-primary">0.0000</td><td class="px-2 py-1.5 text-right text-text-primary">0.0000</td></tr>
+              <tr class="vt-test"><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Gap</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">0.0000</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">0.0000</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">0.0000</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">0.0000</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">0.0000</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">0.0000</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">0.0000</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">0.0000</td></tr>
+              <tr class="vt-val"><td rowspan="3" class="px-6 py-2 align-middle font-sans text-text-secondary">Rule: auto-renew off</td><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Validation</td><td class="px-2 py-1.5 text-right text-text-secondary">0.3162</td><td class="px-2 py-1.5 text-right text-text-secondary">0.7744</td><td class="px-2 py-1.5 text-right text-text-secondary">0.2287</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0632</td><td class="px-2 py-1.5 text-right text-text-secondary">0.8984</td><td class="px-2 py-1.5 text-right text-text-secondary">0.4531</td><td class="px-2 py-1.5 text-right text-text-secondary">0.6231</td><td class="px-2 py-1.5 text-right text-text-secondary">0.5247</td></tr>
+              <tr class="vt-mid"><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Test</td><td class="px-2 py-1.5 text-right text-text-primary">0.3164</td><td class="px-2 py-1.5 text-right text-text-primary">0.7748</td><td class="px-2 py-1.5 text-right text-text-primary">0.2286</td><td class="px-2 py-1.5 text-right text-text-primary">0.0632</td><td class="px-2 py-1.5 text-right text-text-primary">0.8984</td><td class="px-2 py-1.5 text-right text-text-primary">0.4528</td><td class="px-2 py-1.5 text-right text-text-primary">0.6241</td><td class="px-2 py-1.5 text-right text-text-primary">0.5248</td></tr>
+              <tr class="vt-test"><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Gap</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0002</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0004</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0001</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">0.0000</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">0.0000</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0003</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0010</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0001</td></tr>
+              <tr class="vt-val"><td rowspan="3" class="px-6 py-2 align-middle font-sans text-text-secondary">Logistic regression</td><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Validation</td><td class="px-2 py-1.5 text-right text-text-secondary">0.8991</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9760</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0854</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0209</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9739</td><td class="px-2 py-1.5 text-right text-text-secondary">0.8652</td><td class="px-2 py-1.5 text-right text-text-secondary">0.8409</td><td class="px-2 py-1.5 text-right text-text-secondary">0.8528</td></tr>
+              <tr class="vt-mid"><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Test</td><td class="px-2 py-1.5 text-right text-text-primary">0.8946</td><td class="px-2 py-1.5 text-right text-text-primary">0.9767</td><td class="px-2 py-1.5 text-right text-text-primary">0.0873</td><td class="px-2 py-1.5 text-right text-text-primary">0.0217</td><td class="px-2 py-1.5 text-right text-text-primary">0.9728</td><td class="px-2 py-1.5 text-right text-text-primary">0.8565</td><td class="px-2 py-1.5 text-right text-text-primary">0.8373</td><td class="px-2 py-1.5 text-right text-text-primary">0.8468</td></tr>
+              <tr class="vt-test"><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Gap</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0045</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0007</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0019</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0008</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0011</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0087</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0036</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0060</td></tr>
+              <tr class="vt-val"><td rowspan="3" class="px-6 py-2 align-middle font-sans text-text-secondary">Random forest</td><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Validation</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9641</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9951</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0461</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0129</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9820</td><td class="px-2 py-1.5 text-right text-text-secondary">0.8950</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9065</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9007</td></tr>
+              <tr class="vt-mid"><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Test</td><td class="px-2 py-1.5 text-right text-text-primary">0.9596</td><td class="px-2 py-1.5 text-right text-text-primary">0.9946</td><td class="px-2 py-1.5 text-right text-text-primary">0.0489</td><td class="px-2 py-1.5 text-right text-text-primary">0.0138</td><td class="px-2 py-1.5 text-right text-text-primary">0.9808</td><td class="px-2 py-1.5 text-right text-text-primary">0.8878</td><td class="px-2 py-1.5 text-right text-text-primary">0.9008</td><td class="px-2 py-1.5 text-right text-text-primary">0.8942</td></tr>
+              <tr class="vt-test"><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Gap</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0045</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0005</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0028</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0009</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0012</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0072</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0057</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0065</td></tr>
+              <tr class="vt-val"><td rowspan="3" class="px-6 py-2 align-middle font-sans text-text-secondary">LightGBM (default)</td><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Validation</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9670</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9957</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0439</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0125</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9826</td><td class="px-2 py-1.5 text-right text-text-secondary">0.8955</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9127</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9040</td></tr>
+              <tr class="vt-mid"><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Test</td><td class="px-2 py-1.5 text-right text-text-primary">0.9619</td><td class="px-2 py-1.5 text-right text-text-primary">0.9953</td><td class="px-2 py-1.5 text-right text-text-primary">0.0467</td><td class="px-2 py-1.5 text-right text-text-primary">0.0134</td><td class="px-2 py-1.5 text-right text-text-primary">0.9809</td><td class="px-2 py-1.5 text-right text-text-primary">0.8848</td><td class="px-2 py-1.5 text-right text-text-primary">0.9053</td><td class="px-2 py-1.5 text-right text-text-primary">0.8950</td></tr>
+              <tr class="vt-test"><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Gap</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0051</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0004</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0028</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0009</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0017</td><td class="px-2 py-1.5 text-right text-[11px] text-accent-danger font-bold">-0.0107</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0074</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0090</td></tr>
+              <tr class="vt-val bg-surface-subtle"><td rowspan="3" class="px-6 py-2 align-middle font-sans font-bold text-text-primary">LightGBM (tuned) &#9733;</td><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Validation</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9686</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9962</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0423</td><td class="px-2 py-1.5 text-right text-text-secondary">0.0121</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9832</td><td class="px-2 py-1.5 text-right text-text-secondary">0.8942</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9224</td><td class="px-2 py-1.5 text-right text-text-secondary">0.9081</td></tr>
+              <tr class="vt-mid bg-surface-subtle"><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Test</td><td class="px-2 py-1.5 text-right font-bold text-text-primary">0.9644</td><td class="px-2 py-1.5 text-right font-bold text-text-primary">0.9958</td><td class="px-2 py-1.5 text-right font-bold text-text-primary">0.0452</td><td class="px-2 py-1.5 text-right font-bold text-text-primary">0.0131</td><td class="px-2 py-1.5 text-right font-bold text-text-primary">0.9813</td><td class="px-2 py-1.5 text-right font-bold text-text-primary">0.8828</td><td class="px-2 py-1.5 text-right font-bold text-text-primary">0.9129</td><td class="px-2 py-1.5 text-right font-bold text-text-primary">0.8976</td></tr>
+              <tr class="vt-test bg-surface-subtle"><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Gap</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0042</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0004</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0029</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0010</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0019</td><td class="px-2 py-1.5 text-right text-[11px] text-accent-danger font-bold">-0.0114</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0095</td><td class="px-2 py-1.5 text-right text-[11px] text-accent-danger font-bold">-0.0105</td></tr>
+            </tbody>
           </table>
           <p class="text-[11px] text-text-muted px-6 py-3" id="ovn-gap-note"></p>
         </div>
@@ -893,6 +1233,7 @@
             <p class="text-[11px] text-text-secondary mb-4">Share of total split gain, top 12 features. <span style="color:#1D4ED8" class="font-bold">billing</span>, <span style="color:#15803D" class="font-bold">listening</span>, <span style="color:#B45309" class="font-bold">demographic</span>.</p>
             <div class="h-72 relative"><canvas id="ovn-importance-chart"></canvas></div>
             <p class="text-xs text-text-secondary mt-3" id="ovn-importance-text"></p>
+            <p class="text-[11px] text-text-muted mt-2">Split gain is global: it says which features the model uses most, not in which direction. For a single subscriber, the <a href="#model-predictor" class="underline">Model Predictor</a> breaks the prediction into <strong>per-feature contributions</strong>: walking each of the 861 trees, the change in the node value at every split is credited to the feature used there, so the contributions plus a base value add up exactly to the predicted log-odds.</p>
           </div>
         </div>
 
@@ -911,12 +1252,13 @@
           </table>
           <p class="text-xs text-text-secondary px-6 py-4 leading-relaxed max-w-5xl" id="ovn-strict-text"></p>
         </div>
+        <div class="how-grid"><details class="how"><summary>Why the 31 March score is optimistic</summary><div><p>A subscriber churns if they do not renew within 30 days of their plan's expiry, and every labelled plan expires in March 2017. 95.4% of subscribers have a March transaction, and they churn at only 5.5%; the rest churn at 80.9%.</p><p>So by 31 March, a renewal is often already visible in billing. This is not leakage from the future (it is dated before the cutoff), but it means the model partly <em>reads</em> the decision instead of <em>predicting</em> it.</p></div></details><details class="how"><summary>What the strict check changes, and what it does not</summary><div><p>Notebook 08 rebuilds every billing feature from transactions dated before <strong>1 March 2017</strong>, before any labelled expiry, and retrains the same tuned LightGBM on the same split. The threshold is re-chosen on validation.</p><p>Listening still covers all of March, so some of it may fall after a subscriber's expiry. Part of listening's +0.1474 may therefore still reflect the outcome.</p></div></details></div>
       </div>
     </section>
 
             <section id="ovn-errors" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 6 of 9: Error analysis"><span class="chap-no" aria-hidden="true">06</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Error analysis</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <div class="chap" aria-label="Section 8 of 16: Errors"><span class="chap-no" aria-hidden="true">08</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Errors</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Where the champion goes wrong</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8" id="ovn-errors-lead"></p>
 
@@ -970,9 +1312,39 @@
       </div>
     </section>
 
+            <section id="ovn-failures" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 9 of 16: Failure modes"><span class="chap-no" aria-hidden="true">09</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Failure modes</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Where the champion fails, and why</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">At &tau; = 0.45 the champion misses 1,484 of 17,029 test churners and raises 2,063 false alarms. These come mostly from four groups.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><div class="flex items-baseline justify-between gap-3 mb-1"><h3 class="font-bold text-text-primary">1. Plans expiring soon after the cutoff</h3><span class="font-mono text-sm font-extrabold text-accent-danger whitespace-nowrap">recall 0.595</span></div><p class="text-text-secondary leading-relaxed">158,450 test subscribers have a plan expiring within 30 days, and only 1.85% of them churn. The renewal has not happened yet, so billing cannot show it. 1,187 of the 1,484 missed churners are here.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><div class="flex items-baseline justify-between gap-3 mb-1"><h3 class="font-bold text-text-primary">2. Auto-renew still on</h3><span class="font-mono text-sm font-extrabold text-accent-danger whitespace-nowrap">36.6% of misses</span></div><p class="text-text-secondary leading-relaxed">Over a third of missed churners still had auto-renew switched on. Their billing looks exactly like a loyal subscriber's, and the model leans on billing.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><div class="flex items-baseline justify-between gap-3 mb-1"><h3 class="font-bold text-text-primary">3. Subscribers with no transactions</h3><span class="font-mono text-sm font-extrabold text-accent-danger whitespace-nowrap">1,233 false alarms</span></div><p class="text-text-secondary leading-relaxed">7,248 subscribers have no billing history and 78% of them churn, so the model flags almost all of them. The 22% who stay make up most of the false alarms.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><div class="flex items-baseline justify-between gap-3 mb-1"><h3 class="font-bold text-text-primary">4. Active listeners who still leave</h3><span class="font-mono text-sm font-extrabold text-accent-danger whitespace-nowrap">recall 0.892</span></div><p class="text-text-secondary leading-relaxed">Recall is 0.892 for subscribers with March listening, against 0.985 for those without. Someone who keeps playing music but does not renew gives the model little to go on.</p></div>
+        </div>
+        <p class="text-xs text-text-secondary mt-6 max-w-4xl">Per-segment numbers and examples are in <a href="#ovn-errors" class="underline">Errors</a>. A time-based split, cutting listening at each expiry, and a model for soon-expiring plans are listed under <a href="#ovn-next" class="underline">What next</a>.</p>
+      </div>
+    </section>
+
+            <section id="ovn-runtime" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 10 of 16: Runtime model"><span class="chap-no" aria-hidden="true">10</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Runtime model</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">The real model, running in your browser</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">The <a href="#model-predictor" class="underline">Model Predictor</a> page does not call a server and does not use a simplified copy. It runs the exact tuned LightGBM from <code>models/lgbm_champion.txt</code> in JavaScript.</p>
+        <dl class="led">
+          <div class="led-row"><dt><span class="led-big">861</span><span class="led-cap">Trees exported</span></dt>
+            <dd>Notebook 07 writes every tree (split features, thresholds, categorical sets, leaf values) to <code>js/generated/model_lgbm.js</code> (2.9 MB). <code>js/sandbox_engine.js</code> walks each tree the same way LightGBM does, including its rules for missing values and categories, sums the leaves and applies the sigmoid.</dd></div>
+          <div class="led-row"><dt><span class="led-big">16</span><span class="led-cap">Inputs asked</span></dt>
+            <dd><p>The form asks for 16 of the 33 features: the ones a person can actually know about a subscriber, such as plan length, last payment, auto-renew, days to expiry, March listening and age. Asking for all of them would mean typing in a full payment history (number of payments, past cancellations, share of auto-renew payments, discounts, payment methods), which nobody has to hand.</p>
+            <p class="mt-2">The other 17 are handled like this: 3 presence flags are always 1; 6 are worked out from the inputs (for example, days since the last payment = plan length &minus; days to expiry); about 8 history features are filled with the training median of subscribers with the same auto-renew and cancel status. Those 8 carry about 5% of the model's split gain, so the prediction is close to the real model's answer, but it illustrates the model rather than scoring a real subscriber. The page also shows how much each feature pushed the prediction up or down: along each tree's path, the change in node value at every split is credited to that split's feature, so the contributions plus a base value add up exactly to the log-odds (checked in <code>website/tests/check_model_parity.mjs</code>).</p></dd></div>
+        </dl>
+      </div>
+    </section>
+
             <section id="ovn-limitations" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 7 of 9: Limitations"><span class="chap-no" aria-hidden="true">07</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Limitations</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <div class="chap" aria-label="Section 11 of 16: Limitations"><span class="chap-no" aria-hidden="true">11</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Limitations</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">What these results do not show</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
@@ -981,7 +1353,7 @@
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">One snapshot, random split</h3>
-            <p class="text-text-secondary leading-relaxed">Train and test subscribers come from the same month. We do not show that the model keeps working for a later month, when prices, promotions or user mix may change.</p>
+            <p class="text-text-secondary leading-relaxed">Train and test subscribers come from the same month. We do not show that the model keeps working for a later month, when prices, promotions or user mix may change. A split by time was not possible: the dataset labels only one cohort (plans expiring in March 2017), and the listening logs cover that month only. So we used a stratified random split by subscriber, which keeps each subscriber in one split and the churn rate equal across splits, and we state that the scores hold for this month&rsquo;s population, not for future months.</p>
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">Hard cases stay hard</h3>
@@ -1017,44 +1389,165 @@
 
     <section id="ovn-conclusion" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-card">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 8 of 9: Conclusion"><span class="chap-no" aria-hidden="true">08</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Conclusion</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <div class="chap" aria-label="Section 12 of 16: Conclusion"><span class="chap-no" aria-hidden="true">12</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Conclusion</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Answer to the question</h2>
+        <div class="callout mb-6 max-w-5xl">
+          <h3>Which number to quote</h3>
+          <p><strong>0.9644</strong> is an upper bound: at 31 March the billing record often already shows whether the subscriber renewed, so it measures how well the model reads that record, not how early it can warn. <strong>0.5682</strong> [0.5610, 0.5757] is the closer-to-early-warning score: billing from before 1 March, before any labelled plan expires, plus March listening (6.3&times; the no-skill level). It is still not a pure 1 March prediction, because the listening features run to 31 March; a true one would cut listening too (see What next).</p>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm" id="ovn-conclusion-cards"></div>
         <p class="text-xs text-text-secondary mt-6 max-w-4xl leading-relaxed" id="ovn-conclusion-text"></p>
       </div>
     </section>
 
+    <section id="ovn-next" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 13 of 16: What next"><span class="chap-no" aria-hidden="true">13</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">What next</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">What we would do next</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Split by time, not at random</h3><p class="text-text-secondary leading-relaxed">Train on earlier months and test on a later one, to see how the model holds up as behaviour and prices drift.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Cut listening at each subscriber's expiry</h3><p class="text-text-secondary leading-relaxed">So the strict check has no post-expiry signal at all, and the listening gain at 1 March can be read cleanly.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Choose the threshold by cost</h3><p class="text-text-secondary leading-relaxed">Set &tau; from the real cost of a lost subscriber versus a wasted offer, instead of F1, which weighs them equally.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">A model for soon-expiring plans</h3><p class="text-text-secondary leading-relaxed">Plans expiring within 30 days of the cutoff are where recall drops to 0.595; a model trained only on them could use listening trends more.</p></div>
+        </div>
+      </div>
+    </section>
+
     <section id="ovn-repro" class="py-14 sm:py-16 bg-surface-subtle">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 9 of 9: Reproduction steps"><span class="chap-no" aria-hidden="true">09</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Reproduction steps</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Everything on this page comes from seven notebooks</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
-            <ol class="text-xs text-text-secondary space-y-2 list-decimal pl-4">
-              <li><a class="underline font-mono text-text-primary" href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/01_raw_data_analysis.ipynb">01_raw_data_analysis</a>: detailed analysis of the 5 raw tables.</li>
-              <li><a class="underline font-mono text-text-primary" href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/02_feature_engineering.ipynb">02_feature_engineering</a>: one row per subscriber, 33 features.</li>
-              <li><a class="underline font-mono text-text-primary" href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/03_feature_analysis_and_split.ipynb">03_feature_analysis_and_split</a>: the 70/10/20 split, then feature plots on the training split.</li>
-              <li><a class="underline font-mono text-text-primary" href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/04_baselines.ipynb">04_baselines</a>: majority and rule baselines, tuned logistic regression.</li>
-              <li><a class="underline font-mono text-text-primary" href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/05_tree_models_and_tuning.ipynb">05_tree_models_and_tuning</a>: random forest grid, LightGBM with Optuna, threshold, ablation.</li>
-              <li><a class="underline font-mono text-text-primary" href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/06_test_evaluation.ipynb">06_test_evaluation</a>: test metrics, all curves, bootstrap, error analysis.</li>
-              <li><a class="underline font-mono text-text-primary" href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/07_website_export.ipynb">07_website_export</a>: numbers and the browser model for this site.</li>
-              <li><a class="underline font-mono text-text-primary" href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/08_strict_cutoff.ipynb">08_strict_cutoff</a>: sensitivity check with billing cut at 1 March (run before 07).</li>
-            </ol>
-            <p class="text-[11px] text-text-muted mt-4">Full metric tables: <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/test_metrics.csv">results/test_metrics.csv</a>, <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/validation_metrics.csv">results/validation_metrics.csv</a>, <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/strict_cutoff_metrics.csv">results/strict_cutoff_metrics.csv</a>. Setup, data download, AI-use disclosure and citations: <a class="underline" href="https://github.com/destopianpirate/es335_final2#readme">README</a>.</p>
-          </div>
-          <div class="bg-[#121212] text-[#E2E8F0] rounded-2xl p-6 font-mono text-[11px] leading-relaxed overflow-x-auto">
-<pre># 1. put the 5 Kaggle CSVs in data/raw/
-pip install -r requirements.txt
-cd notebooks
-for nb in 01 02 03 04 05 06 08 07; do   # 08 before 07
+        <div class="chap" aria-label="Section 14 of 16: Reproduction steps"><span class="chap-no" aria-hidden="true">14</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Reproduction steps</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-2">Everything on this page comes from eight notebooks and two scripts</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-3xl mb-8">Six steps from the raw Kaggle files to this website. Run them from the repository root.</p>
+        <ol class="rp-steps">
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">01</span>
+              <div class="rp-body">
+                <h3>Get the data</h3>
+                <p>Download the five CSVs from <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer">Kaggle</a> (accept the competition rules first) and put them in <code>data/raw/</code>. The README lists which Kaggle file becomes which name.</p>
+                
+                
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">02</span>
+              <div class="rp-body">
+                <h3>Install</h3>
+                <p>Python 3.11 or newer. Exact versions are pinned in <code>requirements.txt</code>.</p>
+                <div class="rp-cmd"><pre><code>pip install -r requirements.txt</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">03</span>
+              <div class="rp-body">
+                <h3>Run the notebooks</h3>
+                <p>In this order; 08 runs before 07 because 07 exports its results. About 30 minutes and 8 GB of RAM in total.</p>
+                <div class="rp-cmd"><pre><code>cd notebooks
+for nb in 01 02 03 04 05 06 08 07; do
   jupyter nbconvert --to notebook --execute --inplace ${nb}_*.ipynb
 done
-# 2. rebuild this website into docs/
-cd .. &amp;&amp; python scripts/export_ds_extra.py
-python website/build.py
-node website/tests/check_model_parity.mjs   # browser model == Python</pre>
+cd ..</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                <ol class="rp-nbs">
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/01_raw_data_analysis.ipynb"><span>01</span>raw_data_analysis</a><em>the 5 raw tables</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/02_feature_engineering.ipynb"><span>02</span>feature_engineering</a><em>one row per subscriber, 33 features</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/03_feature_analysis_and_split.ipynb"><span>03</span>feature_analysis_and_split</a><em>70 / 10 / 20 split, feature plots</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/04_baselines.ipynb"><span>04</span>baselines</a><em>majority, rule, logistic regression</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/05_tree_models_and_tuning.ipynb"><span>05</span>tree_models_and_tuning</a><em>random forest, LightGBM + Optuna, threshold, ablation</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/06_test_evaluation.ipynb"><span>06</span>test_evaluation</a><em>test metrics, curves, bootstrap, errors</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/08_strict_cutoff.ipynb"><span>08</span>strict_cutoff</a><em>billing cut at 1 March (run before 07)</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/07_website_export.ipynb"><span>07</span>website_export</a><em>numbers and the browser model for this site</em></li>
+                </ol>
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">04</span>
+              <div class="rp-body">
+                <h3>Export the extra tables</h3>
+                <p>Data Studio tables that need the raw files, and every model scored on validation and test.</p>
+                <div class="rp-cmd"><pre><code>python scripts/export_ds_extra.py
+python scripts/export_val_test_metrics.py</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">05</span>
+              <div class="rp-body">
+                <h3>Build and open the site</h3>
+                <p>Writes the site to <code>docs/</code> and serves it locally.</p>
+                <div class="rp-cmd"><pre><code>python website/build.py
+python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">06</span>
+              <div class="rp-body">
+                <h3>Check (optional)</h3>
+                <p>The browser model should match Python, and <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/test_metrics.csv">results/test_metrics.csv</a> should show the tuned LightGBM at PR-AUC 0.9644.</p>
+                <div class="rp-cmd"><pre><code>node website/tests/check_model_parity.mjs</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                
+              </div>
+            </li>
+        </ol>
+        <p class="rp-files">Metric tables: <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/test_metrics.csv">test_metrics.csv</a> &middot; <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/validation_metrics.csv">validation_metrics.csv</a> &middot; <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/val_test_metrics.csv">val_test_metrics.csv</a> &middot; <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/model_comparison.csv">model_comparison.csv</a> &middot; <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/strict_cutoff_metrics.csv">strict_cutoff_metrics.csv</a>. Setup details, data access and citations: <a class="underline" href="https://github.com/destopianpirate/es335_final2#readme">README</a>.</p>
+      </div>
+    </section>
+
+    <section id="ovn-ai" class="py-14 sm:py-16 border-t border-border-subtle bg-page-bg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 15 of 16: AI assistance"><span class="chap-no" aria-hidden="true">15</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">AI assistance</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">How we used AI tools</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-sm text-text-secondary leading-relaxed">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">What AI helped with</h3>
+            <ul class="list-disc pl-5 space-y-2">
+              <li>Building this website: layout, styling, charts, the Data Studio and the in-browser predictor.</li>
+              <li>Drafting and checking explanatory text on this page and in the README.</li>
+            </ul>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">What we did</h3>
+            <ul class="list-disc pl-5 space-y-2">
+              <li>Formulated the research question and chose the dataset.</li>
+              <li>Ran every notebook, checked the numbers, and reviewed every change to the site and repository.</li>
+            </ul>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section id="ovn-libs" class="py-14 sm:py-16 border-t border-border-subtle bg-surface-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="chap" aria-label="Section 16 of 16: Libraries and data"><span class="chap-no" aria-hidden="true">16</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Libraries and data</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">What this project is built on</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs text-text-secondary leading-relaxed">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Libraries</h3>
+            <ul class="space-y-1.5">
+              <li><strong class="text-text-primary">LightGBM</strong> (Ke et al., 2017): gradient-boosted trees, and the model exported to this page.</li>
+              <li><strong class="text-text-primary">Optuna</strong> (Akiba et al., 2019): hyperparameter search.</li>
+              <li><strong class="text-text-primary">scikit-learn</strong> (Pedregosa et al., 2011): logistic regression, random forest, split and metrics.</li>
+              <li><strong class="text-text-primary">pandas, NumPy, PyArrow</strong>: tables, features and bootstrap resampling.</li>
+              <li><strong class="text-text-primary">Matplotlib</strong>: the notebook figures; <strong class="text-text-primary">joblib</strong>: saved models.</li>
+              <li><strong class="text-text-primary">Chart.js, Tailwind CSS, Mermaid</strong>: charts, styling and diagrams on this site.</li>
+            </ul>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Data and references</h3>
+            <ul class="space-y-1.5">
+              <li><strong class="text-text-primary">Data:</strong> <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data">Kaggle, Customer Retention Datathon (Riyadh Edition)</a>, from KKBOX's WSDM 2017 churn challenge.</li>
+              <li>Ke, G. et al. LightGBM: A Highly Efficient Gradient Boosting Decision Tree. NeurIPS 2017.</li>
+              <li>Akiba, T. et al. Optuna: A Next-generation Hyperparameter Optimization Framework. KDD 2019.</li>
+              <li>Pedregosa, F. et al. Scikit-learn: Machine Learning in Python. JMLR 12, 2011.</li>
+              <li>Saito, T. and Rehmsmeier, M. The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets. PLoS ONE 10(3), 2015.</li>
+            </ul>
+            <p class="mt-3">Full setup and citations: <a class="underline" href="https://github.com/destopianpirate/es335_final2#readme">README</a>.</p>
+          </div>
+        </div>
+        <a href="#model-predictor" class="next-cta">
+          <span><small>Next</small><b>Go to the Model Predictor</b><em>Score a subscriber yourself with the real model</em></span>
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+        </a>
       </div>
     </section>
 
@@ -1062,6 +1555,16 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
 
       <!-- VIEW 3: DATA STUDIO (main data points only) -->
       <div id="view-data-studio" class="view-panel hidden">
+            <section id="dsn-top" class="rh dh border-b border-border-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="rh-title dh-title"><span class="rh-line"><span>Data Studio<i class="rh-dot" aria-hidden="true">.</i></span></span></h1>
+        <p class="dh-lede">The data behind the report: five raw tables, how they become one row of 33 features per subscriber, and how those rows are split for training and testing.</p>
+        <nav class="rh-contents dh-contents" aria-label="On this page">
+          <ol class="toc-list rh-toc"><li><a href="#dsn-tables"><span>01</span>The five tables</a></li><li><a href="#dsn-raw"><span>02</span>Raw data</a></li><li><a href="#dsn-overlap"><span>03</span>File overlap</a></li><li><a href="#dsn-quality"><span>04</span>Data quality</a></li><li><a href="#dsn-signals"><span>05</span>Churn signal explorer</a></li><li><a href="#dsn-explorer"><span>06</span>Churn by group</a></li><li><a href="#dsn-features"><span>07</span>Feature analysis</a></li><li><a href="#dsn-training"><span>08</span>Data for training</a></li><li><a href="#dsn-split"><span>09</span>Train / validation / test</a></li></ol>
+        </nav>
+      </div>
+    </section>
+
             <section id="dsn-tables" class="py-14 sm:py-16 border-b border-border-subtle bg-gradient-to-b from-page-bg to-surface-subtle">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="chap" aria-label="Section 1 of 9: The five tables"><span class="chap-no" aria-hidden="true">01</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">The five tables</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
@@ -1089,9 +1592,9 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
         </div>
 
         <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mt-8">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">How the five files become one feature matrix</h2>
-          <p class="text-[11px] text-text-secondary mb-4">Each table is cleaned and aggregated to one row per subscriber (<code>msno</code>), then left-joined onto the labels and split. Notebooks 02 and 03.</p>
-          <div class="overflow-x-auto"><div data-mermaid="data-flow" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="Data flow: four raw files aggregated per subscriber, left-joined into a 946,686 by 33 feature matrix, then split into train, validation and test">Loading diagram&hellip;</div></div>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">How the five files become the feature matrices</h2>
+          <p class="text-[11px] text-text-secondary mb-4">Each table is cleaned and aggregated to one row per subscriber (<code>msno</code>), then left-joined onto the two ID lists. The labelled subscribers are split into train, validation and test (notebooks 02 and 03). The Kaggle test subscribers get the same 33 features but have no label; the tuned model predicts them into <code>submission.csv</code> (notebook 07). Dashed boxes: the Kaggle test path.</p>
+          <div class="overflow-x-auto"><div data-mermaid="data-flow" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="Data flow: five raw files; members, transactions and user logs are aggregated per subscriber and left-joined onto the labelled IDs and the Kaggle test IDs. The labelled 946,686 by 33 matrix is split into train, validation and test; the unlabelled 24,274 by 33 Kaggle test matrix is predicted into submission.csv.">Loading diagram&hellip;</div></div>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
@@ -1123,6 +1626,52 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
           Data types are what pandas infers from the CSV; dates are stored as YYYYMMDD integers and parsed during feature engineering.
         </p>
         <div id="dsn-raw-schema" class="space-y-3"></div>
+
+        <h2 class="text-xl sm:text-2xl font-extrabold text-text-primary tracking-tight mt-12 mb-2">How we joined them</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-5">
+          The files have different shapes: one row per subscriber, per payment, or per day of listening. Each file is first reduced to
+          <strong class="text-text-primary">one row per subscriber</strong>, then all three are <strong class="text-text-primary">left-joined on <span class="font-mono">msno</span></strong>
+          onto the ID list, in the order members &rarr; transactions &rarr; user_logs. A left join keeps every subscriber in the list, even one missing from a file,
+          so the matrix keeps exactly 946,686 labelled rows (and 24,274 Kaggle test rows, built the same way). Notebook 02.
+        </p>
+        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto">
+          <table class="w-full text-xs min-w-[880px]">
+            <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
+              <tr><th class="text-left px-4 py-2">File</th><th class="text-left px-4 py-2">Rows per subscriber</th><th class="text-left px-4 py-2 w-[34%]">Reduced to one row by</th><th class="text-left px-4 py-2">Gives</th><th class="text-left px-4 py-2">If the subscriber is not in the file</th></tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle text-text-secondary leading-relaxed">
+                <tr>
+                  <td class="px-4 py-3 align-top font-mono font-semibold text-text-primary whitespace-nowrap">train_data.csv<br/>kaggle_test_data.csv</td>
+                  <td class="px-4 py-3 align-top whitespace-nowrap">1</td>
+                  <td class="px-4 py-3 align-top">The base of each matrix: the list of IDs. Duplicate <code>msno</code> rows are dropped. Only rows for these IDs are kept from the other three files.</td>
+                  <td class="px-4 py-3 align-top"><code>msno</code>, and <code>is_churn</code> for the labelled list</td>
+                  <td class="px-4 py-3 align-top">&ndash;</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 align-top font-mono font-semibold text-text-primary whitespace-nowrap">members.csv</td>
+                  <td class="px-4 py-3 align-top whitespace-nowrap">0 or 1</td>
+                  <td class="px-4 py-3 align-top">Duplicate profiles dropped (last kept). Gender coded 0 / 1 / 2; ages outside 10&ndash;90 set to missing; account age measured to 31 March 2017.</td>
+                  <td class="px-4 py-3 align-top">6 demographic: city, registered_via, gender, age, tenure_days, has_member</td>
+                  <td class="px-4 py-3 align-top"><code>has_member</code> = 0; the profile fields stay missing</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 align-top font-mono font-semibold text-text-primary whitespace-nowrap">transactions.csv</td>
+                  <td class="px-4 py-3 align-top whitespace-nowrap">0 to many</td>
+                  <td class="px-4 py-3 align-top">Sorted by transaction date. Over the whole history: count, total paid, mean plan length, share with auto-renew, cancels, discounts, payment methods. From the <strong>latest</strong> transaction: payment method, plan length, amount, auto-renew, cancel flag, days since it, days until its plan expires.</td>
+                  <td class="px-4 py-3 align-top">15 billing</td>
+                  <td class="px-4 py-3 align-top"><code>has_tx</code> = 0; counts and sums = 0; the latest-transaction fields stay missing</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 align-top font-mono font-semibold text-text-primary whitespace-nowrap">user_logs.csv</td>
+                  <td class="px-4 py-3 align-top whitespace-nowrap">0 to 31<br/><span class="text-text-muted">(one per day)</span></td>
+                  <td class="px-4 py-3 align-top">Read in chunks; daily seconds clipped to [0, 24 h]. Summed over March: active days, hours, songs, unique songs, skips, full plays. The last 7 days (25&ndash;31 March) are counted separately, plus the last active day and day-to-day variation.</td>
+                  <td class="px-4 py-3 align-top">12 listening</td>
+                  <td class="px-4 py-3 align-top"><code>has_logs</code> = 0; totals and ratios = 0; days since last listen = 31</td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-[11px] text-text-muted mt-3 max-w-4xl">After the join, every feature is stored as <span class="font-mono">float32</span>; the gaps that remain (age, city, the latest-transaction fields) are filled inside each model on the training split only, or handled natively by LightGBM. The &ldquo;latest transaction&rdquo; fields are where March renewals enter the features: see <a href="#ovn-leakage" class="underline">Leakage</a> in the Report.</p>
 
         <h2 class="text-xl sm:text-2xl font-extrabold text-text-primary tracking-tight mt-12 mb-2">The feature matrix</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-5">
@@ -1271,7 +1820,7 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Churn by group: billing, listening and members</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">
           The same idea as the signal explorer, for the groupings people usually ask about: payment method, plan length, price paid, number of transactions, listening time, city and registration channel.
-          Every table is measured on the <span data-sd="data.train.subscribers" data-fmt="int"></span> labelled subscribers (all splits). These tables are descriptive only: no feature, model or threshold choice was based on them. A missing group means the subscriber has no row in that table.
+          Every table is measured on the training split only (662,679 subscribers), so no validation or test label is used here. These tables are descriptive only: no feature, model or threshold choice was based on them. A missing group means the subscriber has no row in that table.
           Generated by <code>scripts/export_ds_extra.py</code>.
         </p>
 
@@ -1394,6 +1943,10 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
             </table>
           </div>
         </div>
+        <a href="#report" class="next-cta">
+          <span><small>Next</small><b>Go to the final report</b><em>The full reasoning, from the question to the conclusion</em></span>
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+        </a>
       </div>
     </section>
 
@@ -1859,26 +2412,29 @@ node website/tests/check_model_parity.mjs   # browser model == Python</pre>
   </div>
 
   <!-- Generated by notebooks/07_website_export.ipynb -->
-  <script src="js/generated/site_data.js"></script>
-  <script src="js/generated/model_lgbm.js"></script>
-  <script src="js/generated/ds_extra.js"></script>
+  <script src="js/generated/site_data.js?v=1794924353"></script>
+  <script src="js/generated/model_lgbm.js?v=1794924353"></script>
+  <script src="js/generated/ds_extra.js?v=1794924353"></script>
 
   <!-- Shell -->
-  <script src="js/sidebar_nav.js"></script>
+  <script src="js/sidebar_nav.js?v=1794924353"></script>
 
   <!-- Pages -->
-  <script src="js/seg_tabs.js"></script>
-  <script src="js/site_common.js"></script>
-  <script src="js/overview.js"></script>
-  <script src="js/hero_motion.js"></script>
-  <script src="js/data_studio.js"></script>
-  <script src="js/sandbox_engine.js"></script>
-  <script src="js/sandbox_ui.js"></script>
+  <script src="js/seg_tabs.js?v=1794924353"></script>
+  <script src="js/site_common.js?v=1794924353"></script>
+  <script src="js/overview.js?v=1794924353"></script>
+  <script src="js/hero_motion.js?v=1794924353"></script>
+  <script src="js/data_studio.js?v=1794924353"></script>
+  <script src="js/sandbox_engine.js?v=1794924353"></script>
+  <script src="js/sandbox_ui.js?v=1794924353"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
-  <script src="js/diagrams.js"></script>
+  <script src="js/diagrams.js?v=1794924353"></script>
 
-  <script src="js/section_rail.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/accent_picker.js?v=1794924353"></script>
+  <script src="js/copy_cmd.js?v=1794924353"></script>
+  <script src="js/report_hero.js?v=1794924353"></script>
+  <script src="js/section_rail.js?v=1794924353"></script>
+  <script src="js/app.js?v=1794924353"></script>
 </body>
 </html>
