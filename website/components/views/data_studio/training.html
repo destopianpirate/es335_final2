@@ -16,13 +16,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Churn rate by feature value</h3>
-            <p class="text-[11px] text-text-secondary mb-3" id="dsn-decile-note"></p>
-            <select id="dsn-decile-select" aria-label="Feature" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary mb-4"></select>
-            <div class="h-72 relative"><canvas id="dsn-decile-chart"></canvas></div>
-          </div>
+        <div class="grid grid-cols-1 gap-8 mb-8">
           <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
             <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Churn rate when a value is missing</h3>
             <p class="text-[11px] text-text-secondary mb-4">Each group of features that is missing together. Missingness carries signal, so it is kept as a flag and not dropped.</p>

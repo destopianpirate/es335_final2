@@ -61,9 +61,7 @@ function ovnRenderMetrics() {
   }).join(''));
 
   const lr = modelRow('Logistic regression'), rf = modelRow('Random forest'), def = modelRow('LightGBM (default)');
-  setText('ovn-model-note', `Bold = best in column. Every learned model beats both baselines by a wide margin. Trees beat the linear model
-    (PR-AUC ${f4(rf.pr_auc)} / ${f4(def.pr_auc)} vs ${f4(lr.pr_auc)}), because churn depends on thresholds and interactions (for example expiry date &times; auto-renew).
-    Tuning adds ${sdFormat(c_pr() - def.pr_auc, 'signed4')} PR-AUC over default LightGBM, small but above zero in a paired bootstrap (<a href="#ovn-model-diff" class="underline">below</a>). Validation scores for the same models: <a href="#ovn-model-metrics" class="underline">Baseline and methods</a>.`);
+  setText('ovn-model-note', `Bold = best in column. Every learned model beats both baselines by far. Trees beat the linear model (PR-AUC ${f4(rf.pr_auc)} / ${f4(def.pr_auc)} vs ${f4(lr.pr_auc)}), because churn depends on thresholds and combinations, such as expiry date and auto-renew. Tuning adds ${sdFormat(c_pr() - def.pr_auc, 'signed4')}: small, but real (<a href="#ovn-model-diff" class="underline">paired test</a>).`);
   setText('ovn-results-lead', `All six models were scored once on the test split. The champion is the model with the best validation log loss; its test PR-AUC confirms the choice.`);
 }
 const c_pr = () => modelRow(CHAMP).pr_auc;
@@ -176,7 +174,7 @@ function ovnRenderImportance() {
       scales: { x: { title: { text: '% of total gain' } }, y: { grid: { display: false } } } },
   });
   const g = SITE.importance_by_group || {};
-  setText('ovn-importance-text', `By group: billing ${(g.billing || 0).toFixed(1)} %, listening ${(g.listening || 0).toFixed(1)} %, demographic ${(g.demographic || 0).toFixed(1)} % of total gain. Split gain shows what the model <em>uses</em>, not what <em>causes</em> churn; when features are correlated (for example the several expiry and plan-length features) the gain is shared between them somewhat arbitrarily, so read the groups, not the exact ranks.`);
+  setText('ovn-importance-text', `By group: billing ${(g.billing || 0).toFixed(1)} %, listening ${(g.listening || 0).toFixed(1)} %, demographic ${(g.demographic || 0).toFixed(1)} % of total gain. This is what the model <em>uses</em>, not what <em>causes</em> churn. Related features share gain somewhat arbitrarily, so read the groups, not the exact ranks.`);
 }
 
 function ovnRenderErrors() {
@@ -206,12 +204,7 @@ function ovnRenderErrors() {
   const soon = seg('Plan expiry vs cutoff', 'within 30 days'), cancel = seg('Cancel logged', 'yes'), expired = seg('Plan expiry vs cutoff', 'already expired');
   const prof = Object.fromEntries((SITE.error_profile || []).map(r => [r.feature, r]));
   const ad = prof.active_days || {}, dsla = prof.days_since_last_active || {};
-  setText('ovn-errors-text', `<strong class="text-text-primary">Reading.</strong> Churners whose billing already shows the decision are almost all caught
-    (recall ${pct1(cancel.recall)} after a cancellation, ${pct1(expired.recall)} for already-expired plans).
-    The misses concentrate in the largest and calmest group, subscribers whose normal plan expires within 30 days of the cutoff:
-    there recall drops to <strong class="text-text-primary">${pct1(soon.recall)}</strong>, and this group holds ${sdFormat(soon.fn / Math.max(1, C.fn), 'pct0')} of all missed churners.
-    Their listening looks <em>more</em> engaged than a typical renewer's (median ${ad.FN} vs ${ad.TN} active days, last listen ${dsla.FN} vs ${dsla.TN} days before the cutoff),
-    and ${sdFormat(SITE.champion.fn_auto_renew_on, 'pct0')} of them still had auto-renew on. Nothing in the data warns about these departures.`);
+  setText('ovn-errors-text', `<strong class="text-text-primary">Reading.</strong> When billing already shows the decision, almost every churner is caught: recall is ${pct1(cancel.recall)} after a cancellation and ${pct1(expired.recall)} for expired plans. The misses sit in the largest, calmest group: normal plans expiring within 30 days of the cutoff. There recall drops to <strong class="text-text-primary">${pct1(soon.recall)}</strong>, and this group holds ${sdFormat(soon.fn / Math.max(1, C.fn), 'pct0')} of all missed churners. Their listening looks <em>more</em> engaged than a renewer's (median ${ad.FN} vs ${ad.TN} active days), and ${sdFormat(SITE.champion.fn_auto_renew_on, 'pct0')} still had auto-renew on. Nothing in the data warns about them.`);
   setText('ovn-hard-cases', `Churners on a normal plan that expires within 30 days, who keep listening until the cutoff, are mostly missed (recall ${pct1(soon.recall)} in that segment).
     The data has no signal for that decision (no app events, support contacts or competitor prices).`);
 
@@ -258,26 +251,21 @@ function ovnRenderExamples() {
       <td class="px-3 py-2 text-right">${e.last_is_cancel === null ? '–' : e.last_is_cancel ? 'yes' : 'no'}</td><td class="px-3 py-2 text-right">${v(e.days_until_expiration)}</td>
       <td class="px-3 py-2 text-right">${v(e.last_plan_days)}</td><td class="px-3 py-2 text-right">${v(e.active_days)}</td>
       <td class="px-3 py-2 text-right">${v(e.days_since_last_active)}</td><td class="px-5 py-2 text-right">${v(e.total_hours, 1)}</td></tr>`).join(''));
-  setText('ovn-example-text', `Missed churners look ordinary: a regular plan expiring soon after the cutoff, no cancellation, recent listening. The model gives them a low
-    probability because most subscribers with exactly this profile do renew. False alarms are the mirror case: they carry warning signs (manual renewal, expired or
-    unusual plan, little listening) yet renewed. Both kinds of error come from information the data does not contain, not from a bug that more tuning would fix.`);
+  setText('ovn-example-text', `Missed churners look ordinary: a regular plan expiring soon, no cancellation, recent listening. Most subscribers like that do renew, so the model scores them low. False alarms are the mirror case: they show warning signs but renewed. Both errors come from information the data does not hold, not from a bug that more tuning would fix.`);
 }
 
 function ovnRenderConclusion() {
   const c = modelRow(CHAMP), rule = modelRow('Rule: auto-renew off'), d = SITE.ablation_diff;
   const bill = ablationRow('Billing + demographics');
   const cards = [
-    ['Can churn be predicted?', `On 31 March, yes: the tuned LightGBM reaches PR-AUC ${f4(c.pr_auc)} (95% CI ${f4(SITE.champion.ci.pr_auc.low)}&ndash;${f4(SITE.champion.ci.pr_auc.high)}) against ${f4(rule.pr_auc)} for the best simple rule, but much of this comes from March billing that already shows the renewal. As an early warning (billing cut at 1 March) it reaches ${f4(strictRow(STRICT_ALL).pr_auc)}: useful, but far from perfect.`],
-    ['Does listening help beyond billing?', `It depends on what billing already reveals. At 31 March, billing + demographics reach ${f4(bill.pr_auc)} and listening adds only ${sdFormat(d.mean, 'signed4')}. With billing cut at 1 March, listening adds ${sdFormat(strictGain().mean, 'signed4')} PR-AUC (paired 95% CI ${sdFormat(strictGain().low, 'signed4')} to ${sdFormat(strictGain().high, 'signed4')}): it matters most exactly when billing is uninformative.`],
-    ['What it cannot do', `It mostly misses subscribers whose records look like renewers', and it shows association, not cause. March listening may partly reflect activity after a plan has already lapsed. It has only been tested on the same month it was trained on.`],
-  ];
+    ['Can churn be predicted?', `On 31 March, yes: PR-AUC ${f4(c.pr_auc)} (95% CI ${f4(SITE.champion.ci.pr_auc.low)}&ndash;${f4(SITE.champion.ci.pr_auc.high)}), against ${f4(rule.pr_auc)} for the best simple rule. But much of it comes from billing that already shows the renewal. With billing cut at 1 March it reaches ${f4(strictRow(STRICT_ALL).pr_auc)}: useful, far from perfect.`],
+    ['Does listening help beyond billing?', `At 31 March, hardly: billing + demographics reach ${f4(bill.pr_auc)}, and listening adds ${sdFormat(d.mean, 'signed4')}. With billing cut at 1 March it adds ${sdFormat(strictGain().mean, 'signed4')}, though part of that may be listening after a plan lapsed.`],
+    ['What it cannot do', `It misses churners whose records look like renewers'. It shows association, not cause. And it was tested only on the month it was trained on.`],
+];
   setText('ovn-conclusion-cards', cards.map(([h, t]) => `
     <div class="p-5 rounded-2xl bg-page-bg border border-border-subtle"><span class="font-bold text-text-primary block mb-1">${h}</span>
       <p class="text-xs text-text-secondary leading-relaxed">${t}</p></div>`).join(''));
-  setText('ovn-conclusion-text', `In practice, a retention team could contact the ${pct1((SITE.champion.confusion.tp + SITE.champion.confusion.fp) / SITE.champion.n_test)} of subscribers
-    flagged at &tau; = ${SITE.champion.threshold.toFixed(2)} and reach ${pct1(c.recall)} of churners, with ${pct1(c.precision)} of contacts being real churners.
-    With billing cut at 1 March (listening still through March; threshold ${(strictRow(STRICT_ALL).threshold || 0).toFixed(2)} chosen on validation) it would reach ${pct1(strictRow(STRICT_ALL).recall)} of churners with ${pct1(strictRow(STRICT_ALL).precision)} precision.
-    Whether contacting them changes their decision is a separate question this project does not answer.`);
+  setText('ovn-conclusion-text', `In practice, a retention team could contact the ${pct1((SITE.champion.confusion.tp + SITE.champion.confusion.fp) / SITE.champion.n_test)} of subscribers flagged at &tau; = ${SITE.champion.threshold.toFixed(2)}. They would reach ${pct1(c.recall)} of churners, and ${pct1(c.precision)} of contacts would be real churners. With billing cut at 1 March, the model would reach ${pct1(strictRow(STRICT_ALL).recall)} of churners at ${pct1(strictRow(STRICT_ALL).precision)} precision. Whether a contact changes anyone's decision is a separate question.`);
 }
 
 const METRICS = {
@@ -306,7 +294,7 @@ window.ovnShowMetric = function (key) {
 };
 
 function ovnRenderMetricButtons() {
-  SegTabs.mount('ovn-metric-buttons', {
+  if (document.getElementById('ovn-metric-buttons')) SegTabs.mount('ovn-metric-buttons', {
     items: Object.entries(METRICS).map(([k, [n]]) => ({ key: k, label: n })),
     active: currentMetric, size: 'sm', label: 'Metric', onSelect: window.ovnShowMetric, arrows: { canvas: 'ovn-metric-chart' },
   });
@@ -314,7 +302,7 @@ function ovnRenderMetricButtons() {
     items: [{ key: 'pr', label: 'PR' }, { key: 'roc', label: 'ROC' }],
     active: curveKind, size: 'sm', label: 'Curve', onSelect: window.ovnShowCurve, arrows: { canvas: 'ovn-curve-chart' },
   });
-  window.ovnShowMetric(currentMetric);
+  if (document.getElementById('ovn-metric-chart')) window.ovnShowMetric(currentMetric);
 }
 
 function ovnRenderScoreAndGains() {
@@ -421,7 +409,7 @@ window.ovnOnCost = function (value) {
     ds.forEach((d, i) => { costChart.data.datasets[i].data = d; });
     costChart.update('none');
   }
-  setText('ovn-cost-note', `Cost = ${ratio} &times; missed churners + 1 &times; false alarms, shown as a share of the cost of contacting nobody. A simplification: it assumes every contacted churner is kept and a contact costs the same for everyone. At ${ratio}&times; the cheapest threshold is ${T[best].t.toFixed(2)}, which catches ${sdFormat(T[best].tp / (T[best].tp + T[best].fn), 'pct1')} of churners; a higher ratio pushes it lower, a lower ratio pushes it up.`);
+  setText('ovn-cost-note', `Cost = ${ratio} &times; missed churners + 1 &times; false alarms, as a share of the cost of contacting nobody. It assumes every contacted churner is kept. At ${ratio}&times; the cheapest threshold is ${T[best].t.toFixed(2)}, catching ${sdFormat(T[best].tp / (T[best].tp + T[best].fn), 'pct1')} of churners. A higher ratio pushes it lower.`);
 };
 
 function ovnRenderCost() {
@@ -435,17 +423,13 @@ function ovnRenderGap() {
   const val = SITE.val_metrics || [], test = SITE.test_metrics || [];
   const rows = test.map(t => ({ t, v: val.find(r => r.model === t.model) })).filter(r => r.v);
   const c = rows.find(r => r.t.model === CHAMP);
-  if (c) setText('ovn-gap-note', `The champion scores ${f4(c.v.pr_auc)} PR-AUC on validation and ${f4(c.t.pr_auc)} on test: a gap of ${sdFormat(c.t.pr_auc - c.v.pr_auc, 'signed4')}. The test split is slightly lower, as expected when the model and threshold were picked on validation (see Limitations).`);
 }
 
 function ovnRenderStrict() {
   const s = SITE.strict;
   if (!s) return;
   const withMarch = (s.overlap || []).find(o => o.march_tx) || {}, without = (s.overlap || []).find(o => !o.march_tx) || {};
-  setText('ovn-strict-lead', `The labelled plans expire during March, and ${pct1(withMarch.share)} of subscribers have a transaction dated in March 2017.
-    Those churn at ${pct1(withMarch.churn_rate)}; the rest churn at ${pct1(without.churn_rate)}. So by 31 March the billing record often already shows the decision.
-    Here every billing feature is rebuilt from transactions before <strong>${s.cutoff}</strong> (only ${pct1(s.has_tx_share)} of subscribers have one), and the same tuned LightGBM is retrained on the same split.
-    Thresholds are chosen on validation; the test split is scored once.`);
+  setText('ovn-strict-lead', `Every labelled plan expires in March. ${pct1(withMarch.share)} of subscribers pay in March and churn at ${pct1(withMarch.churn_rate)}; the rest churn at ${pct1(without.churn_rate)}. So by 31 March, billing often already shows the decision. Here billing is rebuilt from transactions before <strong>${s.cutoff}</strong> (only ${pct1(s.has_tx_share)} of subscribers have one), and the same LightGBM is retrained on the same split. Test is scored once.`);
   const best = Math.max(...s.metrics.filter(m => m.model.startsWith('Strict')).map(m => m.pr_auc));
   setText('ovn-strict-rows', s.metrics.map(r => {
     const orig = r.model.startsWith('Original'), top = r.pr_auc === best;
@@ -458,12 +442,7 @@ function ovnRenderStrict() {
       <td class="px-3 py-2 text-right">${f4(r.recall)}</td><td class="px-6 py-2 text-right">${f4(r.f1)}</td></tr>`;
   }).join(''));
   const g = s.listening_gain;
-  setText('ovn-strict-text', `<strong class="text-text-primary">Reading.</strong> Without March billing, PR-AUC falls from ${f4(strictRow('Original champion (31 March billing)').pr_auc)} to
-    ${f4(strictRow(STRICT_ALL).pr_auc)}, so most of the headline score comes from billing that records the outcome, not from early warning signs.
-    The early-warning model is still clearly useful (${(strictRow(STRICT_ALL).pr_auc / strictRow('Majority (prior)').pr_auc).toFixed(1)}&times; the no-skill PR-AUC of ${f4(strictRow('Majority (prior)').pr_auc)}).
-    And here listening matters: it adds <strong class="text-text-primary">${sdFormat(g.mean, 'signed4')}</strong> PR-AUC (paired bootstrap 95% CI ${sdFormat(g.low, 'signed4')} to ${sdFormat(g.high, 'signed4')}),
-    against ${sdFormat(SITE.ablation_diff.mean, 'signed4')} at 31 March. Caveat: March listening can extend past a subscriber's expiry, and a subscriber whose plan has lapsed may stop listening,
-    so part of this gain may also reflect the outcome. A fully clean early-warning test would need each subscriber's expiry date and listening only before it.`);
+  setText('ovn-strict-text', `<strong class="text-text-primary">Reading.</strong> Without March billing, PR-AUC falls from ${f4(strictRow('Original champion (31 March billing)').pr_auc)} to ${f4(strictRow(STRICT_ALL).pr_auc)}. So most of the headline score comes from billing that records the outcome. The model is still useful: ${(strictRow(STRICT_ALL).pr_auc / strictRow('Majority (prior)').pr_auc).toFixed(1)}&times; the no-skill level. Here listening adds <strong class="text-text-primary">${sdFormat(g.mean, 'signed4')}</strong> (95% CI ${sdFormat(g.low, 'signed4')} to ${sdFormat(g.high, 'signed4')}), against ${sdFormat(SITE.ablation_diff.mean, 'signed4')} at 31 March. But listening runs past many expiry dates, so part of this gain may reflect the outcome.`);
 }
 
 // Home: the title, abstract, headline numbers, question card and findings (no charts).

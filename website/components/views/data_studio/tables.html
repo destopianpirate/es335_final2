@@ -30,29 +30,6 @@
           <div class="overflow-x-auto"><div data-mermaid="data-flow" class="min-w-[760px] flex justify-center text-text-muted text-xs" role="img" aria-label="Data flow: five raw files; members, transactions and user logs are aggregated per subscriber and left-joined onto the labelled IDs and the Kaggle test IDs. The labelled 946,686 by 33 matrix is split into train, validation and test; the unlabelled 24,274 by 33 Kaggle test matrix is predicted into submission.csv.">Loading diagram&hellip;</div></div>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
-            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Labelled subscribers</span>
-            <div class="text-2xl font-extrabold text-text-primary my-1 font-mono" data-sd="data.train.subscribers" data-fmt="int"></div>
-            <p class="text-[10px] text-text-muted">train_data.csv, no duplicates</p>
-          </div>
-          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
-            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Churn rate</span>
-            <div class="text-2xl font-extrabold text-accent-danger my-1 font-mono" data-sd="data.train.churn_rate" data-fmt="pct2"></div>
-            <p class="text-[10px] text-text-muted"><span data-sd="data.train.churners" data-fmt="int"></span> churners</p>
-          </div>
-          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
-            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Features per subscriber</span>
-            <div class="text-2xl font-extrabold text-text-primary my-1 font-mono" data-sd="data.features.n_features"></div>
-            <p class="text-[10px] text-text-muted">6 demographic &bull; 15 billing &bull; 12 listening</p>
-          </div>
-          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
-            <span class="text-[11px] font-bold text-text-muted uppercase tracking-wider">Cutoff date</span>
-            <div class="text-2xl font-extrabold text-text-primary my-1 font-mono">2017-03-31</div>
-            <p class="text-[10px] text-text-muted">all inputs are on or before this date</p>
-          </div>
-        </div>
-
         <h2 class="text-xl sm:text-2xl font-extrabold text-text-primary tracking-tight mt-12 mb-2">Columns in each raw file</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-5">
           27 columns across the five files (2 + 1 + 6 + 9 + 9). <span class="font-mono">msno</span> is in every file and is the join key.

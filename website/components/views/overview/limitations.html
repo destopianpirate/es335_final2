@@ -5,11 +5,11 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">The 31 March scores are optimistic for early warning</h3>
-            <p class="text-text-secondary leading-relaxed" id="ovn-lim-overlap">KKBOX defines churn from transactions, and the labelled plans expire during March, so the last March transaction often already shows the renewal decision. The headline PR-AUC means "easy once billing shows the decision", not "we can read intentions". With billing cut at 1 March the model is much weaker (see the <a href="#ovn-strict" class="underline">strict check</a>).</p>
+            <p class="text-text-secondary leading-relaxed" id="ovn-lim-overlap">The labelled plans expire during March, so the last March payment often already shows the renewal. The headline score means "easy once billing shows the decision", not "we can read intentions". With billing cut at 1 March the model is much weaker (see the <a href="#ovn-strict" class="underline">strict check</a>).</p>
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">One snapshot, random split</h3>
-            <p class="text-text-secondary leading-relaxed">Train and test subscribers come from the same month. We do not show that the model keeps working for a later month, when prices, promotions or user mix may change. A split by time was not possible: the dataset labels only one cohort (plans expiring in March 2017), and the listening logs cover that month only. So we used a stratified random split by subscriber, which keeps each subscriber in one split and the churn rate equal across splits, and we state that the scores hold for this month&rsquo;s population, not for future months.</p>
+            <p class="text-text-secondary leading-relaxed">Train and test come from the same month, so we do not show the model works in a later month. A split by time was not possible: only plans expiring in March 2017 are labelled, and the logs cover that month only. The scores hold for this month&rsquo;s subscribers.</p>
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">Hard cases stay hard</h3>
@@ -17,27 +17,27 @@
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">Prediction is not causation</h3>
-            <p class="text-text-secondary leading-relaxed">Feature importance shows what the model uses, not what makes people leave. For example, switching a subscriber's auto-renew on would not necessarily keep them: auto-renew is partly a sign of an earlier decision to stay. Testing an intervention would need an experiment.</p>
+            <p class="text-text-secondary leading-relaxed">Feature importance shows what the model uses, not what makes people leave. Turning auto-renew on would not necessarily keep someone; it is partly a sign of an earlier decision to stay. Testing that needs an experiment.</p>
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">Listening data is thin</h3>
-            <p class="text-text-secondary leading-relaxed">Only March 2017 is used, and about a fifth of subscribers have no logs at all. A longer listening history might show a larger effect than our ablation finds.</p>
+            <p class="text-text-secondary leading-relaxed">Only March 2017 is used, and about a fifth of subscribers have no logs. A longer history might show a larger effect.</p>
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">Threshold and tuning use the same validation split</h3>
-            <p class="text-text-secondary leading-relaxed">This makes validation scores slightly optimistic; test scores are not affected because the test split was never used for any choice.</p>
+            <p class="text-text-secondary leading-relaxed">This makes validation scores slightly optimistic. Test scores are not affected, because test was never used for a choice.</p>
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">Predictor page is approximate</h3>
-            <p class="text-text-secondary leading-relaxed">The <a href="#model-predictor" class="underline">predictor</a> runs the real champion model, but asks for 16 inputs; the other features are filled with training medians for similar subscribers. Treat it as an illustration of the model, not a scoring tool. Demographic features (age, city) also raise fairness questions if used for decisions.</p>
+            <p class="text-text-secondary leading-relaxed">The <a href="#model-predictor" class="underline">Live Predictor</a> runs the real model, but asks for 16 inputs and fills in the rest. Treat it as an illustration, not a scoring tool.</p>
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">Privacy and fairness</h3>
-            <p class="text-text-secondary leading-relaxed">Subscriber IDs are anonymised hashes and there are no names or contact details. But age and gender are model inputs, and we did not check whether error rates differ between age or gender groups. Before any real use, audit those groups, and use the scores to offer help to people likely to leave, not to treat them worse.</p>
+            <p class="text-text-secondary leading-relaxed">IDs are anonymised, with no names or contacts. But age and gender are inputs, and we did not check error rates by group. Before real use, audit those groups, and use scores to offer help, not to treat people worse.</p>
           </div>
           <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle">
             <h3 class="font-bold text-text-primary mb-1">The Kaggle test set has no labels</h3>
-            <p class="text-text-secondary leading-relaxed">The competition test file lists <span data-sd="data.kaggle_test.subscribers" data-fmt="int"></span> subscribers without the answer. We predict them (<code>results/submission.csv</code>) but cannot score them here, so every number on this page comes from our own labelled test split.</p>
+            <p class="text-text-secondary leading-relaxed">The competition test file lists <span data-sd="data.kaggle_test.subscribers" data-fmt="int"></span> subscribers without the answer. We predict them (<code>results/submission.csv</code>) but cannot score them, so every number here comes from our own test split.</p>
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-6">Answer to the question</h2>
         <div class="callout mb-6 max-w-5xl">
           <h3>Which number to quote</h3>
-          <p><strong>0.9644</strong> is an upper bound: at 31 March the billing record often already shows whether the subscriber renewed, so it measures how well the model reads that record, not how early it can warn. <strong>0.5682</strong> [0.5610, 0.5757] is the closer-to-early-warning score: billing from before 1 March, before any labelled plan expires, plus March listening (6.3&times; the no-skill level). It is still not a pure 1 March prediction, because the listening features run to 31 March; a true one would cut listening too (see What next).</p>
+          <p><strong>0.9644</strong> is an upper bound: at 31 March, billing often already shows whether the subscriber renewed. <strong>0.5682</strong> [0.5610, 0.5757] is closer to an early warning: billing before 1 March plus March listening, 6.3&times; the no-skill level. It is not a pure 1 March prediction, because listening still runs to 31 March.</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm" id="ovn-conclusion-cards"></div>
         <p class="text-xs text-text-secondary mt-6 max-w-4xl leading-relaxed" id="ovn-conclusion-text"></p>
@@ -61,10 +61,10 @@
         <div class="chap" aria-label="Section 13 of 16: What next"><span class="chap-no" aria-hidden="true">13</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">What next</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">What we would do next</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
-          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Split by time, not at random</h3><p class="text-text-secondary leading-relaxed">Train on earlier months and test on a later one, to see how the model holds up as behaviour and prices drift.</p></div>
-          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Cut listening at each subscriber's expiry</h3><p class="text-text-secondary leading-relaxed">So the strict check has no post-expiry signal at all, and the listening gain at 1 March can be read cleanly.</p></div>
-          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Choose the threshold by cost</h3><p class="text-text-secondary leading-relaxed">Set &tau; from the real cost of a lost subscriber versus a wasted offer, instead of F1, which weighs them equally.</p></div>
-          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">A model for soon-expiring plans</h3><p class="text-text-secondary leading-relaxed">Plans expiring within 30 days of the cutoff are where recall drops to 0.595; a model trained only on them could use listening trends more.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Split by time, not at random</h3><p class="text-text-secondary leading-relaxed">Train on earlier months and test on a later one.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Cut listening at each subscriber's expiry</h3><p class="text-text-secondary leading-relaxed">So the strict check has no listening after expiry.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">Choose the threshold by cost</h3><p class="text-text-secondary leading-relaxed">Set &tau; from the real cost of a lost subscriber against a wasted offer, not from F1.</p></div>
+          <div class="p-5 rounded-2xl bg-surface-card border border-border-subtle"><h3 class="font-bold text-text-primary mb-1">A model for soon-expiring plans</h3><p class="text-text-secondary leading-relaxed">Recall drops to 0.595 for plans expiring within 30 days. A model trained only on them could lean more on listening.</p></div>
         </div>
       </div>
     </section>

@@ -40,10 +40,10 @@
             </thead>
             <tbody class="divide-y divide-border-subtle text-text-secondary leading-relaxed">
               <tr><td class="px-6 py-3 text-text-primary font-semibold">1. Does a model beat the one-line rule "auto-renew is off"?</td><td class="px-3 py-3"><span class="verdict verdict-yes">Yes</span></td><td class="px-6 py-3">Tuned LightGBM PR-AUC 0.9644 [0.9624, 0.9664] vs 0.3164 for the rule. Even logistic regression reaches 0.8946.</td></tr>
-              <tr><td class="px-6 py-3 text-text-primary font-semibold">2. Does listening add value beyond billing at 31 March?</td><td class="px-3 py-3"><span class="verdict verdict-part">Yes, but small</span></td><td class="px-6 py-3">+0.0083 PR-AUC [0.0073, 0.0093]: the interval is above zero, but billing + demographics alone already reach 0.9562.</td></tr>
-              <tr><td class="px-6 py-3 text-text-primary font-semibold">3. Does the result hold with billing cut at 1 March?</td><td class="px-3 py-3"><span class="verdict verdict-no">Only partly</span></td><td class="px-6 py-3">PR-AUC drops to 0.5682 [0.5610, 0.5757]. Much of the 31 March score comes from March billing that already shows the renewal.</td></tr>
-              <tr><td class="px-6 py-3 text-text-primary font-semibold">4. Does listening matter more when billing is hidden?</td><td class="px-3 py-3"><span class="verdict verdict-part">Yes, partly</span></td><td class="px-6 py-3">With billing cut at 1 March, listening adds +0.1474 [0.1426, 0.1524], about 18 times its gain at 31 March. But part of this may be the outcome itself: the strict model still sees listening up to 31 March, after many plans have lapsed, and a subscriber who has left stops listening (Leakage: open). A clean test would cut listening at each expiry.</td></tr>
-              <tr><td class="px-6 py-3 text-text-primary font-semibold">5. Are the probabilities honest (calibrated)?</td><td class="px-3 py-3"><span class="verdict verdict-yes">Yes, where it predicts</span></td><td class="px-6 py-3">Across 10 equal-size bins of test subscribers, predicted and observed churn differ by at most 0.007 (riskiest tenth: 85.4% predicted, 85.1% observed). Brier score 0.0131, against 0.0819 for the majority baseline. Caveat: almost all predictions are near 0 or near 0.85, so the middle range (about 0.1&ndash;0.8) is rare and barely tested.</td></tr>
+              <tr><td class="px-6 py-3 text-text-primary font-semibold">2. Does listening add value beyond billing at 31 March?</td><td class="px-3 py-3"><span class="verdict verdict-part">Yes, but small</span></td><td class="px-6 py-3">+0.0083 PR-AUC [0.0073, 0.0093]. Real, but billing + demographics alone already reach 0.9562.</td></tr>
+              <tr><td class="px-6 py-3 text-text-primary font-semibold">3. Does the result hold with billing cut at 1 March?</td><td class="px-3 py-3"><span class="verdict verdict-no">Only partly</span></td><td class="px-6 py-3">PR-AUC drops to 0.5682 [0.5610, 0.5757]. Much of the 31 March score comes from billing that already shows the renewal.</td></tr>
+              <tr><td class="px-6 py-3 text-text-primary font-semibold">4. Does listening matter more when billing is hidden?</td><td class="px-3 py-3"><span class="verdict verdict-part">Yes, partly</span></td><td class="px-6 py-3">With billing cut at 1 March, listening adds +0.1474 [0.1426, 0.1524], about 18 times its gain at 31 March. But the strict model still sees listening up to 31 March, after many plans have lapsed. Someone who has left stops listening, so part of this gain may be the outcome itself.</td></tr>
+              <tr><td class="px-6 py-3 text-text-primary font-semibold">5. Are the probabilities honest (calibrated)?</td><td class="px-3 py-3"><span class="verdict verdict-yes">Yes, where it predicts</span></td><td class="px-6 py-3">In 10 equal-size bins, predicted and observed churn differ by at most 0.007. Brier score is 0.0131, against 0.0819 for the baseline. Almost all predictions are near 0 or 0.85, so the middle range is barely tested.</td></tr>
             </tbody>
           </table>
         </div>
@@ -73,24 +73,12 @@
           </div>
         </div>
 
-        <!-- Metric comparison -->
-        <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mb-10">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
-            <div>
-              <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Compare models on any metric</h3>
-              <p class="text-[11px] text-text-secondary mt-1" id="ovn-metric-note"></p>
-            </div>
-            <div id="ovn-metric-buttons"></div>
-          </div>
-          <div class="h-64 relative"><canvas id="ovn-metric-chart"></canvas></div>
-        </div>
-
         <!-- INTERACTION: threshold explorer -->
         <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 sm:p-8 shadow-subtle-card mb-10">
           <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
             <div>
               <h3 class="text-base sm:text-lg font-bold text-text-primary flex items-center gap-2"><span class="material-symbols-outlined">tune</span>Threshold explorer</h3>
-              <p class="text-xs text-text-secondary mt-1 max-w-2xl">The champion gives every test subscriber a churn probability. Move the threshold to see the trade-off between catching churners (recall) and raising false alarms. These are the real test-set counts.</p>
+              <p class="text-xs text-text-secondary mt-1 max-w-2xl">Move the threshold to trade catching churners against false alarms. These are the real test-set counts.</p>
             </div>
             <div class="flex items-center gap-3 w-full md:w-96">
               <span class="text-[10px] font-bold text-text-muted">0.01</span>
@@ -122,7 +110,7 @@
           <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
             <div>
               <h3 class="text-base sm:text-lg font-bold text-text-primary flex items-center gap-2"><span class="material-symbols-outlined">balance</span>What the mistakes cost</h3>
-              <p class="text-xs text-text-secondary mt-1 max-w-2xl">The two errors are not equally expensive. A false alarm is one unnecessary retention offer. A missed churner is a lost subscriber, which usually costs more. Set how many times worse a miss is, and the best threshold moves.</p>
+              <p class="text-xs text-text-secondary mt-1 max-w-2xl">A false alarm costs one wasted offer; a missed churner costs a subscriber. Set how many times worse a miss is, and see where the best threshold moves.</p>
             </div>
             <div class="flex items-center gap-3 w-full md:w-96">
               <span class="text-[10px] font-bold text-text-muted">1&times;</span>
@@ -142,7 +130,7 @@
         <div id="ovn-model-diff" class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mb-10">
           <div class="px-5 pt-5 pb-3">
             <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">Is the tuned LightGBM really better?</h3>
-            <p class="text-[11px] text-text-secondary max-w-3xl">Difference in test PR-AUC, tuned LightGBM minus each other model, with a 95% paired bootstrap interval (1,000 resamples; both models scored on the same resample). If the whole interval is above zero, the difference is not an accident of which test subscribers were drawn.</p>
+            <p class="text-[11px] text-text-secondary max-w-3xl">Test PR-AUC of the tuned LightGBM minus each other model, with a 95% paired bootstrap interval. An interval fully above zero means the gain is not luck.</p>
           </div>
           <table class="w-full text-xs font-mono">
             <thead class="text-text-muted uppercase tracking-wider text-[10px] border-y border-border-subtle bg-surface-subtle">
@@ -155,14 +143,14 @@
                 <tr><td class="px-5 py-2 font-sans text-text-secondary">vs Rule: auto-renew off</td><td class="px-3 py-2 text-right font-bold text-text-primary">+0.6480</td><td class="px-3 py-2 text-right text-text-secondary">[+0.6419, +0.6536]</td><td class="px-5 py-2 text-right text-text-secondary">100%</td></tr>
             </tbody>
           </table>
-          <p class="text-[11px] text-text-muted px-5 py-3">Every interval is above zero, so each step up the ladder is a real gain on this test set. Tuning adds little over default LightGBM (+0.0025) but reliably so. These intervals cover test sampling only, not training variance. Source: <a class="underline" href="{{REPO_URL}}/blob/main/results/model_comparison.csv">results/model_comparison.csv</a> (<code>scripts/export_val_test_metrics.py</code>).</p>
+          <p class="text-[11px] text-text-muted px-5 py-3">Every interval is above zero, so each step up the ladder is a real gain. Tuning adds little (+0.0025), but reliably. Source: <a class="underline" href="{{REPO_URL}}/blob/main/results/model_comparison.csv">results/model_comparison.csv</a> (<code>scripts/export_val_test_metrics.py</code>).</p>
         </div>
 
         <!-- Validation vs test -->
-        <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mb-10">
+        <div id="ovn-gap" class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mb-10">
           <div class="px-6 pt-5">
             <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary">Does it hold up? Validation vs test</h3>
-            <p class="text-[11px] text-text-secondary mt-1 max-w-3xl">Every model was chosen and tuned on the validation split, then scored once on the test split. All eight metrics on both splits; accuracy, precision, recall and F1 at &tau; = 0.45. Gap = test &minus; validation; red marks a drop of more than 0.01. &darr; = lower is better. A small gap means the tuning did not simply memorise the validation subscribers.</p>
+            <p class="text-[11px] text-text-secondary mt-1 max-w-3xl">Each model was tuned on validation and scored once on test. Gap = test &minus; validation; red marks a drop above 0.01; &darr; = lower is better. Small gaps mean the tuning did not just fit the validation subscribers.</p>
           </div>
           <table id="ovn-gap-table" class="w-full text-xs mt-3 font-mono min-w-[900px]">
             <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
@@ -189,7 +177,6 @@
               <tr class="vt-test bg-surface-subtle"><td class="px-2 py-1.5 font-sans text-[10px] uppercase tracking-wider text-text-muted whitespace-nowrap">Gap</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0042</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0004</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0029</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">+0.0010</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0019</td><td class="px-2 py-1.5 text-right text-[11px] text-accent-danger font-bold">-0.0114</td><td class="px-2 py-1.5 text-right text-[11px] text-text-muted">-0.0095</td><td class="px-2 py-1.5 text-right text-[11px] text-accent-danger font-bold">-0.0105</td></tr>
             </tbody>
           </table>
-          <p class="text-[11px] text-text-muted px-6 py-3" id="ovn-gap-note"></p>
         </div>
 
         <!-- Score distribution + gains -->
@@ -219,7 +206,7 @@
             <p class="text-[11px] text-text-secondary mb-4">Share of total split gain, top 12 features. <span style="color:#1D4ED8" class="font-bold">billing</span>, <span style="color:#15803D" class="font-bold">listening</span>, <span style="color:#B45309" class="font-bold">demographic</span>.</p>
             <div class="h-72 relative"><canvas id="ovn-importance-chart"></canvas></div>
             <p class="text-xs text-text-secondary mt-3" id="ovn-importance-text"></p>
-            <p class="text-[11px] text-text-muted mt-2">Split gain is global: it says which features the model uses most, not in which direction. For a single subscriber, the <a href="#model-predictor" class="underline">Live Predictor</a> breaks the prediction into <strong>per-feature contributions</strong>: walking each of the 861 trees, the change in the node value at every split is credited to the feature used there, so the contributions plus a base value add up exactly to the predicted log-odds.</p>
+            <p class="text-[11px] text-text-muted mt-2">Split gain shows which features the model uses most, not in which direction. For one subscriber, the <a href="#model-predictor" class="underline">Live Predictor</a> shows how much each feature pushed the prediction up or down.</p>
           </div>
         </div>
 
@@ -238,6 +225,5 @@
           </table>
           <p class="text-xs text-text-secondary px-6 py-4 leading-relaxed max-w-5xl" id="ovn-strict-text"></p>
         </div>
-        <div class="how-grid"><details class="how"><summary>Why the 31 March score is optimistic</summary><div><p>A subscriber churns if they do not renew within 30 days of their plan's expiry, and every labelled plan expires in March 2017. 95.4% of subscribers have a March transaction, and they churn at only 5.5%; the rest churn at 80.9%.</p><p>So by 31 March, a renewal is often already visible in billing. This is not leakage from the future (it is dated before the cutoff), but it means the model partly <em>reads</em> the decision instead of <em>predicting</em> it.</p></div></details><details class="how"><summary>What the strict check changes, and what it does not</summary><div><p>Notebook 08 rebuilds every billing feature from transactions dated before <strong>1 March 2017</strong>, before any labelled expiry, and retrains the same tuned LightGBM on the same split. The threshold is re-chosen on validation.</p><p>Listening still covers all of March, so some of it may fall after a subscriber's expiry. Part of listening's +0.1474 may therefore still reflect the outcome.</p></div></details></div>
       </div>
     </section>

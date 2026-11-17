@@ -4,8 +4,7 @@
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Source, size and key variables</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8">
           <strong class="text-text-primary">Source:</strong> the public <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer">Customer Retention Datathon (Riyadh Edition) dataset</a> on Kaggle,
-          released by KKBOX, a music streaming service in Taiwan. Five CSV files (about 2 GB). The label <code>is_churn</code> was defined by KKBOX:
-          a subscriber churns if they make no new valid subscription within 30 days after their membership expires.
+          released by KKBOX, a music streaming service in Taiwan: five CSV files, about 2 GB. KKBOX defined the label.
         </p>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
@@ -23,29 +22,18 @@
           </div>
 
           <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card lg:col-span-2">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Key variables (33 features in three groups)</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-              <div>
-                <span class="font-bold block mb-1" style="color:#1D4ED8">Billing &bull; 15</span>
-                <p class="text-text-secondary leading-relaxed">From the full transaction history: auto-renew flag and cancel flag of the last transaction, days until the plan expires, plan length, amount paid, payment method, number of transactions, cancellations, discounts.</p>
-                <p class="text-[11px] text-text-muted mt-2">Key raw columns: <code>membership_expire_date</code>, <code>is_auto_renew</code>, <code>is_cancel</code>, <code>transaction_date</code>; they drive the strongest features.</p>
-              </div>
-              <div>
-                <span class="font-bold block mb-1" style="color:#15803D">Listening &bull; 12</span>
-                <p class="text-text-secondary leading-relaxed">From March 2017 daily logs: active days, hours, songs per day, skip and completion ratios, share of listening in the last 7 days, days since last listen, day-to-day variability.</p>
-              </div>
-              <div>
-                <span class="font-bold block mb-1" style="color:#B45309">Demographic &bull; 6</span>
-                <p class="text-text-secondary leading-relaxed">From the member profile: city, registration channel, gender, age, account age, and whether a profile exists.</p>
-              </div>
-            </div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-3">Target and features</h3>
+            <p class="text-sm text-text-secondary leading-relaxed"><strong class="text-text-primary">Target:</strong> <code>is_churn</code>, 1 if no new valid subscription within 30 days of expiry.</p>
+            <p class="text-sm text-text-secondary leading-relaxed mt-2"><strong class="text-text-primary">33 features</strong> in three groups:
+              <span class="font-bold" style="color:#1D4ED8">15 billing</span>, <span class="font-bold" style="color:#15803D">12 listening</span> and <span class="font-bold" style="color:#B45309">6 demographic</span>. Each is listed below.</p>
+            <p class="text-sm text-text-secondary leading-relaxed mt-2">The strongest features come from four raw columns: <code>membership_expire_date</code>, <code>is_auto_renew</code>, <code>is_cancel</code> and <code>transaction_date</code>.</p>
           </div>
         </div>
 
         <!-- every model input, by group -->
         <div id="ovn-data-features" class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card mb-8">
           <h3 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">All 33 features, by group</h3>
-          <p class="text-[11px] text-text-secondary mb-5 max-w-3xl">One row per subscriber; every value is computed from data available on 31 March 2017. <code>city</code>, <code>registered_via</code> and <code>last_payment_method</code> are treated as categories. These are the same groups used in the ablation in <a href="#ovn-results" class="underline">Results</a>.</p>
+          <p class="text-[11px] text-text-secondary mb-5 max-w-3xl">Every value uses data up to 31 March 2017. <code>city</code>, <code>registered_via</code> and <code>last_payment_method</code> are treated as categories. The same groups are used in the ablation.</p>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               <div>
                 <div class="flex items-baseline justify-between gap-3 pb-2 border-b-2" style="border-color:#1D4ED8">
@@ -137,9 +125,9 @@
             <li><span data-sd="data.user_logs.bad_secs_rows" data-fmt="int"></span> log rows have impossible listening time (&lt; 0 or &gt; 24 h).</li>
             <li>Money and volume columns are heavily right-skewed.</li>
             <li>Listening logs cover one month only (March 2017).</li>
-            <li class="md:col-span-2"><strong class="text-text-primary">Checks that came back clean:</strong> no duplicate IDs in <code>train_data</code>, <code>kaggle_test_data</code> or <code>members</code>; no exact duplicate rows in <code>transactions</code>; no duplicate subscriber-day in <code>user_logs</code>; labels are only 0 and 1; no subscriber is in both the labelled and the Kaggle test list; dates are in range (transactions 1 Jan 2015 &ndash; 31 Mar 2017, logs 1&ndash;31 Mar 2017).</li>
+            <li class="md:col-span-2"><strong class="text-text-primary">Checks that came back clean:</strong> no duplicate IDs, rows or subscriber-days in any file. Labels are only 0 and 1. No subscriber is in both the labelled and the Kaggle test list. All dates are in range.</li>
           </ul>
-          <p class="text-[11px] text-text-muted mt-4"><strong class="text-text-primary">Access limits.</strong> The data is downloaded from <a href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer" class="underline">its Kaggle page</a> after accepting the competition rules, so the raw CSVs are not in our repository; the README explains how to get them. Subscriber IDs are anonymised hashes and there are no names or contact details. All plots and summaries: <a href="#data-studio" class="underline">Data Studio</a>.</p>
+          <p class="text-[11px] text-text-muted mt-4"><strong class="text-text-primary">Access limits.</strong> The data comes from <a href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer" class="underline">its Kaggle page</a> after accepting the competition rules, so the raw CSVs are not in our repository. Subscriber IDs are anonymised hashes, with no names or contact details. All plots and summaries: <a href="#data-studio" class="underline">Data Studio</a>.</p>
         </div>
       </div>
     </section>

@@ -11,13 +11,7 @@
           <p class="rh-def"><strong>Target</strong> <code>is_churn</code>: no new valid subscription within 30 days of that plan's expiry. <strong>Unit</strong>: one subscriber, 946,686 of them; 9% churn. The test split was scored once.</p>
         </div>
 
-        <!-- What the model may use, and the limits of the claim -->
-        <div class="rh-use" aria-label="What the model may use at prediction time">
-          <div><h3>Main setting &middot; cutoff 31&nbsp;March</h3><p>Profile, billing up to 31 March, March listening. An <strong>upper bound</strong>: most labelled plans have already expired, so the billing record often already shows the renewal.</p></div>
-          <div><h3>Stricter setting &middot; billing cut at 1&nbsp;March</h3><p>Profile, billing from before 1 March (before any labelled plan expires), March listening. Closer to an early warning, but listening still runs to 31 March.</p></div>
-          <div><h3>Never used</h3><p>Anything dated after 31 March 2017, and the label itself. Every choice is made on validation; test is scored once.</p></div>
-        </div>
-        <p class="rh-scope"><strong>Scope of the claim.</strong> One cohort of one service (KKBOX plans expiring in March 2017), a random split within that month, and association, not cause: the scores say who is likely to leave, not why, and not how a later month would look.</p>
+        <p class="rh-scope"><strong>Inputs:</strong> profile, billing up to 31 March and March listening; nothing dated later. The 31 March score is an upper bound, so we also cut billing at 1 March. One cohort, association not cause. <a href="#ovn-why-inputs" class="underline">What the model may use</a></p>
 
         <!-- Figure: every headline score on one scale -->
         <figure class="rh-fig" aria-label="Test PR-AUC on a 0 to 1 scale: guessing 0.0899, auto-renew rule 0.3164, LightGBM with billing cut at 1 March 0.5682, final LightGBM at 31 March 0.9644">
@@ -37,7 +31,7 @@
             <li>
               <span class="rh-n">01</span>
               <strong>Very predictable on 31 March, but that is an upper bound.</strong>
-              <p>The tuned LightGBM reaches PR-AUC 0.9644 [0.9624, 0.9664], against 0.3164 for a one-line rule. March billing often already records the renewal; with billing cut at 1 March (listening still through March) it reaches 0.5682.</p>
+              <p>PR-AUC 0.9644 [0.9624, 0.9664], against 0.3164 for a one-line rule. But March billing often already records the renewal; with billing cut at 1 March it reaches 0.5682.</p>
               <a href="#ovn-results">Results</a>
             </li>
             <li>

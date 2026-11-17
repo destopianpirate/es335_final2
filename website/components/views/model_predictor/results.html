@@ -56,7 +56,7 @@
           <div class="w-full bg-border-strong h-2.5 rounded-none overflow-hidden">
             <div id="res-prob-bar" class="h-full rounded-none transition-all duration-500 ease-out" style="width: 0%; background-color: #1D4ED8;"></div>
           </div>
-          <!-- Red Vertical Mark for Threshold at 30% -->
+          <!-- Threshold marker -->
           <div id="res-tau-mark" class="absolute left-[30%] -translate-x-1/2 w-[3px] h-5 bg-[#B91C1C] z-10 pointer-events-none shadow-xs" title="Decision threshold chosen on validation"></div>
         </div>
         <div class="relative flex justify-between items-center text-[10px] text-text-muted font-mono pt-0.5">
@@ -74,6 +74,12 @@
 
       <!-- Line gap after Assessed Risk Tier -->
       <div class="border-b border-border-subtle my-2"></div>
+
+      <!-- Blind spot: plans that have not expired yet -->
+      <div id="res-blindspot" class="hidden p-3 rounded-lg border border-border-subtle" style="border-left: 3px solid var(--accent)">
+        <h4 class="text-[10px] font-bold text-text-primary uppercase tracking-wider mb-1">Read this score with care</h4>
+        <p id="res-blindspot-text" class="text-xs text-text-secondary leading-relaxed"></p>
+      </div>
 
       <!-- Features that raise and lower the prediction -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
@@ -94,20 +100,6 @@
             <li class="text-text-muted text-xs">Awaiting evaluation...</li>
           </ul>
         </div>
-      </div>
-
-      <!-- Retention Strategy Box -->
-      <div class="p-3 bg-surface-subtle border border-border-subtle rounded-lg">
-        <h4 class="text-[10px] font-bold text-text-primary uppercase tracking-wider mb-1">Recommended Retention Action</h4>
-        <p id="res-recommendation-text" class="text-xs text-text-secondary leading-relaxed">
-          Awaiting prediction.
-        </p>
-      </div>
-
-      <!-- Blind spot: plans that have not expired yet -->
-      <div id="res-blindspot" class="hidden p-3 rounded-lg border border-border-subtle" style="border-left: 3px solid var(--accent)">
-        <h4 class="text-[10px] font-bold text-text-primary uppercase tracking-wider mb-1">Read this score with care</h4>
-        <p id="res-blindspot-text" class="text-xs text-text-secondary leading-relaxed"></p>
       </div>
 
       <!-- What if: days until expiry -->
@@ -131,6 +123,14 @@
           </table>
         </div>
       </details>
+
+      <!-- Retention Strategy Box -->
+      <div class="p-3 bg-surface-subtle border border-border-subtle rounded-lg">
+        <h4 class="text-[10px] font-bold text-text-primary uppercase tracking-wider mb-1">Recommended Retention Action</h4>
+        <p id="res-recommendation-text" class="text-xs text-text-secondary leading-relaxed">
+          Awaiting prediction.
+        </p>
+      </div>
 
 
 
