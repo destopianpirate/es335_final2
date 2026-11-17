@@ -132,7 +132,7 @@ function renderPredictionResult(res) {
   const tauLabel = document.getElementById('res-tau-label');
   if (tauLabel) tauLabel.innerHTML = `&tau; = ${tauPct}%`;
 
-  // 4. Threshold Verdict (Two-line, No Box, Right-Aligned, Increased Height)
+  // 4. Verdict at the decision threshold
   const verdictElem = document.getElementById('res-verdict-badge');
   if (verdictElem) {
     if (res.churn_prediction === 1) {
@@ -155,7 +155,7 @@ function renderPredictionResult(res) {
   const sourceElem = document.getElementById('res-source-badge');
   if (sourceElem) sourceElem.textContent = 'LightGBM (in browser)';
 
-  // 7. Factor Lists (Point-wise bulleted, transparent bg, no vertical line)
+  // 7. Features that raise and lower the prediction
   const riskList = document.getElementById('res-risk-list');
   if (riskList) {
     if (res.primary_risk_factors && res.primary_risk_factors.length) {

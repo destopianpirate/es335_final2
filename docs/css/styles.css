@@ -178,7 +178,7 @@
       background-color: transparent !important;
       cursor: pointer !important;
     }
-    /* Permanent grey background circle for AS and AY - border strictly removed */
+    /* Team member avatars: grey circle */
     #app-sidebar.sidebar-collapsed .sidebar-member-avatar,
     .sidebar-member-avatar {
       width: 42px !important;
@@ -1217,7 +1217,7 @@ body.predictor-viewport-locked { height: 125vh !important; max-height: 125vh !im
   #view-model-predictor { height: calc(125vh - 46px) !important; }
 }
 
-    /* Dark mode: no outline borders on Data Studio cards (table row dividers stay) */
+    /* Dark mode: Data Studio cards without outlines (table row dividers stay) */
     html.dark #view-data-studio .border.border-border-subtle,
     html.dark #view-data-studio details {
       border-color: transparent !important;
@@ -1430,14 +1430,14 @@ html.dark .rq-card::after { opacity: .06; }
 .hero-stats-grid .hero-lab { font-size: 9px !important; }
 .hero-actions a { width: 100% !important; padding: 11px 18px !important; }
 
-/* Stat tiles now sit under the abstract (wider column): roomier again */
+/* Stat tiles under the abstract */
 .hero-stats-grid .hero-stat { padding: 16px 16px !important; gap: 12px !important; border-radius: 22px !important; flex-direction: row !important; align-items: center !important; }
 .hero-stats-grid .hero-num { font-size: 1.2rem !important; }
 .hero-stats-grid .hero-stat > .material-symbols-outlined { width: 36px !important; height: 36px !important; font-size: 19px !important; }
 .hero-stats-grid .hero-lab { font-size: 9.5px !important; }
 @media (max-width: 1100px) { .hero-stats-grid .hero-stat { flex-direction: column !important; align-items: flex-start !important; } }
 
-/* Hero index: an editorial table-of-contents instead of a stack of buttons */
+/* Hero index: table of contents */
 .hero-index { padding-top: 4px; }
 .hi-kicker { font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 10px; }
 .hi-row {
@@ -1510,7 +1510,7 @@ html.dark .rq-card::after { opacity: .06; }
   #app-sidebar .sidebar-text, #app-sidebar .sidebar-arrow, #app-sidebar #sidebar-team-title, #app-sidebar #sidebar-brand-link { animation: none !important; }
 }
 
-/* Hero index: repository card (no number, inked block with the GitHub mark) */
+/* Hero index: repository card with the GitHub mark */
 .hi-repo {
   position: relative; display: flex; align-items: center; gap: 14px; margin-top: 18px; padding: 14px 16px; overflow: hidden;
   border-radius: 20px; text-decoration: none; background: var(--text-primary); color: var(--surface-card);
@@ -1532,11 +1532,11 @@ html.dark .hi-repo { box-shadow: 0 14px 28px -16px rgba(0, 0, 0, .8); }
 .hi-repo:hover .hi-graph { opacity: .45; transform: translateY(-50%) translateX(-4px); }
 @media (prefers-reduced-motion: reduce) { .hi-repo { animation: none; opacity: 1; transform: none; } .hi-caret { animation: none; } }
 
-/* Night-mode fixes for the hero */
+/* Night mode: hero */
 .ovn-title { line-height: 1.17 !important; }
 /* gradient text is only painted inside its own box, so give the highlighted words room for descenders */
 .ovn-title .hw-em { padding-bottom: .22em; margin-bottom: -.22em; }
-/* repository card: no grey chip behind the monospace line */
+/* repository card: monospace line */
 .hi-repo-body code, html.dark .hi-repo-body code { background: transparent !important; color: inherit !important; border: 0 !important; padding: 0 !important; box-shadow: none !important; }
 
 /* ---------- Night sidebar: grey opened tab, light-grey hover circle ---------- */
@@ -1573,7 +1573,7 @@ html.dark #app-sidebar.sidebar-collapsed .sidebar-nav-row.active-nav-row:hover {
 html.dark #app-sidebar.sidebar-collapsed .sidebar-nav-row.active-nav-row:hover * { color: #FFFFFF !important; }
 html.dark #app-sidebar.sidebar-collapsed .sidebar-nav-row:not(.active-nav-row):hover { background-color: #4A4A50 !important; color: #FFFFFF !important; }
 html.dark #app-sidebar.sidebar-collapsed .sidebar-nav-row:not(.active-nav-row):hover .sidebar-nav-icon { color: #FFFFFF !important; }
-/* the link inside a nav row was painting its own square hover tile; the row's circle is the only highlight now */
+/* nav row: the row's circle is the only hover highlight */
 html.dark #sidebar-nav-container .sidebar-nav-row a,
 html.dark #sidebar-nav-container .sidebar-nav-row a:hover {
   background-color: transparent !important; border-radius: 9999px !important;
@@ -1845,7 +1845,7 @@ html.dark .verdict-no { background: #7F1D1D; color: #FECACA; }
 .rh.rh-in .rh-contents { opacity: 1; transform: none; transition: opacity .7s ease .3s, transform .7s ease .3s; }
 @media (prefers-reduced-motion: reduce) { .rh.rh-ready *, .rh.rh-ready .rh-mk { transition: none !important; transform: none !important; opacity: 1 !important; } }
 
-/* tidy page endings: no empty band before the footer */
+/* page endings: footer follows the last section */
 #app-footer { margin-top: 0 !important; }
 .view-panel > section:last-of-type { border-bottom: 0; }
 
@@ -1872,7 +1872,7 @@ html.dark .verdict-no { background: #7F1D1D; color: #FECACA; }
 .rh-mk b { top: 24px; }
 .rh-mk span { top: 46px; }
 
-/* rail: the open section's name, below its dot, no background.
+/* rail: the open section's name, below its dot.
    The label sits inside its dot; it crossfades with a short slide and a soft blur, in the scroll direction. */
 .sr-dot { transition: margin .55s cubic-bezier(.22, 1, .36, 1); }
 .sr-dot.is-active .sr-tip { display: none; }
@@ -1895,7 +1895,7 @@ html.dark .verdict-no { background: #7F1D1D; color: #FECACA; }
 #section-rail.sr-away .sr-label { opacity: 0; transition: opacity .2s ease; }
 @media (prefers-reduced-motion: reduce) { .sr-dot, .sr-label { transition: none !important; filter: none !important; } }
 
-/* hero lists in Plus Jakarta Sans */
+/* hero lists: typeface */
 .rh-n, .rh-toc a span, .toc-list a span { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; }
 .rh-answers, .rh-contents { font-family: 'Plus Jakarta Sans', sans-serif; }
 
