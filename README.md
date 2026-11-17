@@ -128,7 +128,7 @@ Under the strict cutoff, listening adds +0.1474 PR-AUC (paired bootstrap 95% CI 
 - **A ladder of models from a one-line rule to tuned LightGBM.** Each step has to beat the one below it, so every gain can be explained.
 - **Test split scored once.** Every choice (hyperparameters, threshold, feature sets) was made on validation first.
 - **Paired bootstrap for comparisons.** Both models are scored on the same resampled subscribers, so the interval is for the difference itself.
-- **We checked our own leakage.** When we found that March billing already shows most renewals, we added the 1 March strict-cutoff check instead of hiding it.
+- **We checked our own leakage.** When we found that March billing already shows most renewals, we added the 1 March strict-cutoff check to measure how much of the score it explains.
 
 **Failure modes** (test split, threshold 0.45: 1,484 of 17,029 churners missed, 2,063 false alarms)
 
@@ -148,7 +148,7 @@ https://destopianpirate.github.io/es335_final2/ presents the project interactive
 
 ### Runtime model
 
-The predictor runs the exact tuned LightGBM (`models/lgbm_champion.txt`, 861 trees) in JavaScript, with no server, so it works on GitHub Pages. Notebook 07 exports every tree to `website/js/generated/model_lgbm.js` (2.9 MB), and `website/js/sandbox_engine.js` walks the trees the same way LightGBM does, including missing values and categorical splits. `node website/tests/check_model_parity.mjs` compares the browser with Python: on 300 test rows the largest difference in churn probability is 1.1e-16, and on 100 form inputs it is 3.5e-18 (PASS). The form asks for 16 of the 33 features and fills the rest with training medians for similar subscribers, so it illustrates the model; it does not score real subscribers.
+The predictor runs the exact tuned LightGBM (`models/lgbm_champion.txt`, 861 trees) in JavaScript, with no server. Notebook 07 exports every tree to `website/js/generated/model_lgbm.js` (2.9 MB), and `website/js/sandbox_engine.js` walks the trees the same way LightGBM does, including missing values and categorical splits. `node website/tests/check_model_parity.mjs` compares the browser with Python: on 300 test rows the largest difference in churn probability is 1.1e-16, and on 100 form inputs it is 3.5e-18 (PASS). The form asks for the 16 features a person can know about a subscriber. Of the other 17, 3 presence flags are set to 1, 6 are worked out from the inputs, and about 8 payment-history features are filled with the training median for subscribers with the same auto-renew and cancel status (about 5% of the model's split gain). So it illustrates the model; it does not score real subscribers. City, registration channel and payment method are shown as their numeric codes, because the dataset does not give their names.
 
 ## Repository
 
@@ -177,6 +177,8 @@ docs/              built website (GitHub Pages)
 ## Setup and run
 
 ```bash
+git clone https://github.com/destopianpirate/es335_final2.git
+cd es335_final2
 pip install -r requirements.txt
 # put the five CSVs in data/raw/ (see Data access)
 cd notebooks

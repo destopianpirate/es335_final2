@@ -472,11 +472,11 @@ function dsnRenderShift() {
 const GROUP_DIMS = [
   { key: 'payment_method', short: 'Payment method', note: 'One payment method (41) carries more than half of all subscribers and churns at only 3 %. Method 38 churns at about 23 %, and subscribers with no transaction at all churn at 79 %.' },
   { key: 'plan_days', short: 'Plan length', note: 'The 30-day plan is 94 % of subscribers and churns at 4 %. Every longer fixed plan (90, 180, 195, 360, 410 days) is a prepaid card that does not auto-renew, so almost all of those subscribers churn at expiry.' },
-  { key: 'price', short: 'Price paid', note: 'Paying list price every time churns at 6 %. A discounted payment raises it to 24 %, and a last payment of zero (a free trial) to 82 %.' },
+  { key: 'price', short: 'Price paid', note: 'Paying list price every time churns at 6 %. A discounted payment raises it to 23 %, and a last payment of zero (a free trial) to 82 %.' },
   { key: 'tx_count', short: 'Transactions', note: 'Most subscribers have 1 or 2 transactions. Churn peaks at 54 % for 3 to 5 transactions, then falls as the subscriber history grows (22 % at 21 or more).' },
-  { key: 'n_methods', short: 'Payment methods used', note: 'Switching payment method is a warning sign: two methods already means 53 % churn against 6 % for subscribers who only ever used one.' },
+  { key: 'n_methods', short: 'Payment methods used', note: 'Switching payment method is a warning sign: two methods already means 52 % churn against 6 % for subscribers who only ever used one.' },
   { key: 'daily_hours', short: 'Listening per day', note: 'Listening time barely separates churners from renewers. Only very short days (under 15 minutes) stand out a little, at about 12 %.' },
-  { key: 'skip', short: 'Early skips', note: 'The share of songs skipped early moves the churn rate only between 8.7 % and 9.4 %. It is a weak signal on its own.' },
+  { key: 'skip', short: 'Early skips', note: 'The share of songs skipped early moves the churn rate only between 8.7 % and 9.5 %. It is a weak signal on its own.' },
   { key: 'city', short: 'City', note: 'City 1 holds 46 % of subscribers and churns at 6 %. Most other large cities sit at 12 to 14 %.' },
   { key: 'registered_via', short: 'Registration channel', note: 'Channel 7 (48 % of subscribers) churns at 4.5 %. Channels 3 and 4 churn at 17 % and 23 %.' },
 ];
