@@ -232,6 +232,24 @@ Integrity checks on the raw files: no duplicate IDs in `train_data`, `kaggle_tes
 
 Churn is very predictable on 31 March (PR-AUC 0.9644, an upper bound), but mostly because March billing already shows many renewal decisions. Billing carries almost all of the signal, and listening adds only +0.0083. With billing cut at 1 March the task is much harder (PR-AUC 0.5682), and listening becomes worth +0.1474, though part of that gain may come from listening after a plan has lapsed, since the strict model still sees listening through 31 March. Engagement data looks most useful when billing has not yet revealed the outcome; a clean test would cut listening at each subscriber's expiry.
 
+## Individual contributions
+
+### Avnish Yadav (25110067): data quality, billing, baselines, ablation, errors, Data Studio
+
+- **Contribution.** Profiled the five tables and their quality issues; built the 15 billing features, including the latest-transaction fields; set up the baselines and tuned logistic regression and the random forest on validation; ran the feature-group ablation, the error analysis and the failure modes; designed the Data Studio.
+- **Key choices.** Left joins with presence flags instead of dropping subscribers, because those with no transactions churn at 78.8%. `log1p` and scaling for logistic regression only, because of heavy skew (`tx_count` skew 22.8). Settings picked by validation log loss, never by test.
+- **Evaluation.** Every learned model beats the auto-renew rule (0.3164): logistic regression 0.8946, random forest 0.9596 test PR-AUC. Billing + demographics alone reach 0.9562, and listening adds only +0.0083 [0.0073, 0.0093] at 31 March.
+- **Limitation.** The errors concentrate where the data has no warning sign: plans expiring within 30 days, where recall is 0.595. Their billing looks loyal and their listening looks active.
+- **A small change.** Dropping subscribers missing from any table, instead of left-joining, would remove about 25% of them, including the no-transaction group that churns at 78.8%. The scores would look better on an easier test set, but the model would never learn to flag that group.
+
+### Ayush Singh (25110068): listening and profile features, split, LightGBM, evaluation, leakage, Report
+
+- **Contribution.** Built the 12 listening and 6 profile features and the joins with presence flags; made the stratified 70/10/20 split with all learned preprocessing on the training split; tuned LightGBM with Optuna, set the threshold, ran the test evaluation and the strict 1 March check; wrote the Report and built the Live Predictor.
+- **Key choices.** PR-AUC as the main metric, because always saying "renews" is already 91% accurate. Model chosen by validation log loss; threshold 0.45 chosen by F1 on validation; test scored once. No class reweighting, so probabilities stay calibrated.
+- **Evaluation.** The tuned LightGBM reaches 0.9644 [0.9624, 0.9664] test PR-AUC and beats default LightGBM by +0.0025 [0.0016, 0.0038] in a paired bootstrap. Validation and test differ by at most about 0.01.
+- **Limitation.** 0.9644 is an upper bound, because March billing often already records the renewal. With billing cut at 1 March the score is 0.5682, and that model still sees listening through March.
+- **A small change.** Lowering the threshold from 0.45 to 0.20 would catch 16,453 instead of 15,545 test churners (recall 0.913 to 0.966), but false alarms would rise from 2,063 to 3,382 (precision 0.883 to 0.829). It is worth it only if a lost subscriber costs much more than a wasted offer.
+
 ## AI-use disclosure
 
 We took help of Antigravity and Claude Code for getting the codes for the data processing, model building, understanding the concepts, restructurizing the repo and codes for better deployment. We also took help for building the website. But the ideas, final insights and decisions are our own.

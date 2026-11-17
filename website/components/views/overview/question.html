@@ -110,30 +110,54 @@
         </div>
 
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-16 mb-6">Who did what</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
             <h3 class="text-sm font-bold text-text-primary">Avnish Yadav <span class="font-normal text-text-muted">&middot; 25110067</span></h3>
-            <p class="text-[11px] uppercase tracking-wider font-bold text-text-muted mt-1 mb-3">Data quality, billing, baselines, ablation, errors, Data Studio</p>
-            <ul class="list-disc pl-5 space-y-1.5 text-sm text-text-secondary leading-relaxed">
-              <li>Profiled the five Kaggle tables and found the quality issues: invalid ages, blank gender, impossible listening times and the subscribers missing from some tables.</li>
-              <li>Built the 15 billing features from the full transaction history, including the latest-transaction fields that drive the model.</li>
-              <li>Set up the baselines (majority and the auto-renew rule) and tuned logistic regression and the random forest on validation.</li>
-              <li>Ran the feature-group ablation and the paired bootstrap that answers whether listening adds value beyond billing.</li>
-              <li>Analysed the errors: recall and precision by segment, representative misses and false alarms, and the four failure modes.</li>
-              <li>Designed the Data Studio pages: the five tables, file overlap, churn by group and the feature analysis.</li>
-            </ul>
+            <p class="text-[11px] uppercase tracking-wider font-bold text-text-muted mt-1">Data quality, billing, baselines, ablation, errors, Data Studio</p>
+            <div class="pt-3 mt-3 border-t border-border-subtle">
+              <h4 class="text-[10px] font-bold uppercase tracking-wider text-text-muted mb-1.5">My contribution</h4>
+              <div class="text-sm text-text-secondary leading-relaxed"><ul class="list-disc pl-5 space-y-1"><li>Profiled the five Kaggle tables and found the quality issues: invalid ages, blank gender, impossible listening times and subscribers missing from some tables.</li><li>Built the 15 billing features from the full transaction history, including the latest-transaction fields.</li><li>Set up the baselines and tuned logistic regression and the random forest on validation.</li><li>Ran the feature-group ablation, the error analysis and the failure modes, and designed the Data Studio.</li></ul></div>
+            </div>
+            <div class="pt-3 mt-3 border-t border-border-subtle">
+              <h4 class="text-[10px] font-bold uppercase tracking-wider text-text-muted mb-1.5">Key choices</h4>
+              <div class="text-sm text-text-secondary leading-relaxed"><ul class="list-disc pl-5 space-y-1"><li>Left joins with presence flags instead of dropping subscribers: those with no transactions churn at 78.8%, so absence is a signal.</li><li><code>log1p</code> and scaling for logistic regression only, because of heavy skew (<code>tx_count</code> skew 22.8); trees get raw values.</li><li>Logistic regression and random forest settings picked by validation log loss, never by test.</li></ul></div>
+            </div>
+            <div class="pt-3 mt-3 border-t border-border-subtle">
+              <h4 class="text-[10px] font-bold uppercase tracking-wider text-text-muted mb-1.5">Evaluation</h4>
+              <div class="text-sm text-text-secondary leading-relaxed"><p>Every learned model beats the auto-renew rule (0.3164) by far: logistic regression 0.8946, random forest 0.9596 test PR-AUC. The ablation shows billing + demographics alone reach 0.9562, and listening adds only +0.0083 [0.0073, 0.0093] at 31 March.</p></div>
+            </div>
+            <div class="pt-3 mt-3 border-t border-border-subtle">
+              <h4 class="text-[10px] font-bold uppercase tracking-wider text-text-muted mb-1.5">A limitation</h4>
+              <div class="text-sm text-text-secondary leading-relaxed"><p>The errors concentrate where the data has no warning sign: plans expiring within 30 days, where recall is 0.595. Their billing looks loyal and their listening looks active, so no amount of tuning on these features would fix them.</p></div>
+            </div>
+            <div class="pt-3 mt-3 border-t border-border-subtle">
+              <h4 class="text-[10px] font-bold uppercase tracking-wider text-text-muted mb-1.5">A small change, and what would happen</h4>
+              <div class="text-sm text-text-secondary leading-relaxed"><p>If we dropped subscribers missing from any table instead of left-joining, we would lose about 25% of them, including the no-transaction group that churns at 78.8%. The test set would become easier and the scores would look better, but the model would never learn to flag that group, so it would fail on real data.</p></div>
+            </div>
           </div>
           <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
             <h3 class="text-sm font-bold text-text-primary">Ayush Singh <span class="font-normal text-text-muted">&middot; 25110068</span></h3>
-            <p class="text-[11px] uppercase tracking-wider font-bold text-text-muted mt-1 mb-3">Listening and profile features, split, LightGBM, evaluation, leakage, Report</p>
-            <ul class="list-disc pl-5 space-y-1.5 text-sm text-text-secondary leading-relaxed">
-              <li>Built the 12 listening and 6 profile features and joined every table onto the subscriber list with presence flags, so nobody was dropped.</li>
-              <li>Made the stratified 70 / 10 / 20 split and kept every learned preprocessing step on the training split only.</li>
-              <li>Tuned LightGBM with Optuna, chose the model by validation log loss and set the decision threshold on validation.</li>
-              <li>Ran the single test evaluation: PR-AUC and the other metrics, bootstrap intervals, the paired model comparisons and calibration.</li>
-              <li>Found that March billing already records most renewals and ran the strict 1 March cutoff check to measure it.</li>
-              <li>Wrote the Report and built the Live Predictor, with the tuned LightGBM running in the browser.</li>
-            </ul>
+            <p class="text-[11px] uppercase tracking-wider font-bold text-text-muted mt-1">Listening and profile features, split, LightGBM, evaluation, leakage, Report</p>
+            <div class="pt-3 mt-3 border-t border-border-subtle">
+              <h4 class="text-[10px] font-bold uppercase tracking-wider text-text-muted mb-1.5">My contribution</h4>
+              <div class="text-sm text-text-secondary leading-relaxed"><ul class="list-disc pl-5 space-y-1"><li>Built the 12 listening and 6 profile features and joined every table onto the subscriber list with presence flags.</li><li>Made the stratified 70 / 10 / 20 split and kept every learned preprocessing step on the training split only.</li><li>Tuned LightGBM with Optuna, set the threshold, ran the test evaluation and the strict 1 March check.</li><li>Wrote the Report and built the Live Predictor with the tuned LightGBM running in the browser.</li></ul></div>
+            </div>
+            <div class="pt-3 mt-3 border-t border-border-subtle">
+              <h4 class="text-[10px] font-bold uppercase tracking-wider text-text-muted mb-1.5">Key choices</h4>
+              <div class="text-sm text-text-secondary leading-relaxed"><ul class="list-disc pl-5 space-y-1"><li>PR-AUC as the main metric: only 9% churn, so always saying "renews" is already 91% accurate.</li><li>Model chosen by validation log loss, which rewards honest probabilities; threshold &tau; = 0.45 chosen by F1 on validation; test scored once.</li><li>No class reweighting, so a predicted 30% still means about 30% churn.</li></ul></div>
+            </div>
+            <div class="pt-3 mt-3 border-t border-border-subtle">
+              <h4 class="text-[10px] font-bold uppercase tracking-wider text-text-muted mb-1.5">Evaluation</h4>
+              <div class="text-sm text-text-secondary leading-relaxed"><p>The tuned LightGBM reaches 0.9644 [0.9624, 0.9664] test PR-AUC. A paired bootstrap shows it beats default LightGBM by +0.0025 [0.0016, 0.0038], so the gain is small but real. Validation and test differ by at most about 0.01, so the tuning did not just fit the validation subscribers.</p></div>
+            </div>
+            <div class="pt-3 mt-3 border-t border-border-subtle">
+              <h4 class="text-[10px] font-bold uppercase tracking-wider text-text-muted mb-1.5">A limitation</h4>
+              <div class="text-sm text-text-secondary leading-relaxed"><p>0.9644 is an upper bound: by 31 March, March billing often already records the renewal. With billing cut at 1 March the score falls to 0.5682, and even that model still sees listening through March, after many plans have lapsed.</p></div>
+            </div>
+            <div class="pt-3 mt-3 border-t border-border-subtle">
+              <h4 class="text-[10px] font-bold uppercase tracking-wider text-text-muted mb-1.5">A small change, and what would happen</h4>
+              <div class="text-sm text-text-secondary leading-relaxed"><p>Lowering &tau; from 0.45 to 0.20 would catch 16,453 instead of 15,545 test churners (recall 0.913 &rarr; 0.966), but false alarms would rise from 2,063 to 3,382 (precision 0.883 &rarr; 0.829). That is worth it only if a lost subscriber costs much more than a wasted offer; the threshold and cost explorers in Results show this trade-off for any value.</p></div>
+            </div>
           </div>
         </div>
 
