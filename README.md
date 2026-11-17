@@ -141,7 +141,7 @@ Under the strict cutoff, listening adds +0.1474 PR-AUC (paired bootstrap 95% CI 
 
 https://destopianpirate.github.io/es335_final2/ presents the project interactively:
 
-- **Home:** the question, the headline numbers, the findings and the answer at a glance.
+- **Home:** the question, the headline numbers, the answer at a glance, who did what, and how to reproduce it.
 - **Report:** the full write-up in 16 numbered sections: Why, Data, Preprocessing, Evaluation, Baseline and methods, Leakage, Results, Errors, Failure modes, Runtime model, Limitations, Conclusion, What next, Reproduction steps, AI assistance, and Libraries and data. It opens with "The answer in short" and an "On this page" list. Collapsible "How it works" boxes explain each method and why we chose it, and a table gives a verdict for each question we set out to answer.
 - **Data Studio:** explore the raw tables and features, including churn rates by group and how the files overlap.
 - **Model Predictor:** score a subscriber yourself with the real model (see below).

@@ -25,7 +25,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
   <!-- Dual-Theme Engine (Day / Night) -->
-  <script src="js/theme.js?v=1794935654"></script>
+  <script src="js/theme.js?v=1794936032"></script>
 
   <!-- Tailwind Configuration with Project Tokens -->
   <script>
@@ -61,7 +61,7 @@
     };
   </script>
 
-  <link rel="stylesheet" href="css/styles.css?v=1794935654">
+  <link rel="stylesheet" href="css/styles.css?v=1794936032">
 </head>
 
 
@@ -529,8 +529,6 @@
           </div>
         </div>
 
-        <h2 class="text-xs font-bold uppercase tracking-wider text-text-muted mb-3">Findings</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10" id="ovn-findings"></div>
 
         <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
           <h2 class="text-xs font-bold uppercase tracking-wider text-text-primary mb-1">The answer at a glance</h2>
@@ -542,20 +540,7 @@
 
     <section id="ovn-home-more" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mb-2">What is inside</h2>
-        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8">The site has two long pages. Start with the Data Studio to see the data, then read the Report for the full reasoning.</p>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <nav class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card" aria-label="Data Studio contents">
-            <a href="#data-studio" class="flex items-center justify-between gap-3 mb-3 group"><h3 class="text-sm font-bold text-text-primary">Data Studio</h3><span class="material-symbols-outlined text-[18px] text-text-muted group-hover:text-text-primary">arrow_forward</span></a>
-            <ol class="toc-list toc-1"><li><a href="#dsn-tables"><span>01</span>The five tables</a></li><li><a href="#dsn-raw"><span>02</span>Raw data</a></li><li><a href="#dsn-overlap"><span>03</span>File overlap</a></li><li><a href="#dsn-quality"><span>04</span>Data quality</a></li><li><a href="#dsn-signals"><span>05</span>Churn signal explorer</a></li><li><a href="#dsn-explorer"><span>06</span>Churn by group</a></li><li><a href="#dsn-features"><span>07</span>Feature analysis</a></li><li><a href="#dsn-training"><span>08</span>Data for training</a></li><li><a href="#dsn-split"><span>09</span>Train / validation / test</a></li></ol>
-          </nav>
-          <nav class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card" aria-label="Report contents">
-            <a href="#report" class="flex items-center justify-between gap-3 mb-3 group"><h3 class="text-sm font-bold text-text-primary">Report</h3><span class="material-symbols-outlined text-[18px] text-text-muted group-hover:text-text-primary">arrow_forward</span></a>
-            <ol class="toc-list toc-2"><li><a href="#ovn-why"><span>01</span>Why</a></li><li><a href="#ovn-data"><span>02</span>Data</a></li><li><a href="#ovn-preprocessing"><span>03</span>Preprocessing</a></li><li><a href="#ovn-evaluation"><span>04</span>Evaluation</a></li><li><a href="#ovn-models"><span>05</span>Baseline and methods</a></li><li><a href="#ovn-leakage"><span>06</span>Leakage</a></li><li><a href="#ovn-results"><span>07</span>Results</a></li><li><a href="#ovn-errors"><span>08</span>Errors</a></li><li><a href="#ovn-failures"><span>09</span>Failure modes</a></li><li><a href="#ovn-runtime"><span>10</span>Runtime model</a></li><li><a href="#ovn-limitations"><span>11</span>Limitations</a></li><li><a href="#ovn-conclusion"><span>12</span>Conclusion</a></li><li><a href="#ovn-next"><span>13</span>What next</a></li><li><a href="#ovn-repro"><span>14</span>Reproduction steps</a></li><li><a href="#ovn-ai"><span>15</span>AI assistance</a></li><li><a href="#ovn-libs"><span>16</span>Libraries and data</a></li></ol>
-          </nav>
-        </div>
-
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-16 mb-6">Who did what</h2>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mb-6">Who did what</h2>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
             <h3 class="text-sm font-bold text-text-primary">Avnish Yadav <span class="font-normal text-text-muted">&middot; 25110067</span></h3>
@@ -2291,15 +2276,6 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
         </div>
       </div>
 
-      <!-- Risk Tier Banner -->
-      <div class="flex items-center justify-between p-2.5 bg-page-bg border border-border-subtle rounded-none text-xs">
-        <span class="font-semibold text-text-secondary">Assessed Risk Tier:</span>
-        <span id="res-tier-badge" class="font-bold font-mono">Evaluating...</span>
-      </div>
-
-      <!-- Line gap after Assessed Risk Tier -->
-      <div class="border-b border-border-subtle my-2"></div>
-
       <!-- Blind spot: plans that have not expired yet -->
       <div id="res-blindspot" class="hidden p-3 rounded-lg border border-border-subtle" style="border-left: 3px solid var(--accent)">
         <h4 class="text-[10px] font-bold text-text-primary uppercase tracking-wider mb-1">Read this score with care</h4>
@@ -2349,13 +2325,6 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
         </div>
       </details>
 
-      <!-- Retention Strategy Box -->
-      <div class="p-3 bg-surface-subtle border border-border-subtle rounded-lg">
-        <h4 class="text-[10px] font-bold text-text-primary uppercase tracking-wider mb-1">Recommended Retention Action</h4>
-        <p id="res-recommendation-text" class="text-xs text-text-secondary leading-relaxed">
-          Awaiting prediction.
-        </p>
-      </div>
 
 
 
@@ -2403,29 +2372,29 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
   </div>
 
   <!-- Generated by notebooks/07_website_export.ipynb -->
-  <script src="js/generated/site_data.js?v=1794935654"></script>
-  <script src="js/generated/model_lgbm.js?v=1794935654"></script>
-  <script src="js/generated/ds_extra.js?v=1794935654"></script>
+  <script src="js/generated/site_data.js?v=1794936032"></script>
+  <script src="js/generated/model_lgbm.js?v=1794936032"></script>
+  <script src="js/generated/ds_extra.js?v=1794936032"></script>
 
   <!-- Shell -->
-  <script src="js/sidebar_nav.js?v=1794935654"></script>
+  <script src="js/sidebar_nav.js?v=1794936032"></script>
 
   <!-- Pages -->
-  <script src="js/seg_tabs.js?v=1794935654"></script>
-  <script src="js/site_common.js?v=1794935654"></script>
-  <script src="js/overview.js?v=1794935654"></script>
-  <script src="js/hero_motion.js?v=1794935654"></script>
-  <script src="js/data_studio.js?v=1794935654"></script>
-  <script src="js/sandbox_engine.js?v=1794935654"></script>
-  <script src="js/sandbox_ui.js?v=1794935654"></script>
+  <script src="js/seg_tabs.js?v=1794936032"></script>
+  <script src="js/site_common.js?v=1794936032"></script>
+  <script src="js/overview.js?v=1794936032"></script>
+  <script src="js/hero_motion.js?v=1794936032"></script>
+  <script src="js/data_studio.js?v=1794936032"></script>
+  <script src="js/sandbox_engine.js?v=1794936032"></script>
+  <script src="js/sandbox_ui.js?v=1794936032"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
-  <script src="js/diagrams.js?v=1794935654"></script>
+  <script src="js/diagrams.js?v=1794936032"></script>
 
-  <script src="js/accent_picker.js?v=1794935654"></script>
-  <script src="js/copy_cmd.js?v=1794935654"></script>
-  <script src="js/report_hero.js?v=1794935654"></script>
-  <script src="js/section_rail.js?v=1794935654"></script>
-  <script src="js/app.js?v=1794935654"></script>
+  <script src="js/accent_picker.js?v=1794936032"></script>
+  <script src="js/copy_cmd.js?v=1794936032"></script>
+  <script src="js/report_hero.js?v=1794936032"></script>
+  <script src="js/section_rail.js?v=1794936032"></script>
+  <script src="js/app.js?v=1794936032"></script>
 </body>
 </html>
