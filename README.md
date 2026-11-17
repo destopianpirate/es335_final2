@@ -144,7 +144,7 @@ https://destopianpirate.github.io/es335_final2/ presents the project interactive
 - **Home:** the question, the headline numbers, the findings and the answer at a glance.
 - **Report:** the full write-up in 16 numbered sections: Why, Data, Preprocessing, Evaluation, Baseline and methods, Leakage, Results, Errors, Failure modes, Runtime model, Limitations, Conclusion, What next, Reproduction steps, AI assistance, and Libraries and data. It opens with "The answer in short" and an "On this page" list. Collapsible "How it works" boxes explain each method and why we chose it, and a table gives a verdict for each question we set out to answer.
 - **Data Studio:** explore the raw tables and features, including churn rates by group and how the files overlap.
-- **Live Predictor:** score a subscriber yourself with the real model (see below).
+- **Model Predictor:** score a subscriber yourself with the real model (see below).
 
 ### Runtime model
 
@@ -234,7 +234,7 @@ Churn is very predictable on 31 March (PR-AUC 0.9644, an upper bound), but mostl
 
 ## AI-use disclosure
 
-We took help of AI Tools for getting the codes for the data processing, model building, understanding the concepts, restructurizing the repo and codes for better deployment. We also took help for building the website. But the ideas, final insights and decisions are our own.
+We took help of Antigravity and Claude Code for getting the codes for the data processing, model building, understanding the concepts, restructurizing the repo and codes for better deployment. We also took help for building the website. But the ideas, final insights and decisions are our own.
 
 ## Libraries and references
 
