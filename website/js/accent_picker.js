@@ -59,21 +59,8 @@
     if (open) { const cur = panel.querySelector('[aria-pressed="true"]') || panel.querySelector('.ap-swatch'); cur && cur.focus({ preventScroll: true }); }
   }
 
-  // a small palette button at the bottom right opens the same panel without the keyboard
-  let fab = null;
-  function addButton() {
-    fab = document.createElement('button');
-    fab.type = 'button';
-    fab.id = 'accent-fab';
-    fab.title = 'Accent colour (Alt + \\)';
-    fab.setAttribute('aria-label', 'Accent colour');
-    fab.setAttribute('aria-expanded', 'false');
-    fab.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">palette</span>';
-    fab.addEventListener('click', e => { e.stopPropagation(); toggle(); });
-    fab.addEventListener('pointerdown', e => e.stopPropagation());
-    document.body.appendChild(fab);
-  }
-  if (document.body) addButton(); else document.addEventListener('DOMContentLoaded', addButton);
+  const fab = null;
+
 
   // Alt + \ : matched by character, physical key and legacy keyCode (220 / 226) to cover every keyboard layout.
   // Listened to on key press and, if the browser kept the press for itself, on key release.

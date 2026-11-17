@@ -151,7 +151,7 @@
       toast = document.createElement('div');
       toast.id = 'day-gradients-toast';
       toast.className = 'fixed right-6 z-[9999] transition-all duration-300';
-      toast.style.bottom = '76px';   // above the palette button
+      toast.style.bottom = '24px';
       document.body.appendChild(toast);
       // stays open while the pointer is on it, so a colour can be picked
       toast.addEventListener('mouseenter', function () { toast._hover = true; holdToast(); });

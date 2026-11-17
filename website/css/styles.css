@@ -1936,7 +1936,7 @@ html.dark .verdict-no { background: #7F1D1D; color: #FECACA; }
 #accent-fab .material-symbols-outlined { font-size: 20px; }
 #accent-fab:hover, #accent-fab[aria-expanded="true"] { color: var(--accent); border-color: var(--accent); transform: scale(1.06); }
 #accent-fab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-#accent-picker { bottom: 76px; }
+#accent-picker { bottom: 24px; }
 body.predictor-viewport-locked #accent-fab { bottom: 16px; right: 16px; }
 @media print { #accent-fab, #accent-picker { display: none; } }
 
