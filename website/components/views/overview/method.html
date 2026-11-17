@@ -103,6 +103,10 @@
         <div class="chap" aria-label="Section 5 of 16: Baseline and methods"><span class="chap-no" aria-hidden="true">05</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Baseline and methods</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">From a constant guess to tuned boosting</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">Every model outputs a churn probability and, apart from the baselines, is trained by minimising log loss on the training split. Every hyperparameter was chosen on the validation split; the test split played no part.</p>
+        <div class="callout mb-6 max-w-5xl">
+          <h3>Why these three model families</h3>
+          <p>After the two baselines, each model tests one idea about the data. <strong>Logistic regression</strong> (linear) asks whether a straight-line boundary is enough. <strong>Random forest</strong> (bagged trees) asks whether thresholds and interactions matter, such as auto-renew off <em>and</em> a plan about to expire. <strong>LightGBM</strong> (boosted trees) asks whether trees that correct each other do better still; it is usually the strongest family for tabular data with missing values and categories. Together they cover the three main families for tabular classification, and the gains level off (tuning adds only +0.0025 PR-AUC), so another family is unlikely to change the conclusions.</p>
+        </div>
         <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mb-8">
           <table class="w-full text-xs">
             <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">

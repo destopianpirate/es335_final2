@@ -74,78 +74,7 @@
         <div class="chap" aria-label="Section 14 of 16: Reproduction steps"><span class="chap-no" aria-hidden="true">14</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Reproduction steps</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-2">Everything on this page comes from eight notebooks and two scripts</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-3xl mb-8">Six steps from the raw Kaggle files to this website. Run them from the repository root.</p>
-        <ol class="rp-steps">
-            <li class="rp-step">
-              <span class="rp-n" aria-hidden="true">01</span>
-              <div class="rp-body">
-                <h3>Get the data</h3>
-                <p>Download the five CSVs from <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer">Kaggle</a> (accept the competition rules first) and put them in <code>data/raw/</code>. The README lists which Kaggle file becomes which name.</p>
-                
-                
-              </div>
-            </li>
-            <li class="rp-step">
-              <span class="rp-n" aria-hidden="true">02</span>
-              <div class="rp-body">
-                <h3>Install</h3>
-                <p>Python 3.11 or newer. Exact versions are pinned in <code>requirements.txt</code>.</p>
-                <div class="rp-cmd"><pre><code>pip install -r requirements.txt</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
-                
-              </div>
-            </li>
-            <li class="rp-step">
-              <span class="rp-n" aria-hidden="true">03</span>
-              <div class="rp-body">
-                <h3>Run the notebooks</h3>
-                <p>In this order; 08 runs before 07 because 07 exports its results. About 30 minutes and 8 GB of RAM in total.</p>
-                <div class="rp-cmd"><pre><code>cd notebooks
-for nb in 01 02 03 04 05 06 08 07; do
-  jupyter nbconvert --to notebook --execute --inplace ${nb}_*.ipynb
-done
-cd ..</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
-                <ol class="rp-nbs">
-                  <li><a href="{{REPO_URL}}/blob/main/notebooks/01_raw_data_analysis.ipynb"><span>01</span>raw_data_analysis</a><em>the 5 raw tables</em></li>
-                  <li><a href="{{REPO_URL}}/blob/main/notebooks/02_feature_engineering.ipynb"><span>02</span>feature_engineering</a><em>one row per subscriber, 33 features</em></li>
-                  <li><a href="{{REPO_URL}}/blob/main/notebooks/03_feature_analysis_and_split.ipynb"><span>03</span>feature_analysis_and_split</a><em>70 / 10 / 20 split, feature plots</em></li>
-                  <li><a href="{{REPO_URL}}/blob/main/notebooks/04_baselines.ipynb"><span>04</span>baselines</a><em>majority, rule, logistic regression</em></li>
-                  <li><a href="{{REPO_URL}}/blob/main/notebooks/05_tree_models_and_tuning.ipynb"><span>05</span>tree_models_and_tuning</a><em>random forest, LightGBM + Optuna, threshold, ablation</em></li>
-                  <li><a href="{{REPO_URL}}/blob/main/notebooks/06_test_evaluation.ipynb"><span>06</span>test_evaluation</a><em>test metrics, curves, bootstrap, errors</em></li>
-                  <li><a href="{{REPO_URL}}/blob/main/notebooks/08_strict_cutoff.ipynb"><span>08</span>strict_cutoff</a><em>billing cut at 1 March (run before 07)</em></li>
-                  <li><a href="{{REPO_URL}}/blob/main/notebooks/07_website_export.ipynb"><span>07</span>website_export</a><em>numbers and the browser model for this site</em></li>
-                </ol>
-              </div>
-            </li>
-            <li class="rp-step">
-              <span class="rp-n" aria-hidden="true">04</span>
-              <div class="rp-body">
-                <h3>Export the extra tables</h3>
-                <p>Data Studio tables that need the raw files, and every model scored on validation and test.</p>
-                <div class="rp-cmd"><pre><code>python scripts/export_ds_extra.py
-python scripts/export_val_test_metrics.py</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
-                
-              </div>
-            </li>
-            <li class="rp-step">
-              <span class="rp-n" aria-hidden="true">05</span>
-              <div class="rp-body">
-                <h3>Build and open the site</h3>
-                <p>Writes the site to <code>docs/</code> and serves it locally.</p>
-                <div class="rp-cmd"><pre><code>python website/build.py
-python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
-                
-              </div>
-            </li>
-            <li class="rp-step">
-              <span class="rp-n" aria-hidden="true">06</span>
-              <div class="rp-body">
-                <h3>Check (optional)</h3>
-                <p>The browser model should match Python, and <a class="underline" href="{{REPO_URL}}/blob/main/results/test_metrics.csv">results/test_metrics.csv</a> should show the tuned LightGBM at PR-AUC 0.9644.</p>
-                <div class="rp-cmd"><pre><code>node website/tests/check_model_parity.mjs</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
-                
-              </div>
-            </li>
-        </ol>
-        <p class="rp-files">Metric tables: <a class="underline" href="{{REPO_URL}}/blob/main/results/test_metrics.csv">test_metrics.csv</a> &middot; <a class="underline" href="{{REPO_URL}}/blob/main/results/validation_metrics.csv">validation_metrics.csv</a> &middot; <a class="underline" href="{{REPO_URL}}/blob/main/results/val_test_metrics.csv">val_test_metrics.csv</a> &middot; <a class="underline" href="{{REPO_URL}}/blob/main/results/model_comparison.csv">model_comparison.csv</a> &middot; <a class="underline" href="{{REPO_URL}}/blob/main/results/strict_cutoff_metrics.csv">strict_cutoff_metrics.csv</a>. Setup details, data access and citations: <a class="underline" href="{{REPO_URL}}#readme">README</a>.</p>
+        <load ="components/shared/repro_steps.html"/>
       </div>
     </section>
 

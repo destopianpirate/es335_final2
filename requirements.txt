@@ -8,6 +8,6 @@ optuna==4.8.0
 matplotlib==3.10.8
 joblib==1.5.3
 # run the notebooks
-jupyter
+jupyter==1.1.1
 nbconvert==7.17.0
 ipykernel==7.2.0

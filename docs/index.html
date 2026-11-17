@@ -25,7 +25,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
   <!-- Dual-Theme Engine (Day / Night) -->
-  <script src="js/theme.js?v=1794924353"></script>
+  <script src="js/theme.js?v=1794926644"></script>
 
   <!-- Tailwind Configuration with Project Tokens -->
   <script>
@@ -61,7 +61,7 @@
     };
   </script>
 
-  <link rel="stylesheet" href="css/styles.css?v=1794924353">
+  <link rel="stylesheet" href="css/styles.css?v=1794926644">
 </head>
 
 
@@ -461,8 +461,8 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8 hero-stats-grid">
             <div class="hero-stat"><span class="material-symbols-outlined">group</span><div><div class="hero-num" data-hero="subs">&ndash;</div><div class="hero-lab">labelled subscribers</div></div></div>
             <div class="hero-stat"><span class="material-symbols-outlined">person_off</span><div><div class="hero-num" data-hero="churn">&ndash;</div><div class="hero-lab">churn rate in the data</div></div></div>
-            <div class="hero-stat"><span class="material-symbols-outlined">target</span><div><div class="hero-num" data-hero="pr">&ndash;</div><div class="hero-lab">test PR-AUC (champion)</div></div></div>
-            <div class="hero-stat"><span class="material-symbols-outlined">show_chart</span><div><div class="hero-num" data-hero="roc">&ndash;</div><div class="hero-lab">test ROC-AUC (champion)</div></div></div>
+            <div class="hero-stat"><span class="material-symbols-outlined">target</span><div><div class="hero-num" data-hero="pr">&ndash;</div><div class="hero-lab">test PR-AUC, 31 March (upper bound)</div></div></div>
+            <div class="hero-stat"><span class="material-symbols-outlined">show_chart</span><div><div class="hero-num" data-hero="roc">&ndash;</div><div class="hero-lab">test ROC-AUC, 31 March</div></div></div>
             </div>
             </div>
             </div>
@@ -555,35 +555,83 @@
           </nav>
         </div>
 
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-16 mb-2">Setup and run</h2>
-        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">Python 3.11+ (tested on 3.14), about 8 GB RAM and about 30 minutes for all notebooks. First download the five CSVs from <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer">Kaggle</a> (you need to accept the competition rules) and put them in <code>data/raw/</code>.</p>
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-          <div class="lg:col-span-3 bg-[#121212] text-[#E2E8F0] border border-border-subtle rounded-2xl p-6 font-mono text-[11px] leading-relaxed overflow-x-auto">
-<pre>git clone https://github.com/destopianpirate/es335_final2.git
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-16 mb-2">Reproduce it</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-3xl mb-8">Six steps from the raw Kaggle files to this website, run from the repository root. The same steps are in the <a href="#ovn-repro" class="underline">Report</a> and the README.</p>
+                <ol class="rp-steps">
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">01</span>
+              <div class="rp-body">
+                <h3>Get the data</h3>
+                <p>Download the five CSVs from <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer">Kaggle</a> (accept the competition rules first) and put them in <code>data/raw/</code>. The README lists which Kaggle file becomes which name.</p>
+                
+                
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">02</span>
+              <div class="rp-body">
+                <h3>Install</h3>
+                <p>Clone the repository, then install. Python 3.11 or newer; exact versions are pinned in <code>requirements.txt</code>.</p>
+                <div class="rp-cmd"><pre><code>git clone https://github.com/destopianpirate/es335_final2.git
 cd es335_final2
-pip install -r requirements.txt
-# put the five CSVs in data/raw/
-cd notebooks
-for nb in 01 02 03 04 05 06 08 07; do   # 08 before 07
+pip install -r requirements.txt</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">03</span>
+              <div class="rp-body">
+                <h3>Run the notebooks</h3>
+                <p>In this order; 08 runs before 07 because 07 exports its results. About 30 minutes and 8 GB of RAM in total.</p>
+                <div class="rp-cmd"><pre><code>cd notebooks
+for nb in 01 02 03 04 05 06 08 07; do
   jupyter nbconvert --to notebook --execute --inplace ${nb}_*.ipynb
 done
-cd ..
-python scripts/export_ds_extra.py          # extra Data Studio tables
-python scripts/export_val_test_metrics.py  # every model, validation and test
-python website/build.py                    # builds the site into docs/
-node website/tests/check_model_parity.mjs  # optional: browser model == Python
-python -m http.server 8000 -d docs         # open http://localhost:8000</pre>
-          </div>
-          <div class="lg:col-span-2 bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card text-xs text-text-secondary leading-relaxed">
-            <h3 class="text-sm font-bold text-text-primary mb-2">Check the numbers</h3>
-            <ul class="list-disc pl-4 space-y-1.5">
-              <li>After notebook 06, <code>results/test_metrics.csv</code>: tuned LightGBM PR-AUC 0.9644, ROC-AUC 0.9958, log loss 0.0452 on 189,338 test subscribers.</li>
-              <li><code>results/validation_metrics.csv</code>: PR-AUC 0.9686 on validation.</li>
-              <li>After notebook 08, <code>results/strict_cutoff_metrics.csv</code>: 0.4208 (billing + demographics) and 0.5682 (with listening).</li>
-            </ul>
-            <p class="mt-3">Full details: <a class="underline" href="https://github.com/destopianpirate/es335_final2#readme" target="_blank" rel="noopener noreferrer">README</a>.</p>
-          </div>
-        </div>
+cd ..</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                <ol class="rp-nbs">
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/01_raw_data_analysis.ipynb"><span>01</span>raw_data_analysis</a><em>the 5 raw tables</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/02_feature_engineering.ipynb"><span>02</span>feature_engineering</a><em>one row per subscriber, 33 features</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/03_feature_analysis_and_split.ipynb"><span>03</span>feature_analysis_and_split</a><em>70 / 10 / 20 split, feature plots</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/04_baselines.ipynb"><span>04</span>baselines</a><em>majority, rule, logistic regression</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/05_tree_models_and_tuning.ipynb"><span>05</span>tree_models_and_tuning</a><em>random forest, LightGBM + Optuna, threshold, ablation</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/06_test_evaluation.ipynb"><span>06</span>test_evaluation</a><em>test metrics, curves, bootstrap, errors</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/08_strict_cutoff.ipynb"><span>08</span>strict_cutoff</a><em>billing cut at 1 March (run before 07)</em></li>
+                  <li><a href="https://github.com/destopianpirate/es335_final2/blob/main/notebooks/07_website_export.ipynb"><span>07</span>website_export</a><em>numbers and the browser model for this site</em></li>
+                </ol>
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">04</span>
+              <div class="rp-body">
+                <h3>Export the extra tables</h3>
+                <p>Data Studio tables that need the raw files, and every model scored on validation and test.</p>
+                <div class="rp-cmd"><pre><code>python scripts/export_ds_extra.py
+python scripts/export_val_test_metrics.py</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">05</span>
+              <div class="rp-body">
+                <h3>Build and open the site</h3>
+                <p>Writes the site to <code>docs/</code> and serves it locally.</p>
+                <div class="rp-cmd"><pre><code>python website/build.py
+python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                
+              </div>
+            </li>
+            <li class="rp-step">
+              <span class="rp-n" aria-hidden="true">06</span>
+              <div class="rp-body">
+                <h3>Check (optional)</h3>
+                <p>The browser model should match Python, and <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/test_metrics.csv">results/test_metrics.csv</a> should show the tuned LightGBM at PR-AUC 0.9644. Seeds are fixed, but training uses all CPU threads, so the last decimal places can differ on another machine.</p>
+                <div class="rp-cmd"><pre><code>node website/tests/check_model_parity.mjs</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                
+              </div>
+            </li>
+        </ol>
+        <p class="rp-files">Metric tables: <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/test_metrics.csv">test_metrics.csv</a> &middot; <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/validation_metrics.csv">validation_metrics.csv</a> &middot; <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/val_test_metrics.csv">val_test_metrics.csv</a> &middot; <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/model_comparison.csv">model_comparison.csv</a> &middot; <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/strict_cutoff_metrics.csv">strict_cutoff_metrics.csv</a>. Setup details, data access and citations: <a class="underline" href="https://github.com/destopianpirate/es335_final2#readme">README</a>.</p>
+
       </div>
     </section>
 
@@ -921,6 +969,10 @@ python -m http.server 8000 -d docs         # open http://localhost:8000</pre>
         <div class="chap" aria-label="Section 5 of 16: Baseline and methods"><span class="chap-no" aria-hidden="true">05</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Baseline and methods</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">From a constant guess to tuned boosting</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">Every model outputs a churn probability and, apart from the baselines, is trained by minimising log loss on the training split. Every hyperparameter was chosen on the validation split; the test split played no part.</p>
+        <div class="callout mb-6 max-w-5xl">
+          <h3>Why these three model families</h3>
+          <p>After the two baselines, each model tests one idea about the data. <strong>Logistic regression</strong> (linear) asks whether a straight-line boundary is enough. <strong>Random forest</strong> (bagged trees) asks whether thresholds and interactions matter, such as auto-renew off <em>and</em> a plan about to expire. <strong>LightGBM</strong> (boosted trees) asks whether trees that correct each other do better still; it is usually the strongest family for tabular data with missing values and categories. Together they cover the three main families for tabular classification, and the gains level off (tuning adds only +0.0025 PR-AUC), so another family is unlikely to change the conclusions.</p>
+        </div>
         <div class="bg-surface-card border border-border-subtle rounded-2xl shadow-subtle-card overflow-x-auto mb-8">
           <table class="w-full text-xs">
             <thead class="bg-surface-subtle text-text-muted uppercase tracking-wider text-[10px]">
@@ -1014,7 +1066,7 @@ python -m http.server 8000 -d docs         # open http://localhost:8000</pre>
 
             <section id="ovn-results" class="py-14 sm:py-16 border-b border-border-subtle bg-page-bg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 7 of 16: Results (test split)"><span class="chap-no" aria-hidden="true">07</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Results (test split)</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
+        <div class="chap" aria-label="Section 7 of 16: Results"><span class="chap-no" aria-hidden="true">07</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Results</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">How well each model does on unseen subscribers</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-8" id="ovn-results-lead"></p>
 
@@ -1418,7 +1470,7 @@ python -m http.server 8000 -d docs         # open http://localhost:8000</pre>
         <div class="chap" aria-label="Section 14 of 16: Reproduction steps"><span class="chap-no" aria-hidden="true">14</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Reproduction steps</span></span><span class="chap-of" aria-hidden="true">/ 16</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-2">Everything on this page comes from eight notebooks and two scripts</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-3xl mb-8">Six steps from the raw Kaggle files to this website. Run them from the repository root.</p>
-        <ol class="rp-steps">
+                <ol class="rp-steps">
             <li class="rp-step">
               <span class="rp-n" aria-hidden="true">01</span>
               <div class="rp-body">
@@ -1432,8 +1484,10 @@ python -m http.server 8000 -d docs         # open http://localhost:8000</pre>
               <span class="rp-n" aria-hidden="true">02</span>
               <div class="rp-body">
                 <h3>Install</h3>
-                <p>Python 3.11 or newer. Exact versions are pinned in <code>requirements.txt</code>.</p>
-                <div class="rp-cmd"><pre><code>pip install -r requirements.txt</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
+                <p>Clone the repository, then install. Python 3.11 or newer; exact versions are pinned in <code>requirements.txt</code>.</p>
+                <div class="rp-cmd"><pre><code>git clone https://github.com/destopianpirate/es335_final2.git
+cd es335_final2
+pip install -r requirements.txt</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
                 
               </div>
             </li>
@@ -1483,13 +1537,14 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
               <span class="rp-n" aria-hidden="true">06</span>
               <div class="rp-body">
                 <h3>Check (optional)</h3>
-                <p>The browser model should match Python, and <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/test_metrics.csv">results/test_metrics.csv</a> should show the tuned LightGBM at PR-AUC 0.9644.</p>
+                <p>The browser model should match Python, and <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/test_metrics.csv">results/test_metrics.csv</a> should show the tuned LightGBM at PR-AUC 0.9644. Seeds are fixed, but training uses all CPU threads, so the last decimal places can differ on another machine.</p>
                 <div class="rp-cmd"><pre><code>node website/tests/check_model_parity.mjs</code></pre><button type="button" class="rp-copy" aria-label="Copy commands"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button></div>
                 
               </div>
             </li>
         </ol>
         <p class="rp-files">Metric tables: <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/test_metrics.csv">test_metrics.csv</a> &middot; <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/validation_metrics.csv">validation_metrics.csv</a> &middot; <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/val_test_metrics.csv">val_test_metrics.csv</a> &middot; <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/model_comparison.csv">model_comparison.csv</a> &middot; <a class="underline" href="https://github.com/destopianpirate/es335_final2/blob/main/results/strict_cutoff_metrics.csv">strict_cutoff_metrics.csv</a>. Setup details, data access and citations: <a class="underline" href="https://github.com/destopianpirate/es335_final2#readme">README</a>.</p>
+
       </div>
     </section>
 
@@ -1785,7 +1840,7 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
 
             <section id="dsn-signals" class="py-14 sm:py-16 border-b border-border-subtle bg-surface-subtle">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 5 of 9: Churn signals"><span class="chap-no" aria-hidden="true">05</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Churn signals</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <div class="chap" aria-label="Section 5 of 9: Churn signal explorer"><span class="chap-no" aria-hidden="true">05</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Churn signal explorer</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Churn signal explorer</h2>
         <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">
           Pick a variable to see the churn rate in each group of subscribers. The dashed line is the overall rate. Bar width does not show group size; hover a bar for the count.
@@ -1923,7 +1978,7 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
 
             <section id="dsn-split" class="py-14 sm:py-16 bg-page-bg">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="chap" aria-label="Section 9 of 9: Train / val / test"><span class="chap-no" aria-hidden="true">09</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Train / val / test</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
+        <div class="chap" aria-label="Section 9 of 9: Train / validation / test"><span class="chap-no" aria-hidden="true">09</span><span class="chap-meta"><span class="chap-rule" aria-hidden="true"></span><span class="chap-name">Train / validation / test</span></span><span class="chap-of" aria-hidden="true">/ 09</span></div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-1 mb-3">Train / validation / test</h2>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <div class="text-sm text-text-secondary leading-relaxed space-y-3">
@@ -1989,7 +2044,7 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
   <form id="sandbox-form" onsubmit="event.preventDefault(); runPrediction();" class="flex flex-col h-full min-h-0">
     
     <!-- Scrollable Form Body: Only this box scrolls internally -->
-    <div class="flex-1 min-h-0 overflow-y-auto p-5 sm:p-6 space-y-5 sm:space-y-6 flex flex-col justify-between">
+    <div class="flex-1 min-h-0 overflow-y-auto p-5 sm:p-6 space-y-7">
       
       <!-- Group 1: Subscription & Billing Terms -->
       <div>
@@ -2021,37 +2076,37 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
 
           <div class="sm:col-span-4">
             <label for="sb-plan-days" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
-              Plan Duration
+              Plan Length
             </label>
             <select id="sb-plan-days" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong">
-              <option value="30" selected>30 Days (Monthly - 94% of subscribers)</option>
-              <option value="0">0 Days (Free Pass / Trial)</option>
-              <option value="1">1 Day (Single Day Pass)</option>
-              <option value="3">3 Days (Weekend Pass)</option>
-              <option value="7">7 Days (1-Week Pass)</option>
-              <option value="10">10 Days (10-Day Promo)</option>
-              <option value="14">14 Days (2-Week Trial)</option>
-              <option value="35">35 Days (30d + 5d Bonus)</option>
-              <option value="60">60 Days (2-Month Plan)</option>
-              <option value="70">70 Days (70-Day Bundle)</option>
-              <option value="80">80 Days (80-Day Bundle)</option>
-              <option value="90">90 Days (Quarterly Plan)</option>
-              <option value="100">100 Days (100-Day Bundle)</option>
-              <option value="110">110 Days (110-Day Promo)</option>
-              <option value="120">120 Days (4-Month Plan)</option>
-              <option value="180">180 Days (Half-Year Plan)</option>
-              <option value="195">195 Days (180d + 15d Bonus)</option>
-              <option value="200">200 Days (200-Day Bundle)</option>
-              <option value="230">230 Days (230-Day Promo)</option>
-              <option value="240">240 Days (8-Month Plan)</option>
-              <option value="270">270 Days (9-Month Plan)</option>
-              <option value="360">360 Days (Annual Plan)</option>
-              <option value="365">365 Days (Full Calendar Year)</option>
-              <option value="395">395 Days (Annual + 1m Bonus)</option>
-              <option value="400">400 Days (400-Day Bundle)</option>
-              <option value="410">410 Days (410-Day Promo)</option>
-              <option value="415">415 Days (415-Day Bundle)</option>
-              <option value="450">450 Days (15-Month Plan)</option>
+              <option value="30" selected>30 days &middot; 98.0%</option>
+              <option value="410">410 days &middot; 0.5%</option>
+              <option value="90">90 days &middot; 0.4%</option>
+              <option value="180">180 days &middot; 0.3%</option>
+              <option value="195">195 days &middot; 0.3%</option>
+              <option value="360">360 days &middot; 0.1%</option>
+              <option value="100">100 days &middot; 0.1%</option>
+              <option value="7">7 days &middot; 0.1%</option>
+              <option value="60">60 days &middot; &lt;0.1%</option>
+              <option value="395">395 days &middot; &lt;0.1%</option>
+              <option value="200">200 days &middot; &lt;0.1%</option>
+              <option value="120">120 days &middot; &lt;0.1%</option>
+              <option value="240">240 days &middot; &lt;0.1%</option>
+              <option value="400">400 days &middot; &lt;0.1%</option>
+              <option value="365">365 days &middot; &lt;0.1%</option>
+              <option value="1">1 days &middot; &lt;0.1%</option>
+              <option value="450">450 days &middot; &lt;0.1%</option>
+              <option value="10">10 days &middot; &lt;0.1%</option>
+              <option value="14">14 days &middot; &lt;0.1%</option>
+              <option value="70">70 days &middot; &lt;0.1%</option>
+              <option value="415">415 days &middot; &lt;0.1%</option>
+              <option value="80">80 days &middot; &lt;0.1%</option>
+              <option value="110">110 days &middot; &lt;0.1%</option>
+              <option value="270">270 days &middot; &lt;0.1%</option>
+              <option value="3">3 days &middot; &lt;0.1%</option>
+              <option value="230">230 days &middot; &lt;0.1%</option>
+              <option value="35">35 days &middot; &lt;0.1%</option>
+              <option value="0">0 days &middot; &lt;0.1%</option>
             </select>
           </div>
 
@@ -2071,52 +2126,52 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
 
           <div class="sm:col-span-6">
             <label for="sb-payment-method" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
-              Payment Method
+              Payment Method (code)
             </label>
             <select id="sb-payment-method" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong">
-              <option value="41" selected>Method 41: Credit Card Auto-Pay</option>
-              <option value="38">Method 38: LinePay / Mobile Direct</option>
-              <option value="39">Method 39: ATM Transfer</option>
-              <option value="36">Method 36: Convenience Store Cash</option>
-              <option value="40">Method 40: Digital Mobile Wallet</option>
-              <option value="37">Method 37: Web ATM Online Banking</option>
-              <option value="32">Method 32: Partner In-App Billing</option>
-              <option value="30">Method 30: Partner Carrier Bundle A</option>
-              <option value="31">Method 31: Partner Carrier Bundle B</option>
-              <option value="33">Method 33: Payment Gateway A</option>
-              <option value="34">Method 34: Payment Gateway B</option>
-              <option value="35">Method 35: Retail Prepaid Voucher</option>
-              <option value="29">Method 29: Regional Payment Provider</option>
-              <option value="28">Method 28: Digital Channel 28</option>
-              <option value="27">Method 27: Digital Channel 27</option>
-              <option value="26">Method 26: Carrier Billing 26</option>
-              <option value="23">Method 23: Gateway Channel 23</option>
-              <option value="22">Method 22: Telecom Direct 22</option>
-              <option value="21">Method 21: Telecom Direct 21</option>
-              <option value="20">Method 20: Retail Gateway 20</option>
-              <option value="19">Method 19: Online Gateway 19</option>
-              <option value="18">Method 18: Card Channel 18</option>
-              <option value="17">Method 17: Banking Direct 17</option>
-              <option value="16">Method 16: Banking Direct 16</option>
-              <option value="15">Method 15: Partner Gateway 15</option>
-              <option value="14">Method 14: Mobile Channel 14</option>
-              <option value="13">Method 13: Partner Bundle 13</option>
-              <option value="12">Method 12: In-Store Channel 12</option>
-              <option value="11">Method 11: Merchant Gateway 11</option>
-              <option value="10">Method 10: Special Channel 10</option>
-              <option value="8">Method 8: Legacy Channel 8</option>
-              <option value="6">Method 6: Legacy Channel 6</option>
-              <option value="3">Method 3: Legacy Channel 3</option>
+              <option value="41" selected>41 &middot; 58.0%</option>
+              <option value="40">40 &middot; 7.8%</option>
+              <option value="36">36 &middot; 7.3%</option>
+              <option value="39">39 &middot; 7.0%</option>
+              <option value="38">38 &middot; 4.5%</option>
+              <option value="37">37 &middot; 3.9%</option>
+              <option value="34">34 &middot; 3.1%</option>
+              <option value="30">30 &middot; 1.8%</option>
+              <option value="29">29 &middot; 1.6%</option>
+              <option value="33">33 &middot; 1.5%</option>
+              <option value="31">31 &middot; 1.1%</option>
+              <option value="32">32 &middot; 0.8%</option>
+              <option value="15">15 &middot; 0.2%</option>
+              <option value="23">23 &middot; 0.2%</option>
+              <option value="27">27 &middot; 0.2%</option>
+              <option value="28">28 &middot; 0.2%</option>
+              <option value="19">19 &middot; 0.1%</option>
+              <option value="21">21 &middot; 0.1%</option>
+              <option value="20">20 &middot; 0.1%</option>
+              <option value="16">16 &middot; 0.1%</option>
+              <option value="18">18 &middot; 0.1%</option>
+              <option value="14">14 &middot; 0.1%</option>
+              <option value="22">22 &middot; 0.1%</option>
+              <option value="17">17 &middot; &lt;0.1%</option>
+              <option value="13">13 &middot; &lt;0.1%</option>
+              <option value="35">35 &middot; &lt;0.1%</option>
+              <option value="12">12 &middot; &lt;0.1%</option>
+              <option value="26">26 &middot; &lt;0.1%</option>
+              <option value="11">11 &middot; &lt;0.1%</option>
+              <option value="10">10 &middot; &lt;0.1%</option>
+              <option value="8">8 &middot; &lt;0.1%</option>
+              <option value="3">3 &middot; &lt;0.1%</option>
+              <option value="6">6 &middot; &lt;0.1%</option>
             </select>
           </div>
 
         </div>
       </div>
 
-      <!-- Group 2: 30-Day Listening Engagement (NO SLIDERS: Direct Numeric Inputs) -->
+      <!-- Group 2: March 2017 listening -->
       <div>
         <div class="text-[11px] font-bold text-text-primary uppercase tracking-wider mb-3 pb-2 border-b border-border-subtle flex items-center justify-between">
-          <span>2. 30-Day Listening Engagement</span>
+          <span>2. Listening in March 2017</span>
           <span class="text-[10px] font-mono text-text-muted lowercase">user_logs.csv</span>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
@@ -2126,31 +2181,31 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
               Listening Hours
             </label>
             <input type="number" id="sb-hours" value="22.5" min="0" max="250" step="0.5" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
-            <span class="text-[10px] text-text-muted block mt-0.5">30d sum (hrs)</span>
+            <span class="text-[10px] text-text-muted block mt-0.5">total hours in March</span>
           </div>
 
           <div>
             <label for="sb-active-days" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
               Active Days
             </label>
-            <input type="number" id="sb-active-days" value="16" min="0" max="30" step="1" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
-            <span class="text-[10px] text-text-muted block mt-0.5">out of 30 days</span>
+            <input type="number" id="sb-active-days" value="16" min="0" max="31" step="1" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
+            <span class="text-[10px] text-text-muted block mt-0.5">out of 31 days in March</span>
           </div>
 
           <div>
             <label for="sb-inactivity" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
-              Inactivity Streak
+              Days Since Last Listen
             </label>
             <input type="number" id="sb-inactivity" value="2" min="0" max="30" step="1" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
-            <span class="text-[10px] text-text-muted block mt-0.5">days dormant</span>
+            <span class="text-[10px] text-text-muted block mt-0.5">before 31 March (0&ndash;30)</span>
           </div>
 
           <div>
             <label for="sb-velocity" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
-              7d / 30d Velocity
+              Last-Week Share
             </label>
-            <input type="number" id="sb-velocity" value="0.25" min="0.0" max="2.0" step="0.01" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
-            <span class="text-[10px] text-text-muted block mt-0.5">0.23x = flat pace</span>
+            <input type="number" id="sb-velocity" value="0.25" min="0" max="1" step="0.01" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
+            <span class="text-[10px] text-text-muted block mt-0.5">of March hours in 25&ndash;31 Mar; 0.23 = even</span>
           </div>
 
           <div>
@@ -2158,7 +2213,7 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
               Song Skip Rate
             </label>
             <input type="number" id="sb-skip-ratio" value="20" min="0" max="100" step="1" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong"/>
-            <span class="text-[10px] text-text-muted block mt-0.5">% skipped (&lt;25%)</span>
+            <span class="text-[10px] text-text-muted block mt-0.5">% of songs played &lt; 25%</span>
           </div>
 
         </div>
@@ -2167,7 +2222,7 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
       <!-- Group 3: Subscriber Profile & Demographics -->
       <div>
         <div class="text-[11px] font-bold text-text-primary uppercase tracking-wider mb-3 pb-2 border-b border-border-subtle flex items-center justify-between">
-          <span>3. Subscriber Profile & Demographics</span>
+          <span>3. Member Profile</span>
           <span class="text-[10px] font-mono text-text-muted lowercase">members.csv</span>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
@@ -2201,47 +2256,48 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
 
           <div>
             <label for="sb-city" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
-              City / Jurisdiction
+              City (code)
             </label>
             <select id="sb-city" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong">
-              <option value="1" selected>City 1: Taipei Metropolitan (Primary)</option>
-              <option value="13">City 13: New Taipei City</option>
-              <option value="4">City 4: Taichung</option>
-              <option value="5">City 5: Kaohsiung</option>
-              <option value="15">City 15: Tainan</option>
-              <option value="22">City 22: Taoyuan</option>
-              <option value="6">City 6: Hsinchu</option>
-              <option value="14">City 14: Changhua</option>
-              <option value="11">City 11: Pingtung</option>
-              <option value="12">City 12: Yunlin</option>
-              <option value="9">City 9: Chiayi</option>
-              <option value="3">City 3: Keelung</option>
-              <option value="18">City 18: Miaoli</option>
-              <option value="8">City 8: Nantou</option>
-              <option value="10">City 10: Yilan</option>
-              <option value="17">City 17: Hualien</option>
-              <option value="7">City 7: Taitung</option>
-              <option value="21">City 21: Penghu</option>
-              <option value="16">City 16: Kinmen</option>
-              <option value="20">City 20: Lienchiang</option>
-              <option value="19">City 19: Offshore Islands</option>
+              <option value="1" selected>1 &middot; 51.5%</option>
+              <option value="13">13 &middot; 11.3%</option>
+              <option value="5">5 &middot; 8.2%</option>
+              <option value="4">4 &middot; 5.5%</option>
+              <option value="15">15 &middot; 5.0%</option>
+              <option value="22">22 &middot; 4.9%</option>
+              <option value="6">6 &middot; 3.0%</option>
+              <option value="14">14 &middot; 2.3%</option>
+              <option value="12">12 &middot; 1.3%</option>
+              <option value="9">9 &middot; 1.1%</option>
+              <option value="11">11 &middot; 1.1%</option>
+              <option value="18">18 &middot; 0.9%</option>
+              <option value="8">8 &middot; 0.9%</option>
+              <option value="10">10 &middot; 0.7%</option>
+              <option value="17">17 &middot; 0.6%</option>
+              <option value="21">21 &middot; 0.6%</option>
+              <option value="3">3 &middot; 0.6%</option>
+              <option value="7">7 &middot; 0.3%</option>
+              <option value="16">16 &middot; 0.1%</option>
+              <option value="20">20 &middot; 0.1%</option>
+              <option value="19">19 &middot; &lt;0.1%</option>
             </select>
           </div>
 
           <div>
             <label for="sb-registered-via" class="text-[11px] font-semibold text-text-secondary block mb-1.5">
-              Registration Channel
+              Registration (code)
             </label>
             <select id="sb-registered-via" class="w-full text-xs bg-page-bg border border-border-subtle rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-border-strong">
-              <option value="7" selected>Method 7: Direct Web Portal</option>
-              <option value="9">Method 9: Native Mobile App</option>
-              <option value="3">Method 3: Telecom Partner Bundle</option>
-              <option value="4">Method 4: Device Pre-Install</option>
-              <option value="13">Method 13: Promotional Campaign</option>
+              <option value="7" selected>7 &middot; 53.8%</option>
+              <option value="9">9 &middot; 27.3%</option>
+              <option value="3">3 &middot; 12.4%</option>
+              <option value="4">4 &middot; 6.1%</option>
+              <option value="13">13 &middot; 0.4%</option>
             </select>
           </div>
 
         </div>
+        <p class="text-[10px] text-text-muted mt-3 leading-relaxed">KKBOX publishes city, registration channel and payment method only as numeric codes, so their real names are unknown. Each option shows the code and its share of training subscribers. Plan lengths are the values seen in the data.</p>
       </div>
 
     </div>
@@ -2249,7 +2305,7 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
     <!-- Pinned Bottom Action Bar: Always visible, never scrolls away -->
     <div class="shrink-0 p-3 sm:px-5 bg-surface-card border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="text-[11px] text-text-muted">
-        <span>16 parameter controls | 33 model features | LightGBM runs in your browser</span>
+        <span>16 inputs &middot; 33 model features &middot; the tuned LightGBM runs in your browser</span>
       </div>
       <button type="button" id="sb-submit-btn" onclick="runPrediction()" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2 bg-text-primary text-page-bg font-bold text-xs rounded-none hover:opacity-90 transition-all shadow-xs cursor-pointer">
         <span>Run Churn Prediction</span>
@@ -2274,16 +2330,16 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
         </svg>
       </div>
       <div>
-        <h3 class="text-sm font-bold text-text-primary">Inference Engine Standby</h3>
+        <h3 class="text-sm font-bold text-text-primary">No prediction yet</h3>
         <p class="text-xs text-text-muted mt-1 max-w-xs mx-auto">
-          Choose an archetype preset above or customize subscriber parameters, then click <strong>Run Churn Prediction</strong>.
+          Pick a preset above or change any input, then click <strong>Run Churn Prediction</strong>.
         </p>
       </div>
       <button type="button" onclick="loadArchetype('loyal')" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-surface-subtle text-text-primary border border-border-subtle rounded-lg hover:bg-surface-card transition-colors cursor-pointer">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
         </svg>
-        <span>Evaluate Default Subscriber</span>
+        <span>Score the example subscriber</span>
       </button>
     </div>
 
@@ -2412,29 +2468,29 @@ python -m http.server 8000 -d docs   # open http://localhost:8000</code></pre><b
   </div>
 
   <!-- Generated by notebooks/07_website_export.ipynb -->
-  <script src="js/generated/site_data.js?v=1794924353"></script>
-  <script src="js/generated/model_lgbm.js?v=1794924353"></script>
-  <script src="js/generated/ds_extra.js?v=1794924353"></script>
+  <script src="js/generated/site_data.js?v=1794926644"></script>
+  <script src="js/generated/model_lgbm.js?v=1794926644"></script>
+  <script src="js/generated/ds_extra.js?v=1794926644"></script>
 
   <!-- Shell -->
-  <script src="js/sidebar_nav.js?v=1794924353"></script>
+  <script src="js/sidebar_nav.js?v=1794926644"></script>
 
   <!-- Pages -->
-  <script src="js/seg_tabs.js?v=1794924353"></script>
-  <script src="js/site_common.js?v=1794924353"></script>
-  <script src="js/overview.js?v=1794924353"></script>
-  <script src="js/hero_motion.js?v=1794924353"></script>
-  <script src="js/data_studio.js?v=1794924353"></script>
-  <script src="js/sandbox_engine.js?v=1794924353"></script>
-  <script src="js/sandbox_ui.js?v=1794924353"></script>
+  <script src="js/seg_tabs.js?v=1794926644"></script>
+  <script src="js/site_common.js?v=1794926644"></script>
+  <script src="js/overview.js?v=1794926644"></script>
+  <script src="js/hero_motion.js?v=1794926644"></script>
+  <script src="js/data_studio.js?v=1794926644"></script>
+  <script src="js/sandbox_engine.js?v=1794926644"></script>
+  <script src="js/sandbox_ui.js?v=1794926644"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
-  <script src="js/diagrams.js?v=1794924353"></script>
+  <script src="js/diagrams.js?v=1794926644"></script>
 
-  <script src="js/accent_picker.js?v=1794924353"></script>
-  <script src="js/copy_cmd.js?v=1794924353"></script>
-  <script src="js/report_hero.js?v=1794924353"></script>
-  <script src="js/section_rail.js?v=1794924353"></script>
-  <script src="js/app.js?v=1794924353"></script>
+  <script src="js/accent_picker.js?v=1794926644"></script>
+  <script src="js/copy_cmd.js?v=1794926644"></script>
+  <script src="js/report_hero.js?v=1794926644"></script>
+  <script src="js/section_rail.js?v=1794926644"></script>
+  <script src="js/app.js?v=1794926644"></script>
 </body>
 </html>

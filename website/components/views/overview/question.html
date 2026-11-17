@@ -15,8 +15,8 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8 hero-stats-grid">
             <div class="hero-stat"><span class="material-symbols-outlined">group</span><div><div class="hero-num" data-hero="subs">&ndash;</div><div class="hero-lab">labelled subscribers</div></div></div>
             <div class="hero-stat"><span class="material-symbols-outlined">person_off</span><div><div class="hero-num" data-hero="churn">&ndash;</div><div class="hero-lab">churn rate in the data</div></div></div>
-            <div class="hero-stat"><span class="material-symbols-outlined">target</span><div><div class="hero-num" data-hero="pr">&ndash;</div><div class="hero-lab">test PR-AUC (champion)</div></div></div>
-            <div class="hero-stat"><span class="material-symbols-outlined">show_chart</span><div><div class="hero-num" data-hero="roc">&ndash;</div><div class="hero-lab">test ROC-AUC (champion)</div></div></div>
+            <div class="hero-stat"><span class="material-symbols-outlined">target</span><div><div class="hero-num" data-hero="pr">&ndash;</div><div class="hero-lab">test PR-AUC, 31 March (upper bound)</div></div></div>
+            <div class="hero-stat"><span class="material-symbols-outlined">show_chart</span><div><div class="hero-num" data-hero="roc">&ndash;</div><div class="hero-lab">test ROC-AUC, 31 March</div></div></div>
             </div>
             </div>
             </div>
@@ -109,34 +109,8 @@
           </nav>
         </div>
 
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-16 mb-2">Setup and run</h2>
-        <p class="text-sm text-text-secondary leading-relaxed max-w-4xl mb-6">Python 3.11+ (tested on 3.14), about 8 GB RAM and about 30 minutes for all notebooks. First download the five CSVs from <a class="underline" href="https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data" target="_blank" rel="noopener noreferrer">Kaggle</a> (you need to accept the competition rules) and put them in <code>data/raw/</code>.</p>
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-          <div class="lg:col-span-3 bg-[#121212] text-[#E2E8F0] border border-border-subtle rounded-2xl p-6 font-mono text-[11px] leading-relaxed overflow-x-auto">
-<pre>git clone {{REPO_URL}}.git
-cd es335_final2
-pip install -r requirements.txt
-# put the five CSVs in data/raw/
-cd notebooks
-for nb in 01 02 03 04 05 06 08 07; do   # 08 before 07
-  jupyter nbconvert --to notebook --execute --inplace ${nb}_*.ipynb
-done
-cd ..
-python scripts/export_ds_extra.py          # extra Data Studio tables
-python scripts/export_val_test_metrics.py  # every model, validation and test
-python website/build.py                    # builds the site into docs/
-node website/tests/check_model_parity.mjs  # optional: browser model == Python
-python -m http.server 8000 -d docs         # open http://localhost:8000</pre>
-          </div>
-          <div class="lg:col-span-2 bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card text-xs text-text-secondary leading-relaxed">
-            <h3 class="text-sm font-bold text-text-primary mb-2">Check the numbers</h3>
-            <ul class="list-disc pl-4 space-y-1.5">
-              <li>After notebook 06, <code>results/test_metrics.csv</code>: tuned LightGBM PR-AUC 0.9644, ROC-AUC 0.9958, log loss 0.0452 on 189,338 test subscribers.</li>
-              <li><code>results/validation_metrics.csv</code>: PR-AUC 0.9686 on validation.</li>
-              <li>After notebook 08, <code>results/strict_cutoff_metrics.csv</code>: 0.4208 (billing + demographics) and 0.5682 (with listening).</li>
-            </ul>
-            <p class="mt-3">Full details: <a class="underline" href="{{REPO_URL}}#readme" target="_blank" rel="noopener noreferrer">README</a>.</p>
-          </div>
-        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-16 mb-2">Reproduce it</h2>
+        <p class="text-sm text-text-secondary leading-relaxed max-w-3xl mb-8">Six steps from the raw Kaggle files to this website, run from the repository root. The same steps are in the <a href="#ovn-repro" class="underline">Report</a> and the README.</p>
+        <load ="components/shared/repro_steps.html"/>
       </div>
     </section>

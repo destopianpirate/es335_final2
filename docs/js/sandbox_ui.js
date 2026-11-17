@@ -48,7 +48,7 @@ async function runPrediction() {
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
       </svg>
-      <span>Evaluating Model...</span>
+      <span>Scoring...</span>
     `;
   }
 
@@ -186,6 +186,11 @@ function renderPredictionResult(res) {
 
 
 }
+
+// Score the subscriber already in the form once everything has loaded, so the panel never opens empty
+window.addEventListener('load', () => {
+  if (window.LGBM_MODEL && document.getElementById('sandbox-form')) runPrediction();
+});
 
 // Expose globally
 window.loadArchetype = loadArchetype;
