@@ -1,4 +1,4 @@
-// All-in-One Model Predictor Single-Screen Controller
+// All-in-One Live Predictor Single-Screen Controller
 
 const SUBMIT_BUTTON_IDLE_HTML = `
   <span>Run Churn Prediction</span>
@@ -84,6 +84,7 @@ async function runPrediction() {
     const result = computeClientSidePrediction(payload);
 
     renderPredictionResult(result);
+    renderInsights(payload, result);
 
   } catch (err) {
     console.error("Prediction engine error:", err);
@@ -185,6 +186,83 @@ function renderPredictionResult(res) {
   }
 
 
+}
+
+// ---------- extra views that explain the prediction ----------
+const FILLED = [
+  ['has_member', 'flag', '1: a member profile is entered'],
+  ['has_tx', 'flag', '1: a payment is entered'],
+  ['has_logs', 'flag', '1 if any March listening is entered'],
+  ['avg_plan_days', 'derived', 'set to the plan length'],
+  ['total_paid', 'derived', 'typical number of payments \u00d7 amount paid'],
+  ['days_since_last_tx', 'derived', 'plan length \u2212 days until expiry'],
+  ['secs_per_day', 'derived', 'listening seconds \u00f7 active days'],
+  ['songs_per_day', 'derived', 'seconds per day \u00f7 median song length'],
+  ['active_days_7d', 'derived', 'from active days and last-week share'],
+  ['tx_count', 'median', 'median for the same auto-renew and cancel status'],
+  ['auto_renew_ratio', 'median', 'median for the same auto-renew and cancel status'],
+  ['cancel_count', 'median', 'median for the same status (at least 1 if a cancel is entered)'],
+  ['discount_count', 'median', 'median for the same auto-renew and cancel status'],
+  ['n_payment_methods', 'median', 'median for the same auto-renew and cancel status'],
+  ['unique_song_ratio', 'median', 'median of training listeners'],
+  ['complete_ratio', 'median', 'median of training listeners, capped by the skip rate'],
+  ['daily_secs_cv', 'median', 'median of training listeners'],
+];
+const FILL_TAG = { flag: 'flag', derived: 'worked out', median: 'median' };
+
+function fmtVal(v) {
+  if (v == null || Number.isNaN(v)) return 'missing';
+  return Number.isInteger(v) ? v.toLocaleString('en-US') : (Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(3));
+}
+
+function renderInsights(payload, res) {
+  const tau = res.optimal_threshold;
+  const accent = (getComputedStyle(document.documentElement).getPropertyValue('--accent') || '#DC2626').trim();
+
+  // 1. what if: days until expiry
+  const cur = payload.days_until_expiration;
+  const lo = Math.min(-30, cur), hi = Math.max(60, cur);
+  const pts = [];
+  for (let d = lo; d <= hi; d += 1) pts.push({ x: d, y: computeClientSidePrediction({ ...payload, days_until_expiration: d }).churn_probability * 100 });
+  makeChart('res-whatif-chart', {
+    type: 'line',
+    data: { datasets: [
+      { label: 'churn probability', data: pts, borderColor: accent, backgroundColor: accent, borderWidth: 2, pointRadius: 0, tension: 0 },
+      { label: 'this subscriber', data: [{ x: cur, y: res.churn_probability * 100 }], borderColor: accent, backgroundColor: accent, pointRadius: 5, showLine: false },
+      { label: 'threshold', data: [{ x: lo, y: tau * 100 }, { x: hi, y: tau * 100 }], borderColor: '#94A3B8', borderDash: [4, 4], borderWidth: 1, pointRadius: 0 },
+    ] },
+    options: {
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.parsed.x} days: ${c.parsed.y.toFixed(1)} %` } } },
+      scales: { x: { type: 'linear', min: lo, max: hi, title: { text: 'days until expiry (negative = already expired)' } },
+                y: { min: 0, max: 100, title: { text: 'churn probability (%)' } } },
+    },
+  });
+  const pAt = d => computeClientSidePrediction({ ...payload, days_until_expiration: d }).churn_probability * 100;
+  const note = document.getElementById('res-whatif-note');
+  if (note) note.textContent = `For this subscriber: ${pAt(-10).toFixed(1)} % if the plan expired 10 days ago, ${pAt(5).toFixed(1)} % if it expires in 5 days, ${pAt(30).toFixed(1)} % if it expires in 30 days.`;
+
+  // 2. blind spot: not expired yet, no cancellation, scored below the threshold
+  const box = document.getElementById('res-blindspot'), txt = document.getElementById('res-blindspot-text');
+  const seg = ((window.SITE_DATA || {}).segments || []).find(s => s.segment === 'Plan expiry vs cutoff' && s.group === 'within 30 days');
+  const show = cur >= 0 && cur <= 30 && payload.last_is_cancel === 0 && res.churn_probability < tau;
+  if (box && txt) {
+    box.classList.toggle('hidden', !show);
+    if (show && seg) {
+      txt.innerHTML = `This plan expires within 30 days of the cutoff and no cancellation is logged, so the renewal has not happened yet and billing cannot show it. `
+        + `This is where the model is weakest: on the test set it caught only <strong>${(seg.recall * 100).toFixed(1)} %</strong> of the churners in this group `
+        + `(${seg.fn.toLocaleString('en-US')} churners missed). A low score here means "no warning sign yet", not "will renew". `
+        + `<a href="#ovn-failures" class="underline">Failure modes</a>`;
+    }
+  }
+
+  // 3. the 17 features the form does not ask for
+  const tb = document.getElementById('res-filled-rows');
+  if (tb && res.feature_names) {
+    const idx = Object.fromEntries(res.feature_names.map((f, i) => [f, i]));
+    tb.innerHTML = FILLED.map(([f, kind, how]) => `<tr><td class="py-1 pr-2 font-mono text-text-primary">${f}</td>`
+      + `<td class="py-1 pr-3 text-right font-mono">${fmtVal(res.feature_values[idx[f]])}</td>`
+      + `<td class="py-1"><span class="text-text-muted">${FILL_TAG[kind]}</span> &middot; ${how}</td></tr>`).join('');
+  }
 }
 
 // Score the subscriber already in the form once everything has loaded, so the panel never opens empty

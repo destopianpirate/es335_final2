@@ -178,6 +178,8 @@ function computeClientSidePrediction(payload) {
     protective_factors: protect,
     retention_recommendation: rec,
     inference_source: 'LightGBM champion, running in your browser',
+    feature_names: feats,
+    feature_values: x,
   };
 }
 

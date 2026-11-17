@@ -40,7 +40,7 @@
               </a>
               <a class="hi-row" href="#model-predictor">
                 <span class="hi-no">04</span>
-                <span class="hi-body"><b>Model</b><small>Score a subscriber yourself</small></span>
+                <span class="hi-body"><b>Live Predictor</b><small>Score a subscriber yourself</small></span>
                 <span class="hi-arrow material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
               <a class="hi-repo" href="{{REPO_URL}}" target="_blank" rel="noopener noreferrer" aria-label="Open the repository on GitHub">
@@ -107,6 +107,34 @@
             <a href="#report" class="flex items-center justify-between gap-3 mb-3 group"><h3 class="text-sm font-bold text-text-primary">Report</h3><span class="material-symbols-outlined text-[18px] text-text-muted group-hover:text-text-primary">arrow_forward</span></a>
             <ol class="toc-list toc-2"><li><a href="#ovn-why"><span>01</span>Why</a></li><li><a href="#ovn-data"><span>02</span>Data</a></li><li><a href="#ovn-preprocessing"><span>03</span>Preprocessing</a></li><li><a href="#ovn-evaluation"><span>04</span>Evaluation</a></li><li><a href="#ovn-models"><span>05</span>Baseline and methods</a></li><li><a href="#ovn-leakage"><span>06</span>Leakage</a></li><li><a href="#ovn-results"><span>07</span>Results</a></li><li><a href="#ovn-errors"><span>08</span>Errors</a></li><li><a href="#ovn-failures"><span>09</span>Failure modes</a></li><li><a href="#ovn-runtime"><span>10</span>Runtime model</a></li><li><a href="#ovn-limitations"><span>11</span>Limitations</a></li><li><a href="#ovn-conclusion"><span>12</span>Conclusion</a></li><li><a href="#ovn-next"><span>13</span>What next</a></li><li><a href="#ovn-repro"><span>14</span>Reproduction steps</a></li><li><a href="#ovn-ai"><span>15</span>AI assistance</a></li><li><a href="#ovn-libs"><span>16</span>Libraries and data</a></li></ol>
           </nav>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-16 mb-6">Who did what</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-sm font-bold text-text-primary">Avnish Yadav <span class="font-normal text-text-muted">&middot; 25110067</span></h3>
+            <p class="text-[11px] uppercase tracking-wider font-bold text-text-muted mt-1 mb-3">Data quality, billing, baselines, ablation, errors, Data Studio</p>
+            <ul class="list-disc pl-5 space-y-1.5 text-sm text-text-secondary leading-relaxed">
+              <li>Profiled the five Kaggle tables and found the quality issues: invalid ages, blank gender, impossible listening times and the subscribers missing from some tables.</li>
+              <li>Built the 15 billing features from the full transaction history, including the latest-transaction fields that drive the model.</li>
+              <li>Set up the baselines (majority and the auto-renew rule) and tuned logistic regression and the random forest on validation.</li>
+              <li>Ran the feature-group ablation and the paired bootstrap that answers whether listening adds value beyond billing.</li>
+              <li>Analysed the errors: recall and precision by segment, representative misses and false alarms, and the four failure modes.</li>
+              <li>Designed the Data Studio pages: the five tables, file overlap, churn by group and the feature analysis.</li>
+            </ul>
+          </div>
+          <div class="bg-surface-card border border-border-subtle rounded-2xl p-6 shadow-subtle-card">
+            <h3 class="text-sm font-bold text-text-primary">Ayush Singh <span class="font-normal text-text-muted">&middot; 25110068</span></h3>
+            <p class="text-[11px] uppercase tracking-wider font-bold text-text-muted mt-1 mb-3">Listening and profile features, split, LightGBM, evaluation, leakage, Report</p>
+            <ul class="list-disc pl-5 space-y-1.5 text-sm text-text-secondary leading-relaxed">
+              <li>Built the 12 listening and 6 profile features and joined every table onto the subscriber list with presence flags, so nobody was dropped.</li>
+              <li>Made the stratified 70 / 10 / 20 split and kept every learned preprocessing step on the training split only.</li>
+              <li>Tuned LightGBM with Optuna, chose the model by validation log loss and set the decision threshold on validation.</li>
+              <li>Ran the single test evaluation: PR-AUC and the other metrics, bootstrap intervals, the paired model comparisons and calibration.</li>
+              <li>Found that March billing already records most renewals and ran the strict 1 March cutoff check to measure it.</li>
+              <li>Wrote the Report and built the Live Predictor, with the tuned LightGBM running in the browser.</li>
+            </ul>
+          </div>
         </div>
 
         <h2 class="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight mt-16 mb-2">Reproduce it</h2>

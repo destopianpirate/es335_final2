@@ -1,10 +1,10 @@
-// Single-page router: Home, Report, Data Studio, Model Predictor.
+// Single-page router: Home, Report, Data Studio, Live Predictor.
 
 const VIEW_TITLES = {
   'home': 'Home',
   'report': 'Report',
   'data-studio': 'Data Studio',
-  'model-predictor': 'Model Predictor',
+  'model-predictor': 'Live Predictor',
 };
 const VIEW_ALIASES = { 'overview': 'report' };  // old links
 

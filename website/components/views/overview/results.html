@@ -219,7 +219,7 @@
             <p class="text-[11px] text-text-secondary mb-4">Share of total split gain, top 12 features. <span style="color:#1D4ED8" class="font-bold">billing</span>, <span style="color:#15803D" class="font-bold">listening</span>, <span style="color:#B45309" class="font-bold">demographic</span>.</p>
             <div class="h-72 relative"><canvas id="ovn-importance-chart"></canvas></div>
             <p class="text-xs text-text-secondary mt-3" id="ovn-importance-text"></p>
-            <p class="text-[11px] text-text-muted mt-2">Split gain is global: it says which features the model uses most, not in which direction. For a single subscriber, the <a href="#model-predictor" class="underline">Model Predictor</a> breaks the prediction into <strong>per-feature contributions</strong>: walking each of the 861 trees, the change in the node value at every split is credited to the feature used there, so the contributions plus a base value add up exactly to the predicted log-odds.</p>
+            <p class="text-[11px] text-text-muted mt-2">Split gain is global: it says which features the model uses most, not in which direction. For a single subscriber, the <a href="#model-predictor" class="underline">Live Predictor</a> breaks the prediction into <strong>per-feature contributions</strong>: walking each of the 861 trees, the change in the node value at every split is credited to the feature used there, so the contributions plus a base value add up exactly to the predicted log-odds.</p>
           </div>
         </div>
 

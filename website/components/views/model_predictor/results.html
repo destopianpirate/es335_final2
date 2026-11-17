@@ -104,6 +104,35 @@
         </p>
       </div>
 
+      <!-- Blind spot: plans that have not expired yet -->
+      <div id="res-blindspot" class="hidden p-3 rounded-lg border border-border-subtle" style="border-left: 3px solid var(--accent)">
+        <h4 class="text-[10px] font-bold text-text-primary uppercase tracking-wider mb-1">Read this score with care</h4>
+        <p id="res-blindspot-text" class="text-xs text-text-secondary leading-relaxed"></p>
+      </div>
+
+      <!-- What if: days until expiry -->
+      <div class="p-3 border border-border-subtle rounded-lg">
+        <h4 class="text-[10px] font-bold text-text-primary uppercase tracking-wider mb-1">What if the plan expired on a different day?</h4>
+        <p class="text-[11px] text-text-muted leading-snug mb-2">Churn probability for this same subscriber as days until expiry changes; every other input stays as entered. Days until expiry is the model's strongest feature. The dot is the value in the form; the dashed line is the decision threshold.</p>
+        <div class="h-40 relative"><canvas id="res-whatif-chart" aria-label="Churn probability against days until expiry for this subscriber"></canvas></div>
+        <p id="res-whatif-note" class="text-[11px] text-text-secondary leading-snug mt-2"></p>
+      </div>
+
+      <!-- The 17 features the form does not ask for -->
+      <details class="p-3 border border-border-subtle rounded-lg group">
+        <summary class="cursor-pointer text-[10px] font-bold text-text-primary uppercase tracking-wider">What the model filled in (17 of 33 features)</summary>
+        <p class="text-[11px] text-text-muted leading-snug mt-2 mb-2">The form asks for 16 features. These are the other 17 values the model received for this prediction, and where each comes from.</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-[11px]">
+            <thead class="text-text-muted uppercase tracking-wider text-[9px] border-b border-border-subtle">
+              <tr><th class="text-left py-1 pr-2">Feature</th><th class="text-right py-1 pr-3">Value</th><th class="text-left py-1">Source</th></tr>
+            </thead>
+            <tbody id="res-filled-rows" class="divide-y divide-border-subtle text-text-secondary"></tbody>
+          </table>
+        </div>
+      </details>
+
+
 
 
     </div>
