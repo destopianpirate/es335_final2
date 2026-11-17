@@ -1,6 +1,6 @@
 """Build the static website into ../docs (served by GitHub Pages: Settings -> Pages -> Branch main, folder /docs).
 
-    python website/build.py --repo https://github.com/destopianpirate/es335_final
+    python website/build.py --repo https://github.com/destopianpirate/es335_final2
 
 Inlines the HTML partials (<load ="..."/>), copies js/ css/ and the result figures. No Node/npm needed.
 """
@@ -22,7 +22,7 @@ def inline(path: Path) -> str:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--repo", default="https://github.com/destopianpirate/es335_final", help="GitHub repository URL linked from the site")
+    ap.add_argument("--repo", default="https://github.com/destopianpirate/es335_final2", help="GitHub repository URL linked from the site")
     args = ap.parse_args()
 
     if DOCS.exists():

@@ -2,9 +2,9 @@
 
 ES 335 Machine Learning course project.
 
-- **Website:** https://destopianpirate.github.io/es335_final/
+- **Website:** https://destopianpirate.github.io/es335_final2/
 - **Dataset (Kaggle):** https://www.kaggle.com/competitions/customer-retention-datathon-riyadh-edition/data
-- **Repository:** https://github.com/destopianpirate/es335_final
+- **Repository:** https://github.com/destopianpirate/es335_final2
 
 **Team**
 
